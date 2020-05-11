@@ -1,0 +1,18 @@
+.Auth {
+    width: 500px;
+    
+    margin: 120px auto 0 auto;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+}
+
+
+
+.Auth h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #04f;
+    box-sizing: border-box;
+    padding: 20px 20px 0 20px;
+}
