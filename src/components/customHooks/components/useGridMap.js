@@ -5,7 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 console.log(process.env.REACT_APP_MAPBOX_KEY)
-export default ({ mapConfig }) => {
+export default ({ mapConfig, layers }) => {
 
 	const [map, setMap] = useState(null);
 	const [popUp, setPopUp] = useState(null);
@@ -24,7 +24,9 @@ export default ({ mapConfig }) => {
 			let popUp = new mapboxgl.Popup({
 				closeButton: false,
 				closeOnClick: false
-			});
+      });
+      
+      
 			
 			map.on("load", () => {
         const lineWidth = .3;
@@ -33,18 +35,20 @@ export default ({ mapConfig }) => {
         setPopUp(popUp);
         setMap(map);
         // ['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd']
-        map
-          .addSource('hdd-grid', { 'type': 'vector', 'url': 'mapbox://iea.2uybg10y' })
-          .addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
-          .addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' })
-          .addLayer({
-            'id': 'hdd',
-            'source':'hdd-grid',
+        
+        for ( let i in layers ) {
+            map.addSource(`hdd-grid-${i}`, { type: "vector", url: layers[i].url });
+        }
+
+        for ( let i in layers) {
+          map.addLayer({
+            'id': `hdd-${i}`,
+            'source': `hdd-grid-${i}`,
             'type': 'circle',
-            'source-layer':'new_name',
+            'source-layer': layers[i].sourceLayer,
             'paint': {
-              'circle-radius': 3,
-              'circle-opacity': .6,
+              'circle-radius': 2.3,
+              'circle-opacity': .3,
               'circle-color': [
                 "step",
                 ["get", "val"],
@@ -70,6 +74,12 @@ export default ({ mapConfig }) => {
                ]
             }
           })
+        }
+
+        map
+          .addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
+          .addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' });
+        map
           .addLayer({
             'id': 'solid-border',
             'source':'borders',
@@ -123,7 +133,10 @@ export default ({ mapConfig }) => {
               false
             ]
           });
-			});
+      });
+      
+      
+
 	}, [])
 
 	return {

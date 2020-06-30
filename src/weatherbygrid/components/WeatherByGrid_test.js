@@ -4,7 +4,9 @@ import { useGridMapTest } from '../../components/customHooks';
 
 function WeatherByGrid_test() {
   const mapConfig = {
-    center: [155, 24],
+    center: [47.243, 6.931],
+    minZoom: 3,
+    maxZoom: 2
   } 
   const { map, popUp, mapContainerRef } = useGridMapTest({ mapConfig });
   
