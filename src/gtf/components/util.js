@@ -192,38 +192,29 @@ export const getBorderPointCountriesColor = tx => {
     return resultsWithColor
 }
 
-const formatNum = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+const formatNum = x =>  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
 export function getCountryInfo(countries, selected) {
-    
-    let result;
-    countries.filter(country => {
-        if( country.ISO3 === selected ){
-            result = `
-                <strong>${country.country}</strong>
-                <p>Total Exited: ${formatNum(country.exit)} MM3</p>
-                <p>Total Entered: ${formatNum(country.entry)} MM3</p>
-            `
-        }
-    })
-    
-    return result;
+	const selectedCountry = countries.filter(country => country.ISO3 === selected)[0];
+	return `
+		<strong>${selectedCountry.country}</strong>
+		<p>Total Exited: ${formatNum(selectedCountry.exit)} MM3</p>
+		<p>Total Entered: ${formatNum(selectedCountry.entry)} MM3</p>
+	`
 }
 
 export function getBorderPointInfo(selected) {
-    
-    let txs = JSON.parse(selected.tx);
-    let tx = txs.map(t => `<p>${t.exit} to ${t.entry}: ${formatNum(t.value)} MM3</p>`)
-    let tx_result = tx.length === 3
-        ? tx[0].concat(tx[1]).concat(tx[2]) 
-        : tx.length === 2
-        ? tx[0].concat(tx[1])
-        : tx[0]
+	let txs = JSON.parse(selected.tx);
+	let tx = txs.map(t => `<p>${t.exit} to ${t.entry}: ${formatNum(t.value)} MM3</p>`)
+	let tx_result = tx.length === 3
+		? tx[0].concat(tx[1]).concat(tx[2]) 
+		: tx.length === 2
+		? tx[0].concat(tx[1])
+		: tx[0]
 
-    return ` 
-        <strong>Border point: ${selected.borderpoint}</strong> 
-        ${tx_result}
-            
-        `
+	return ` 
+		<strong>Border point: ${selected.borderpoint}</strong> 
+		${tx_result}
+	`
 }
 

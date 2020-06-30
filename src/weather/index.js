@@ -1,1 +1,1 @@
-export { default as Weather } from './components/Weather'
+export { default as Weather } from './components/WeatherWrapper'

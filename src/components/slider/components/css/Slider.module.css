@@ -1,0 +1,8 @@
+.RailStyle {
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    margin-top: 16px;
+    border-radius: 7px;
+    background-color: #bababa;
+}
