@@ -1,5 +1,5 @@
 import React from 'react';
-import Map from './Map_Flow';
+import Flowmap from './GtfFlowMap';
 import Papa from 'papaparse';
 import axios from 'axios';
 
@@ -65,7 +65,7 @@ export default function GTFContainer(props) {
 
   if(loaded){
     return (
-      <Map 
+      <Flowmap 
         width='100vw' 
         height='100vh' 
         data={data}

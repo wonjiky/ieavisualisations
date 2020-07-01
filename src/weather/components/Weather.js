@@ -102,12 +102,5 @@ export default function({data, indicators, viewUnit, monthOfDayView, ...props}) 
 		)
 	}
 
-	return (
-		<React.Fragment>
-			<div ref={mapContainerRef} className='map' />
-			<div className={classes.ControlOverlay}>
-				{controls}
-			</div>
-		</React.Fragment>
-	)
+	return <div ref={mapContainerRef} className='map' />;
 }

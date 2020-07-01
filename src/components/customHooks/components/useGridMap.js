@@ -4,7 +4,6 @@ import { dottedBorderA, dottedBorderB, solidBorder } from './util/useMapStyle';
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
-console.log(process.env.REACT_APP_MAPBOX_KEY)
 export default ({ mapConfig, layers }) => {
 
 	const [map, setMap] = useState(null);
@@ -14,7 +13,7 @@ export default ({ mapConfig, layers }) => {
 	useEffect (() => {
 			const map = new mapboxgl.Map({
 				container: mapContainerRef.current,
-        style: "mapbox://styles/iea/ckbtgt7wt0vjy1jnryrdi16kn",
+        style: "mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6",
 				center: mapConfig.center ? mapConfig.center : [0, 0],
 				minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 				maxZoom: mapConfig.maxZoom ? mapConfig.maxZoom : 22,
@@ -25,8 +24,6 @@ export default ({ mapConfig, layers }) => {
 				closeButton: false,
 				closeOnClick: false
       });
-      
-      
 			
 			map.on("load", () => {
         const lineWidth = .3;

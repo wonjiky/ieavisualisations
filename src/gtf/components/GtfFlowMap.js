@@ -128,6 +128,7 @@ export default function Map({ width, height, viewState, colors, onViewStateChang
 		<DeckGL initialViewState={viewState} layers={layers} controller={true}>
 			<MapGL width={width} height={height} 
 				viewState={viewState} onViewStateChange={onViewStateChange}
+				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_KEY}
 				mapStyle="mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6"
 			/>
 			{_renderTooltip}

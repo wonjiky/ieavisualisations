@@ -4,8 +4,6 @@ import DeckGL from '@deck.gl/react';
 import {ScreenGridLayer} from '@deck.gl/aggregation-layers';
 import {isWebGL2} from '@luma.gl/core';
 
-
-
 function WeatherByGrid({ data, viewState,  handleViewState, colorRange }) {
   
   const _renderLayer = new ScreenGridLayer({
@@ -22,9 +20,9 @@ function WeatherByGrid({ data, viewState,  handleViewState, colorRange }) {
   
   function _onInitialized(gl) {
     if (!isWebGL2(gl)) {
-      if (this.props.disableGPUAggregation) {
-        this.props.disableGPUAggregation();
-      }
+      // if (this.props.disableGPUAggregation) {
+      //   this.props.disableGPUAggregation();
+      // }
     }
   }
   return (
@@ -39,6 +37,7 @@ function WeatherByGrid({ data, viewState,  handleViewState, colorRange }) {
         height='100vh' 
         viewState={viewState} 
         onViewStateChange={handleViewState}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_KEY}
 				mapStyle="mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6"
 			/>
 		</DeckGL>

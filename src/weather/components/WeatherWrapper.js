@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Weather from './Weather';
+import { Control } from '../../components/controls';
 import Papa from 'papaparse';
 
 export default function(props) {
@@ -56,16 +57,21 @@ export default function(props) {
         
 			})
 	}, [URL, indicatorType])
-  
+	
   if (!data) return <div>Loading...</div>
   return (
-    <Weather
-     data={data}
-     indicators={INDICATOR_LIST}
-		 viewUnit={viewUnit}
-		 monthOfDayView={month}
-     changeIndicator={value => setIndicatorType(value)}
-     changeViewUnit={value => setViewUnit(value)}
-    />
+		<>
+			<Weather
+				data={data}
+				indicators={INDICATOR_LIST}
+				viewUnit={viewUnit}
+				monthOfDayView={month}
+				changeIndicator={value => setIndicatorType(value)}
+				changeViewUnit={value => setViewUnit(value)}
+			/>
+			<Control 
+				timeRange={data.timeRange}
+			/>
+		</>
   )
 };
