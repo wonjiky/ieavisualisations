@@ -1,7 +1,7 @@
 import React from 'react';
 import MapGL from 'react-map-gl';
 import { DeckGL } from '@deck.gl/react';
-import FlowMapLayer, {PickingType} from '@flowmap.gl/core';
+import FlowMapLayer, { PickingType } from '@flowmap.gl/core';
 
 export default function Map({ width, height, viewState, colors, onViewStateChange, data }) {
 	
@@ -26,8 +26,6 @@ export default function Map({ width, height, viewState, colors, onViewStateChang
 		animationFrames.current = window.requestAnimationFrame(animate);
 	}, []) 
 
-	
-
 	React.useEffect(() => {
 		animate();
 		return () => {
@@ -35,7 +33,6 @@ export default function Map({ width, height, viewState, colors, onViewStateChang
 		}
   }, [animate])
 	
-
 	const layers=[
 		new FlowMapLayer ({
 			id: 'my-flowmap-layer',

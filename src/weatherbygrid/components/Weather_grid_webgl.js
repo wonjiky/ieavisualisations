@@ -1,6 +1,6 @@
 import React from 'react';
 import Papa from 'papaparse';
-import Map from './Map';
+import Map from './Map_grid_webgl';
 import axios from 'axios';
 
 function WeatherByGrid(props) {

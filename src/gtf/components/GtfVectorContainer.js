@@ -11,7 +11,6 @@ import {
     getBorderPointCountriesColor 
 } from './util';
 
-
 export default () => {
     
 	const mapConfig = {
@@ -141,7 +140,7 @@ export default () => {
 				let mousePos = [e.lngLat.lng, e.lngLat.lat];
 				let selected = e.features[0].properties.ISO3_CODE;
 				while (Math.abs(e.lngLat.lng - mousePos[0]) > 180) {
-						mousePos[0] += e.lngLat.lng > mousePos[0] ? 360 : -360;
+					mousePos[0] += e.lngLat.lng > mousePos[0] ? 360 : -360;
 				}
 				popUp   
 					.setLngLat(mousePos)

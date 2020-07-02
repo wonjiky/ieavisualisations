@@ -1,4 +1,4 @@
-.Button {
+/* .Button {
     background-color: transparent;
     border: none;
     color: white;
@@ -22,4 +22,15 @@
 
 .Danger {
     color: #944317;
+} */
+
+.ButtonWrapper {
+    /* display: flex; */    
+}
+
+.Selected {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: red;
 }

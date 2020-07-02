@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Slider } from '../../components/slider';
 import { colorsByVariables, getCountryPopupInfo } from './util';
 import { useMap } from '../../components/customHooks';
 import classes from './css/Weather.module.css';
@@ -62,14 +61,14 @@ export default function({data, indicators, viewUnit, monthOfDayView, ...props}) 
 			<>
 				<div className={classes.Slider}>
 					<h1>{viewUnit === 'day' ? `${monthOfDayView}-${time}-2020` : time}</h1>
-					<Slider 
+					{/* <Slider 
 						width={'100%'}
 						height={10}
 						margin={10}
 						time={50}
 						range={[0, timeRange.length - 1]}
 						toggleChange={value => setTime(timeRange[value])}
-					/>
+					/> */}
 				</div>
 				<ul className={classes.SliderType}>
 					{viewUnits.map(viewType =>

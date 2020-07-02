@@ -14,10 +14,10 @@ function WeatherByGrid({ data, viewState,  handleViewState, colorRange }) {
       getWeight: d => d[2],
       colorRange,
       cellSizePixels: 20,
-      gpuAggregation: true,
+      gpuAggregation: true, 
       aggregation: 'SUM'
     });
-  
+
   function _onInitialized(gl) {
     if (!isWebGL2(gl)) {
       // if (this.props.disableGPUAggregation) {
@@ -41,7 +41,6 @@ function WeatherByGrid({ data, viewState,  handleViewState, colorRange }) {
 				mapStyle="mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6"
 			/>
 		</DeckGL>
-      
   )
 }
 
