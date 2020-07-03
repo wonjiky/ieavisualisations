@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Weather from './Weather';
-import { Control, Button, Slider } from '../../components/controls';
+import { Control, Button, Slider, Dropdown } from '../../components/controls';
 import Papa from 'papaparse';
 
 export default function(props) {
@@ -9,9 +9,11 @@ export default function(props) {
   const [data, setData] = useState(null);
 	
 	const [viewUnit, setViewUnit] = useState('month');
-	const [indicatorType, setIndicatorType] = useState('hdd');
+	const [indicator, setIndicator] = useState('hdd');
 	const [viewType, setViewType] = useState('Country');
-	
+	const wrapperRef = React.useRef(null);
+	const { active } = useDetectClick(wrapperRef, indicator);
+
   const INDICATOR_LIST = [
     'hdd',
     'cdd',
@@ -19,7 +21,7 @@ export default function(props) {
   ];  
 	let month = 'Apr';
 	
-	let URL = `${props.baseURL}weather/country/${viewUnit}/${indicatorType}.csv`;
+	let URL = `${props.baseURL}weather/country/${viewUnit}/${indicator}.csv`;
 	if ( viewUnit === 'day') URL = `${props.baseURL}weather/country/day/solar radiation/${month}.csv`;
   
   useEffect (() => {
@@ -55,22 +57,41 @@ export default function(props) {
 				setData({
 					tempData: getData(fetchResult),
 					timeRange: getTimeRange(),
-					type: indicatorType,
+					type: indicator,
         
         })				
         
 			})
-	}, [URL, indicatorType])
-	
+	}, [URL, indicator])
+
+	function useDetectClick(ref, indicator) {
+		const [active, setActive] = React.useState(false);
+		console.log(indicator);
+
+		React.useEffect(() => {
+			function handleClickOutside(event) {
+				let clickedOutside = ref.current && !ref.current.contains(event.target);
+				if ( clickedOutside ) {
+					setActive(false);
+				} else {
+					setActive(true);
+				}
+			}
+			document.addEventListener("mousedown", handleClickOutside);
+			return () => document.removeEventListener("mousedown", handleClickOutside);
+		}, [ref, active]);
+		return { active }
+	}
   if (!data) return <div>Loading...</div>
-  return (
+
+	return (
 		<>
 			<Weather
 				data={data}
 				indicators={INDICATOR_LIST}
 				viewUnit={viewUnit}
 				monthOfDayView={month}
-				changeIndicator={value => setIndicatorType(value)}
+				// changeIndicator={value => setIndicator(value)}
 				changeViewUnit={value => setViewUnit(value)}
 			/>
 			<Control>
@@ -79,9 +100,18 @@ export default function(props) {
 					click={(value) => setViewType(value)}
 					selected={viewType}
 				/>
+				<Dropdown
+					label='Indicators'
+					list={INDICATOR_LIST}
+					wrapperRef={wrapperRef}
+					click={value => useDetectClick(wrapperRef, value)}
+					// click={value => setIndicator(value)}
+					active={active}
+					selected={indicator}
+				/>
 				<Button 
 					list={['month', 'day']}
-					click={(value) => setViewUnit(value)}
+					click={(e) => setViewUnit(e.target.value)}
 					selected={viewUnit}
 				/>
 				<Slider 

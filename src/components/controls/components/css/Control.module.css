@@ -1,4 +1,87 @@
 .ControlWrapper {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100vh * .1);
+  background: linear-gradient(rgba(255,255,255,.8) 0%, rgba(255,255,255,1) 50% );
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+  bottom:0;
+  padding: 30px 20px;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.IndicatorContainer {
+  width: 300px;
+  position: relative;
+  font-size: 24px;
+  transition: border .2s linear;
+  padding: 12px 20px;
+}
+
+.IndicatorLabel {
+  font-size: .875rem;
+}
+
+.IndicatorContainer > button {
+  padding: 4px 20px 0 0;
+  font-size: 1.25rem;
+  background: none;
+}
+
+.IndicatorContainer > button:before {
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  transition: border .2s linear;
+  border: 1px solid #e6e6e6;
+  content: "";
+}
+
+.IndicatorContainer > button:hover:before {
+  /* transition: border .2s linear; */
+  border-color: #949494;
+}
+
+.ControlWrapper h1 {
+  margin: 0;
+  color: #525252;
+}
+
+.Slider {
+  margin-bottom: 30px;
+}
+
+.SliderType {
+  text-align: center;
+}
+
+
+
+.Select {
+  margin-bottom: 20px;
+}
+
+.Options {
+  background: #e3e3e3;
+  color: #525252;
+}
+
+.selected {
+  background: #525252;
+  color: #e3e3e3;
+}
+
+.Indicator {
+  flex-flow: column;
+  margin: 0 !important;
+}
+/* .ControlWrapper {
   position: absolute;
   display: flex;
   flex-flow: column;
@@ -55,4 +138,4 @@
 .Indicator {
   flex-flow: column;
   margin: 0 !important;
-}
+} */

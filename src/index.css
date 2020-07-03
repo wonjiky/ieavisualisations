@@ -1,17 +1,34 @@
+@font-face {
+  font-family: 'Graphik';
+  src: local('Graphik'), url('./fonts/Graphik-Bold.otf'), format('otf');
+  font-weight: bold;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: 'Graphik';
+  src: local('Graphik'), url('./fonts/Graphik-Regular.otf'), format('otf');
+}
+
 body {
+  font-family: 'Graphik';
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Open Sans';
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+button {
+  border: none;
+  padding: 0;
+  font-weight: bold;
+}
+
+button:focus {
+  outline: none;
 }
 
 .map {
-  position: absolute !important;
+  /* position: absolute !important; */
   width: 100%;
   height: 100vh;
 }

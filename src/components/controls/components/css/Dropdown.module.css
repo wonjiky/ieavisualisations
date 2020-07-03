@@ -1,0 +1,60 @@
+.DropdownOptions {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  min-height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 3;
+  background: #fff;
+  box-shadow: 0 0 50px rgba(0,0,0,.15);
+  pointer-events: none;
+  transition: opacity .2s linear,visibility 0ms .21s,max-height 0ms .21s;
+}
+
+.DropdownOptions.active {
+  transition: opacity .2s linear;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.DropdownOptions > div {
+  overflow-y: scroll;
+  max-height: 248px;
+}
+
+.DropdownOptions ul {
+  display: block;
+  padding: 12px;
+  margin: 0;
+}
+
+.DropdownOptions ul li {
+  font-size: 1.25rem;
+  list-style-type: none;
+  display: inline-block;
+  box-sizing:border-box;
+  cursor: pointer;
+  padding: 7px;
+  width: 100%;
+}
+
+.Options:hover {
+  background: #e6e6e6;
+
+}
+
+/* ul {
+  display: flex;
+  list-style: none;
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+li {
+  width: 100%;
+  cursor: pointer;
+  padding: 7px;
+  box-sizing:border-box;
+} */
