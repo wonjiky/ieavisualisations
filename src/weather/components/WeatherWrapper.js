@@ -7,13 +7,11 @@ import Papa from 'papaparse';
 export default function(props) {
 
   const [data, setData] = useState(null);
-	
 	const [viewUnit, setViewUnit] = useState('month');
 	const [indicator, setIndicator] = useState('hdd');
 	const [viewType, setViewType] = useState('Country');
-	const wrapperRef = React.useRef(null);
-	const { active } = useDetectClick(wrapperRef, indicator);
-
+	const [active, setActive] = useState(false);
+	
   const INDICATOR_LIST = [
     'hdd',
     'cdd',
@@ -62,28 +60,9 @@ export default function(props) {
         })				
         
 			})
-	}, [URL, indicator])
+	}, [URL, indicator, viewType])
 
-	function useDetectClick(ref, indicator) {
-		const [active, setActive] = React.useState(false);
-		console.log(indicator);
-
-		React.useEffect(() => {
-			function handleClickOutside(event) {
-				let clickedOutside = ref.current && !ref.current.contains(event.target);
-				if ( clickedOutside ) {
-					setActive(false);
-				} else {
-					setActive(true);
-				}
-			}
-			document.addEventListener("mousedown", handleClickOutside);
-			return () => document.removeEventListener("mousedown", handleClickOutside);
-		}, [ref, active]);
-		return { active }
-	}
   if (!data) return <div>Loading...</div>
-
 	return (
 		<>
 			<Weather
@@ -95,17 +74,27 @@ export default function(props) {
 				changeViewUnit={value => setViewUnit(value)}
 			/>
 			<Control>
-				<Button 
+				<Dropdown
+					label='View by'
 					list={['Country', 'Grid']}
-					click={(value) => setViewType(value)}
+					hide={e => {
+						if(e && e.relatedTarget) e.relatedTarget.click();
+						setActive(false)
+					}}
+					open={_=> setActive(!active)}
+					click={item => setViewType(item)}
+					active={active}
 					selected={viewType}
 				/>
 				<Dropdown
 					label='Indicators'
 					list={INDICATOR_LIST}
-					wrapperRef={wrapperRef}
-					click={value => useDetectClick(wrapperRef, value)}
-					// click={value => setIndicator(value)}
+					hide={e => {
+						if(e && e.relatedTarget) e.relatedTarget.click();
+						setActive(false)
+					}}
+					open={_=> setActive(!active)}
+					click={item => setIndicator(item)}
 					active={active}
 					selected={indicator}
 				/>

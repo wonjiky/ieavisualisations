@@ -7,10 +7,10 @@
   opacity: 0;
   visibility: hidden;
   z-index: 3;
+  width: 100%;
   background: #fff;
   box-shadow: 0 0 50px rgba(0,0,0,.15);
   pointer-events: none;
-  transition: opacity .2s linear,visibility 0ms .21s,max-height 0ms .21s;
 }
 
 .DropdownOptions.active {
@@ -32,14 +32,23 @@
 }
 
 .DropdownOptions ul li {
-  font-size: 1.25rem;
   list-style-type: none;
   display: inline-block;
-  box-sizing:border-box;
-  cursor: pointer;
-  padding: 7px;
   width: 100%;
 }
+
+.DropdownOptions ul li > button{
+  cursor: pointer;
+  width: 100%;
+  font-weight: normal;
+  font-size: 1.25rem;
+  background: transparent;
+  box-sizing:border-box;
+  padding: 7px;
+  text-align: left;
+  display: block;
+}
+
 
 .Options:hover {
   background: #e6e6e6;

@@ -2,25 +2,24 @@ import React from 'react'
 import classes from './css/Dropdown.module.css'
 import global from './css/Control.module.css'
 
-export default ({ label, list, click, selected, active, wrapperRef }) => {
-
-  // const wrapperRef = React.useRef(null);
-  // const { active } = useDetectClick(wrapperRef);
+export default ({ label, list, click, selected, active, open, hide }) => {
 
   return (
-    <div ref={wrapperRef} className={global.IndicatorContainer}>
-      <div className={global.IndicatorLabel}>
+    <div className={global.IndicatorContainer}>
+      <label className={global.IndicatorLabel}>
         {label}
-      </div>
-      <button>
+      </label>
+      <button onClick={open} onBlur={e => hide(e)}>
         {selected}
       </button>     
       <div className={active ? [classes.DropdownOptions, classes.active].join(' ') : classes.DropdownOptions}>
         <div>
           <ul>
             {list.map(item => 
-              <li key={item} onClick={() => click(item)} className={classes.Options}>
+              <li key={item}  onClick={_ => click(item)} className={classes.Options}>
+                <button>
                   {item}
+                </button>
               </li>
             )}
           </ul>
@@ -29,25 +28,3 @@ export default ({ label, list, click, selected, active, wrapperRef }) => {
     </div>
   )
 }
-
-// function useDetectClick(ref) {
-//   const [active, setActive] = React.useState(false);
-//   React.useEffect(() => {
-//     function handleClickOutside(event) {
-//       let clickedOutside = ref.current && !ref.current.contains(event.target);
-//       if ( clickedOutside ) {
-//         setActive(false);
-//       } else {
-//         setActive(true);
-//       }
-//     }
-//     document.addEventListener("mousedown", handleClickOutside);
-    
-//     return () => document.removeEventListener("mousedown", handleClickOutside);
-    
-//   }, [ref, active]);
-  
-//   return {
-//     active
-//   }
-// }
