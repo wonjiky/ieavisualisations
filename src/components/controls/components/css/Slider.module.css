@@ -1,8 +1,37 @@
+.Slider {
+    position: relative;
+    width: 400px;
+    padding: 12px 20px;
+    margin-left: -1px;
+}
+
+.Slider:before {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transition: border .2s linear;
+    border: 1px solid #e6e6e6;
+    content: "";
+}
+
+.SliderLabel {
+    display: flex;
+    justify-content: space-between;
+}
+
+.SliderLabel > span {
+    font-weight: bold;
+}
+
+
 .RailStyle {
     position: absolute;
     width: 100%;
     height: 8px;
-    margin-top: 16px;
-    border-radius: 7px;
-    background-color: #bababa;
+    background: #bababa;
+    /* margin-top: 16px; */
+    /* border-radius: 7px; */
 }

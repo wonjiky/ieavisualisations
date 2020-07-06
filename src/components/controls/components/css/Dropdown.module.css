@@ -1,3 +1,8 @@
+.Dropdown {
+  min-width: 200px;
+  padding: 12px 20px;
+}
+
 .DropdownOptions {
   display: block;
   position: absolute;

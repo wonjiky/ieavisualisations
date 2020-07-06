@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Graphik';
   src: local('Graphik'), url('./fonts/Graphik-Bold.otf'), format('otf');
-  font-weight: bold;
-  font-style: bold;
+  font-weight: medium;
+  font-style: medium;
 }
 
 @font-face {

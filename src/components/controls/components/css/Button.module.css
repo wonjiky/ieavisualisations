@@ -1,3 +1,36 @@
+.Button {
+    margin-left: 20px;
+}
+
+.ButtonOption {
+    display: inline-block;
+    position: relative;
+    padding: 23px 20px;
+}
+
+.ButtonOption:not(:first-child) {
+    margin-left: -1px;
+  }
+
+.ButtonOption > button {
+    font-size: 1.25rem;
+    background: none;
+    display: flex;
+}
+
+.ButtonOption > button:before {
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transition: border .2s linear;
+    border: 1px solid #e6e6e6;
+    content: "";
+}
+
 /* .Button {
     background-color: transparent;
     border: none;

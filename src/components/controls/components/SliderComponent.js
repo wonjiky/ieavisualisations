@@ -1,12 +1,13 @@
 import React from 'react';
 import classes from './css/SliderComponents.module.css';
 
-export const Handle = ( {handle: { id, value, percent }, getHandleProps }) => {
+export const Handle = ( {handle, getHandleProps }) => {
+  console.log(handle);
   return (
     <div
       className={classes.Handle}
-      style={{ left: `${percent}%` }}
-      {...getHandleProps(id)} >
+      style={{ left: `${handle.percent}%` }}
+      {...getHandleProps(handle.id)} >
       {/* <div style={{ fontFamily: 'Roboto', fontSize: 11, marginTop: -35 }}>
         {value}
       </div> */}
@@ -19,7 +20,7 @@ export const Track = ({ source, target, getTrackProps }) => {
     <div
       className={classes.Track}
       style={{
-        backgroundColor: '#525252',
+        backgroundColor: '#000',
         borderRadius:'7',
         left: `${source.percent}%`,
         width: `${target.percent - source.percent}%`,

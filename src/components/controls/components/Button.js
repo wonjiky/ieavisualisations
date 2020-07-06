@@ -1,16 +1,18 @@
 import React from 'react';
-import classes from './css/Button.module.css';
+import global from './css/Global.module.css'
+import classes from './css/Button.module.css'
 
-export default ({ list, selected, click }) => (
-	<div className={classes.ButtonWrapper}>
-		{list.map((item, i) => (
-			<button 
-				key={item + i}
-				onClick={() => click(item)}
-				className={selected === item ? classes.Selected : ''}
-			>
-				{item}
-			</button>
+export default ({ label, options, selected, click }) => (
+	<div className={[global.IndicatorContainer, classes.Button].join(' ')}>
+		{/* <label className={global.IndicatorLabel}>
+			{label}
+		</label> */}
+		{options.map(option => (
+			<div key={option} className={classes.ButtonOption}>
+				<button key={option}>
+					{option}
+				</button>
+			</div>  
 		))}
 	</div>
 )

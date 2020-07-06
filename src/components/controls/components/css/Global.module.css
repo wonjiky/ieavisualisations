@@ -1,37 +1,24 @@
-.ControlWrapper {
-  position: fixed;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  background: linear-gradient(rgba(255,255,255,.8) 0%, rgba(255,255,255,1) 50% );
-  box-shadow: 0 0 10px rgba(0,0,0,.2);
-  bottom:0;
-  padding: 30px 20px;
-  z-index: 2;
-  box-sizing: border-box;
-}
-
-.IndicatorContainer {
-  width: 300px;
+.ControlContainer {
   position: relative;
-  font-size: 24px;
-  /* transition: border .2s linear; */
-  padding: 12px 20px;
 }
 
-.IndicatorLabel {
+.ControlContainer:not(:first-child) {
+  margin-left: -1px;
+}
+
+.ControlLabel {
   display: flex;
   line-height: 1.25rem;
   font-size: .875rem;
 }
 
-.IndicatorContainer > button {
+.ControlContainer > button {
   padding: 4px 20px 0 0;
   font-size: 1.25rem;
   background: none;
 }
 
-.IndicatorContainer > button:before {
+.ControlContainer > button:before {
   cursor: pointer;
   display: block;
   position: absolute;
@@ -44,14 +31,10 @@
   content: "";
 }
 
-.IndicatorContainer > button:hover:before {
+.ControlContainer > button:hover:before {
   /* transition: border .2s linear; */
+  z-index:1;
   border-color: #949494;
-}
-
-.ControlWrapper h1 {
-  margin: 0;
-  color: #525252;
 }
 
 .Slider {
@@ -61,8 +44,6 @@
 .SliderType {
   text-align: center;
 }
-
-
 
 .Select {
   margin-bottom: 20px;
