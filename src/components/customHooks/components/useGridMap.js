@@ -28,6 +28,7 @@ export default ({ mapConfig, layers }) => {
 			map.on("load", () => {
         const lineWidth = .3;
         const lineColor = 'black';
+        const radius = 1.7; //2.3;
         const invertLineColor = 'white';
         setPopUp(popUp);
         setMap(map);
@@ -44,7 +45,7 @@ export default ({ mapConfig, layers }) => {
             'type': 'circle',
             'source-layer': layers[i].sourceLayer,
             'paint': {
-              'circle-radius': 2.3,
+              'circle-radius': radius,
               'circle-opacity': .3,
               'circle-color': [
                 "step",

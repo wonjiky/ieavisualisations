@@ -91,7 +91,15 @@ export default function(props) {
 			label: 'Interval', 
 			options: ['day', 'month'],
 			active: active,
-			click: value => setInterval(value),
+			click: value => {
+				if((time.substring(0,3) === 'Apr' && indicator === 'solar radiation') 
+				|| (data.timeRange.length > 10 && indicator === 'solar radiation')) {
+						setInterval(value)
+				} else {
+				 alert('Data by day does not exist. Please select (April, Solar Radiation)')
+				}
+				
+			},
 			open: e => open(e),
 			hide: e => hide(e),
 			selected: interval

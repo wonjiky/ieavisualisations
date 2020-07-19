@@ -2,7 +2,6 @@ import React from 'react';
 import classes from './css/SliderComponents.module.css';
 
 export const Handle = ( {handle, getHandleProps }) => {
-  console.log(handle);
   return (
     <div
       className={classes.Handle}
