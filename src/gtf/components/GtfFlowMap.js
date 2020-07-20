@@ -45,7 +45,7 @@ export default function Map({ width, height, viewState, colors, onViewStateChang
 			getFlowMagnitude: flow => flow.total || 0,
 			getFlowOriginId: flow => flow.entry,
 			getFlowDestId: flow => flow.exit,
-			getLocationId: loc =>  loc.properties.name,
+			getLocationId: loc => loc.properties.name,
 			getLocationCentroid: loc => [loc.properties.centroid[0], loc.properties.centroid[1]],
 			// showLocationAreas: false,
 			// maxLocationCircleSize:3,

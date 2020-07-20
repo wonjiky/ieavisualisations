@@ -2,6 +2,7 @@ import React from 'react';
 import { Weather } from './weather';
 import { GTF_Flow, GTF_Vector } from './gtf';
 import { WeatherByGrid, WeatherByGrid_Vector } from './weatherbygrid';
+import { CO2Map } from './etp2020';
 // import { Auth } from './components/fakeAuth';
 import { Route, Link, Switch } from 'react-router-dom';
 import './App.css';
@@ -18,6 +19,7 @@ function App() {
 		{ id: 3, item: 'Weather - by country', url: '/weather-country', component: Weather, exact: true, pw: password[2], title: 'Weather: by country' },
 		{ id: 4, item: 'Weather - by grid - webgl', url: '/weather-grid-1', component: WeatherByGrid, exact: true, pw: password[2], title: 'Weather: by grid - v1' },
 		{ id: 5, item: 'Weather - by grid - vector', url: '/weather-grid-2', component: WeatherByGrid_Vector, exact: true, pw: password[2], title: 'Weather: by grid - v2' },
+		{ id: 6, item: 'ETP2020 - CO2', url: '/ETP2020-co2', component: CO2Map, exact: true, pw: password[2], title: 'ETP2020 - CO2 Map' },
 	];
 
 	let baseURL = process.env.REACT_APP_DEV;

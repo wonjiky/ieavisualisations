@@ -94,6 +94,8 @@ export default () => {
 			))
 		};
 
+		console.log(borderpoints);
+
 		map // Add images for border points buffer
 			.addImage('borderPointsBuffer', borderPointsBuffer, { pixelRatio: 2 });
 		

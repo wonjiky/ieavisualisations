@@ -54,7 +54,7 @@ export default function GTFContainer(props) {
           }
         })
       );
-
+      
       setData({
         locations: {type: 'FeatureCollection', features: result},
         flows: flows,
@@ -64,6 +64,7 @@ export default function GTFContainer(props) {
 	}, [props.baseURL])
 
   if(loaded){
+    console.log(data);
     return (
       <Flowmap 
         width='100vw' 
