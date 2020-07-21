@@ -45,7 +45,16 @@ export default ({ mapConfig, layers }) => {
             'type': 'circle',
             'source-layer': layers[i].sourceLayer,
             'paint': {
-              'circle-radius': radius,
+              // 'circle-radius': radius,
+              'circle-radius': [
+                'interpolate',
+                ['exponential', 0.5],
+                ['zoom'],
+                3,
+                2,
+                6,
+                5
+              ],
               'circle-opacity': .3,
               'circle-color': [
                 "step",

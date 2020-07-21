@@ -2,16 +2,21 @@ import React from 'react';
 import { Weather } from './weather';
 import { GTF_Flow, GTF_Vector } from './gtf';
 import { WeatherByGrid, WeatherByGrid_Vector } from './weatherbygrid';
-import { CO2Map } from './etp2020';
-// import { Auth } from './components/fakeAuth';
+import { CO2Map, CDDMap } from './etp2020';
+import { Auth } from './components/fakeAuth';
 import { Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 
 
 function App() {
 	
-	let password = [' ', ' ', ' '];
-	if (process.env.NODE_ENV === 'production') password = [process.env.REACT_APP_GTF_PW, process.env.REACT_APP_GTF2_PW, process.env.REACT_APP_WEATHER_PW];
+	let password = [' ', ' ', ' ', ' '];
+	if (process.env.NODE_ENV === 'production') password = [
+		process.env.REACT_APP_GTF_PW, 
+		process.env.REACT_APP_GTF2_PW, 
+		process.env.REACT_APP_WEATHER_PW,
+		process.env.REACT_APP_ETP2020_PW,
+	];
 	
 	let projects = [
 		{ id: 1, item: 'GTF', url: '/gtf-vector', component: GTF_Vector, exact: true, pw: password[0], title: 'GTF: Vector' },
@@ -19,7 +24,8 @@ function App() {
 		{ id: 3, item: 'Weather - by country', url: '/weather-country', component: Weather, exact: true, pw: password[2], title: 'Weather: by country' },
 		{ id: 4, item: 'Weather - by grid - webgl', url: '/weather-grid-1', component: WeatherByGrid, exact: true, pw: password[2], title: 'Weather: by grid - v1' },
 		{ id: 5, item: 'Weather - by grid - vector', url: '/weather-grid-2', component: WeatherByGrid_Vector, exact: true, pw: password[2], title: 'Weather: by grid - v2' },
-		{ id: 6, item: 'ETP2020 - CO2', url: '/ETP2020-co2', component: CO2Map, exact: true, pw: password[2], title: 'ETP2020 - CO2 Map' },
+		{ id: 6, item: 'ETP2020 - CO2', url: '/ETP2020-co2', component: CO2Map, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
+		{ id: 6, item: 'ETP2020 - CDD', url: '/ETP2020-cdd', component: CDDMap, exact: true, pw: password[3], title: 'ETP2020 - CDD Map' },
 	];
 
 	let baseURL = process.env.REACT_APP_DEV;
@@ -41,9 +47,9 @@ function App() {
 							path={`${url}`}
 							exact={exact}
 							render={ props => 
-								// <Auth pw={pw} title={title}>	
+								<Auth pw={pw} title={title}>	
 									<C {...props} baseURL={baseURL} /> 
-							  // </Auth>
+							  </Auth>
 							}
 						/>
 				))}
