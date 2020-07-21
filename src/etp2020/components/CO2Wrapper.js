@@ -7,9 +7,10 @@ export default props => {
 
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
+
     let URL = [
-      axios.get('./ETP2020/CO2/CO2_Storage.geojson'),
-      axios.get('./ETP2020/CO2/CO2_USA_2017_GIS.csv'),
+      axios.get(`${props.baseURL}ETP2020/CO2/CO2_Storage.json`),
+      axios.get(`${props.baseURL}ETP2020/CO2/CO2_USA_2017_GIS.csv`),
     ];
     let indicatorList = ['IRON STEEL', 'CEMENT', 'REFINING', 'CHEMICALS', 'POWER', 'heatmap'];
     let indicators = indicatorList.reduce((acc, obj) => {
