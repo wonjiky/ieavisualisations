@@ -44,7 +44,6 @@ class Auth extends Component {
 	}
 
 	submitHandler = event  => {
-		console.log(event);
 		event.preventDefault();
 		const password = this.state.controls.password.value;
 		const authentication = this.props.pw;
