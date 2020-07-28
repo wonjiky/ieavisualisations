@@ -1,29 +1,15 @@
 import React from 'react'
-import mapboxgl from 'mapbox-gl';
+// import mapboxgl from 'mapbox-gl';
 import { useCO2Map } from '../../components/customHooks'
 
 export default ({ data, region  }) => {
-
-  const mapConfig ={
-    US: {
-      maxBounds: [[-190, 10],[-40, 74]]
-    },
-    China: {
-
-    },
-    Europe: {
-
-    }
-  };
-
-  const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: mapConfig.US });
-
+  
+  const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: region } });
   React.useEffect(() => {
     if(!map) return;
     
     let colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
-    
-    let { types, ...rest } = data;
+    let { types, minMax, ...rest } = data;
     // let highlightColors = ['black','black','black','black','black'];
     // let canvas = map.getCanvasContainer();
     // let start, current, box;
@@ -33,6 +19,7 @@ export default ({ data, region  }) => {
         'data': rest[source]
       })
     }
+    
     map
       .addLayer({
         id: 'location-layer',
@@ -54,16 +41,15 @@ export default ({ data, region  }) => {
             property: 'value',
             type: 'exponential',
             stops: [
-              [1, 0],
-              [1000000, 1]
-              // [15391540, 1]
+              [minMax[0], 0],
+              [minMax[1], 1]
             ]
           },
           // increase intensity as zoom level increases
           'heatmap-intensity': {
             stops: [
               [11, 1],
-              [15, 3]
+              [15, 19]
             ]
           },
           // assign color values be applied to points depending on their density
@@ -118,7 +104,6 @@ export default ({ data, region  }) => {
         }
       })
     
-
     function setColors(type, colors) {
       colors.forEach((color, idx) => {
         let pos = (idx * 2);
