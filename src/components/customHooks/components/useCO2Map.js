@@ -12,6 +12,7 @@ export default ({ mapConfig }) => {
 	const mapContainerRef = useRef(null);
 
 	useEffect (() => {
+		console.log('Add Map', mapConfig.maxBounds)
 		const map = new mapboxgl.Map({
 			container: mapContainerRef.current,
 			style: "mapbox://styles/iea/ckcufggk135km1ijqswxxu0v1",
@@ -33,65 +34,64 @@ export default ({ mapConfig }) => {
 			setPopUp(popUp);
 			setMap(map);
 
-			map
-				.addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
-				.addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' })
-				.addLayer({
-					'id': 'solid-border',
-					'source':'borders',
-					'type': 'line',
-					'source-layer': 'admin',
-					'paint': {
-							'line-width': lineWidth,
-							'line-color': lineColor,
-					},
-					'filter': solidBorder.filter
-				})
-				.addLayer({
-					'id': 'dotted-border-A',
-					'source':'borders',
-					'type': 'line',
-					'source-layer': 'admin',
-					'paint': {
-							'line-width': lineWidth,
-							'line-color': invertLineColor,
-							'line-dasharray': dottedBorderA.lineDashArray
-					},
-					'filter': dottedBorderA.filter
-				})
-				.addLayer({
-					'id': 'dotted-border-B',
-					'source':'borders',
-					'type': 'line',
-					'source-layer': 'admin',
-					'paint': {
-							'line-width': lineWidth,
-							'line-color': lineColor,
-							'line-dasharray': dottedBorderA.lineDashArray
-					},
-					'filter': dottedBorderB.filter
-				})
-				.addLayer({
-					'id': 'dotted-border-oecd',
-					'source':'dottedborder',
-					'type': 'line',
-					'source-layer': 'dottedborder_1-a7o3op',
-					'paint': {
-							'line-width': lineWidth,
-							'line-color': invertLineColor,
-							'line-dasharray': dottedBorderA.lineDashArray
-					},
-					'filter':[
-						"match",
-						["get", "OBJECTID"],
-						[127],
-						true,
-						false
-					]
-				});
+			// map
+			// 	.addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
+			// 	.addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' })
+			// 	.addLayer({
+			// 		'id': 'solid-border',
+			// 		'source':'borders',
+			// 		'type': 'line',
+			// 		'source-layer': 'admin',
+			// 		'paint': {
+			// 				'line-width': lineWidth,
+			// 				'line-color': lineColor,
+			// 		},
+			// 		'filter': solidBorder.filter
+			// 	})
+			// 	.addLayer({
+			// 		'id': 'dotted-border-A',
+			// 		'source':'borders',
+			// 		'type': 'line',
+			// 		'source-layer': 'admin',
+			// 		'paint': {
+			// 				'line-width': lineWidth,
+			// 				'line-color': invertLineColor,
+			// 				'line-dasharray': dottedBorderA.lineDashArray
+			// 		},
+			// 		'filter': dottedBorderA.filter
+			// 	})
+			// 	.addLayer({
+			// 		'id': 'dotted-border-B',
+			// 		'source':'borders',
+			// 		'type': 'line',
+			// 		'source-layer': 'admin',
+			// 		'paint': {
+			// 				'line-width': lineWidth,
+			// 				'line-color': lineColor,
+			// 				'line-dasharray': dottedBorderA.lineDashArray
+			// 		},
+			// 		'filter': dottedBorderB.filter
+			// 	})
+			// 	.addLayer({
+			// 		'id': 'dotted-border-oecd',
+			// 		'source':'dottedborder',
+			// 		'type': 'line',
+			// 		'source-layer': 'dottedborder_1-a7o3op',
+			// 		'paint': {
+			// 				'line-width': lineWidth,
+			// 				'line-color': invertLineColor,
+			// 				'line-dasharray': dottedBorderA.lineDashArray
+			// 		},
+			// 		'filter':[
+			// 			"match",
+			// 			["get", "OBJECTID"],
+			// 			[127],
+			// 			true,
+			// 			false
+			// 		]
+			// 	});
 		});
-
-		return () => map.remove();
+		// return () =>  console.log('Map Remove') || map.remove();
 	}, [])
 
 	return {

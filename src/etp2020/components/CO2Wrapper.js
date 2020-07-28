@@ -19,7 +19,7 @@ export default props => {
   let colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
 
   React.useEffect(() => {
-
+    
     let types = region.region === 'China'
       ? ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Coal']
       : ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power']
@@ -103,7 +103,7 @@ export default props => {
         region.region === reg ? <CO2
           key={key} 
           data={data}
-          region={region.bounds}
+          region={region}
         />
         : null
       ))}

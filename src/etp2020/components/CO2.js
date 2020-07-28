@@ -4,7 +4,7 @@ import { useCO2Map } from '../../components/customHooks'
 
 export default ({ data, region  }) => {
   
-  const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: region } });
+  const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: region.bounds } });
   React.useEffect(() => {
     if(!map) return;
     
@@ -13,18 +13,20 @@ export default ({ data, region  }) => {
     // let highlightColors = ['black','black','black','black','black'];
     // let canvas = map.getCanvasContainer();
     // let start, current, box;
+    // if ( map.getSource(`${region.region}-${source}`))
     for ( let source in rest ) {
-      map.addSource(source, {
+      map.addSource(`${region.region}-${source}`, {
         'type': 'geojson',
         'data': rest[source]
       })
     }
-    
+    console.log( map.getSource(`${region.region}-location`));
     map
       .addLayer({
         id: 'location-layer',
         type: 'fill',
-        source: 'location',
+        source: `${region.region}-location`,
+        // source: 'location',
         paint: {
           'fill-pattern': 'pedestrian-polygon',
           'fill-opacity': 0.5
@@ -33,7 +35,8 @@ export default ({ data, region  }) => {
       .addLayer({
         id: 'heatmap-layer',
         type: 'heatmap',
-        source: 'heatmap',
+        // source: 'heatmap',
+        source: `${region.region}-heatmap`,
         maxzoom: 5,
         paint: {
           // increase weight as diameter breast height increases
@@ -83,7 +86,8 @@ export default ({ data, region  }) => {
       .addLayer({
         id: 'heatmap-circle',
         type: 'circle',
-        source: 'heatmap',
+        // source: 'heatmap',
+        source: `${region.region}-heatmap`,
         paint: {
           'circle-radius': 4.5,
           'circle-color': setColors(types, colors),
@@ -114,7 +118,15 @@ export default ({ data, region  }) => {
       return colors;
     }
     
-  }, [map, data])
+    return () => {
+      console.log('source remove')
+      map.removeLayer('heatmap-circle')
+      map.removeLayer('heatmap-layer')
+      map.removeLayer('location-layer')
+      map.removeSource(`${region.region}-location`)
+      map.removeSource(`${region.region}-heatmap`)
+    }
+  }, [map, region.region, data])
   
   return <div ref={mapContainerRef} className='map' />
 }
