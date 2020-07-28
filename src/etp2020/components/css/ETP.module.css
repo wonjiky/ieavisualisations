@@ -1,0 +1,18 @@
+.Legend {
+  margin-top: 20px;
+  min-width: 200px;
+  height: 200px;
+  width: 100%;
+}
+
+.LegendItem {
+  margin: 10px 0;
+  display: flex;
+}
+
+.LegendItem > div {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  border-radius: 25px; 
+}

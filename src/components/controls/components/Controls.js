@@ -1,8 +1,8 @@
 import React from 'react'
 import classes from './css/Controls.module.css';
 
-export default ({ children }) => (
-  <div className={classes.ControlWrapper}>
+export default ({ children, style }) => (
+  <div style={style} className={classes.ControlWrapper}>
     {children}
   </div>
 )

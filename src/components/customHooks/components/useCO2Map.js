@@ -5,7 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
-export default ({ mapConfig, data }) => {
+export default ({ mapConfig,  }) => {
 
 	const [map, setMap] = useState(null);
 	const [popUp, setPopUp] = useState(null);
@@ -14,14 +14,14 @@ export default ({ mapConfig, data }) => {
 	useEffect (() => {
 			const map = new mapboxgl.Map({
 				container: mapContainerRef.current,
-				style: "mapbox://styles/iea/ck9jt8mxx028m1ip9gih9yod6",
+				style: "mapbox://styles/iea/ckcufggk135km1ijqswxxu0v1",
 				center: mapConfig.center ? mapConfig.center : [0, 0],
 				minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
-				maxZoom: 5,//mapConfig.maxZoom ? mapConfig.maxZoom : 22,
+				maxZoom: 5,
 				maxBounds: mapConfig.maxBounds ? mapConfig.maxBounds : null,
 			})
       
-			let popUp = new mapboxgl.Popup({
+			const popUp = new mapboxgl.Popup({
 				closeButton: false,
 				closeOnClick: false
 			});
@@ -30,6 +30,7 @@ export default ({ mapConfig, data }) => {
 					const lineWidth = .3;
 					const lineColor = 'black';
 					const invertLineColor = 'white';
+					console.log('hello')
 					setPopUp(popUp);
 					setMap(map);
 

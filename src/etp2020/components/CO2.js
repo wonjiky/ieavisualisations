@@ -1,95 +1,47 @@
 import React from 'react'
+import mapboxgl from 'mapbox-gl';
 import { useCO2Map } from '../../components/customHooks'
 
-export default ({ data }) => {
+export default ({ data, region  }) => {
 
   const mapConfig ={
     US: {
       maxBounds: [[-190, 10],[-40, 74]]
+    },
+    China: {
+
+    },
+    Europe: {
+
     }
-  }
+  };
 
   const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: mapConfig.US });
 
-
-
   React.useEffect(() => {
     if(!map) return;
-    const circleRadius = 2;
-    let layerParams = {
-      'location': {
-        paint: {
-          'fill-color': '#088',
-          'fill-opacity': 0.3
-        },
-        type: 'fill',
-      },
-      'IRON STEEL': {
-        paint: {
-          'circle-color': 'yellow',
-          'circle-radius': circleRadius
-        },
-        type: 'circle',
-      },
-      'CEMENT': {
-        paint: {
-          'circle-color': 'purple',
-          'circle-radius': circleRadius
-        },
-        type: 'circle',
-      },
-      'REFINING': {
-        paint: {
-          'circle-color': 'blue',
-          'circle-radius': circleRadius
-        },
-        type: 'circle',
-      },
-      'CHEMICALS': {
-        paint: {
-          'circle-color': 'orange',
-          'circle-radius': circleRadius
-        },
-        type: 'circle',
-      },
-      'POWER': {
-        paint: {
-          'circle-color': 'red',
-          'circle-radius': circleRadius
-        },
-        type: 'circle',
-      }
-    }
-
-    const colors = ['yellow', 'purple', 'blue', 'orange', 'red'];
-
-    const { heatmap, location, ...rest } = data;
+    
+    let colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
+    
+    let { types, ...rest } = data;
+    // let highlightColors = ['black','black','black','black','black'];
+    // let canvas = map.getCanvasContainer();
+    // let start, current, box;
     for ( let source in rest ) {
       map.addSource(source, {
         'type': 'geojson',
-        'data': data[source]
+        'data': rest[source]
       })
     }
-    map
-      .addSource('heatmap', {
-        'type': 'geojson',
-        'data': heatmap
-      })
-      .addSource('location', {
-        'type': 'geojson',
-        'data': location
-      })
-
     map
       .addLayer({
         id: 'location-layer',
         type: 'fill',
         source: 'location',
         paint: {
-          'fill-color': 'white',
-          'fill-opacity': 0.3
+          'fill-pattern': 'pedestrian-polygon',
+          'fill-opacity': 0.5
         }
-
       })
       .addLayer({
         id: 'heatmap-layer',
@@ -119,11 +71,11 @@ export default ({ data }) => {
             'interpolate',
             ['linear'],
             ['heatmap-density'],
-            0, 'rgba(236,222,239,0)',
+            0, 'rgba(0,0,0,0)',
             0.2, 'rgb(208,209,230)',
             0.4, 'rgb(166,189,219)',
-            0.6, 'rgb(103,169,207)',
-            0.8, 'rgb(28,144,153)'
+            0.6, 'rgb(104,243,148)',
+            0.8, 'rgb(29,190,98)'
           ],
           // increase radius as zoom increases
           'heatmap-radius': {
@@ -147,21 +99,30 @@ export default ({ data }) => {
         type: 'circle',
         source: 'heatmap',
         paint: {
-          'circle-radius': 3,
-          'circle-color': setColors(rest, colors),
+          'circle-radius': 4.5,
+          'circle-color': setColors(types, colors),
           'circle-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, 0.7]
+            ]
+          },
+          'circle-stroke-color': 'white',
+          'circle-stroke-width': .5,
+          'circle-stroke-opacity': {
             stops: [
               [4.5, 0],
               [5, 1]
             ]
-          }
+          },
         }
-      });
+      })
+    
 
     function setColors(type, colors) {
       colors.forEach((color, idx) => {
         let pos = (idx * 2);
-		    colors.splice(pos, 0, ["match", ["get", "type"], [Object.keys(type)[idx]], true, false ])
+		    colors.splice(pos, 0, ["match", ["get", "type"], [type[idx]], true, false ])
       })
       colors.splice(0,0, 'case');
       colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');

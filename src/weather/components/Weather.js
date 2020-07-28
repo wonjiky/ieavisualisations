@@ -20,7 +20,7 @@ export default function({data, time, interval }) {
 
 	},  [map, type, time, timeRange, tempData, interval]);
 
-
+	
 	useEffect (() => {
 		if ( !map ) return;
 		map

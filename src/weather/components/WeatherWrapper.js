@@ -134,7 +134,12 @@ export default function(props) {
 				interval={interval}
 				changeViewUnit={value => setInterval(value)}
 			/>
-			<Controls>
+			<Controls
+				style={{
+						width: '100%',
+						bottom: '0',
+				}}
+			>
 				{controls.map(control => 
 					<Control key={control.label} {...control} /> )}
 				{/* <Labels 
