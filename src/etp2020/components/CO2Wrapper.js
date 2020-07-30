@@ -16,22 +16,39 @@ export default props => {
   const [active, setActive] = React.useState({ open: false, target: null });
   const [region, setRegion] = React.useState({region: 'US', bounds: regionBounds['US']});
   const regions = [ 'US', 'Europe', 'China' ];
-  let colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
+  const colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
 
   React.useEffect(() => {
     
-    let types = region.region === 'China'
-      ? ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Coal']
-      : ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power']
-    
-    let scale = region.region === 'China'
-      ? 0.05
-      : 0.7;
-
-    let URL = [
+    const URL = [
       axios.get(`${props.baseURL}ETP2020/CO2/${region.region}_Saline.json`),
       axios.get(`${props.baseURL}ETP2020/CO2/${region.region}_emissions.csv`),
     ];
+
+    const regionParam = {
+      US: {
+        reservoirs: [
+          { url: "mapbox://iea.14tgvncx", sourceLayer: "US_Reservoir_1-76ycw8" },
+          { url: "mapbox://iea.1xmyhl9q", sourceLayer: "US_Reservoir_2-1l8efp" }
+        ],
+        scale: 0.7,
+        types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
+      },
+      Europe: {
+        reservoirs: [
+          { url: "mapbox://iea.93t29jsi", sourceLayer: "Europe_Reservoir-2x3vs4" },
+        ],
+        scale: 0.7,
+        types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
+      },
+      China: {
+        reservoirs: [
+          { url: "mapbox://iea.0nkpwvw6", sourceLayer: "China_Reservoir-4sfg1q" },
+        ],
+        scale: 0.05,
+        types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Coal'],
+      }
+    }
 
     axios.all(URL)
       .then(responses => {
@@ -41,11 +58,12 @@ export default props => {
             'type': 'FeatureCollection',
             'features': []
           },
+          reservoirs: regionParam[region.region].reservoirs,
           location: responses[0].data,
-          types: types,
+          types: regionParam[region.region].types,
           minMax: [
             Math.min(...tempData.map(d=> parseFloat(d.value))),
-            Math.max(...tempData.map(d=> parseFloat(d.value))) * scale
+            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region.region].scale
           ]
         };
 
@@ -65,6 +83,7 @@ export default props => {
             }
           })
         };
+
         setData(data)
       })
   

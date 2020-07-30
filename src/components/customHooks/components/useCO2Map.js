@@ -12,10 +12,10 @@ export default ({ mapConfig }) => {
 	const mapContainerRef = useRef(null);
 
 	useEffect (() => {
-		console.log('Add Map', mapConfig.maxBounds)
+		
 		const map = new mapboxgl.Map({
 			container: mapContainerRef.current,
-			style: "mapbox://styles/iea/ckcufggk135km1ijqswxxu0v1",
+			style: "mapbox://styles/iea/ckd8t01qv11hn1iqb8gg7a58w",
 			center: mapConfig.center ? mapConfig.center : [0, 0],
 			minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 			maxZoom: 5,

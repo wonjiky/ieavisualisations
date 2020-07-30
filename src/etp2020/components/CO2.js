@@ -2,25 +2,48 @@ import React from 'react'
 // import mapboxgl from 'mapbox-gl';
 import { useCO2Map } from '../../components/customHooks'
 
-export default ({ data, region  }) => {
+export default ({ data, region }) => {
   
   const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: region.bounds } });
   React.useEffect(() => {
     if(!map) return;
     
     let colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
-    let { types, minMax, ...rest } = data;
+    let { types, minMax, reservoirs, ...rest } = data;
     // let highlightColors = ['black','black','black','black','black'];
     // let canvas = map.getCanvasContainer();
     // let start, current, box;
     // if ( map.getSource(`${region.region}-${source}`))
+
+    // Adding sources
+
+    for ( let reservoir in reservoirs ) {
+      map.addSource(`${region.region}-Reservoir-${reservoir}`, {
+        type: "vector", url: reservoirs[reservoir].url
+      })
+    }
+
     for ( let source in rest ) {
       map.addSource(`${region.region}-${source}`, {
         'type': 'geojson',
         'data': rest[source]
       })
     }
-    console.log( map.getSource(`${region.region}-location`));
+
+    // Adding Layers
+
+    for ( let reservoir in reservoirs ) {
+      map.addLayer({
+        'id': `${region.region}-OilGasRsv-${reservoir}`,
+        'source': `${region.region}-Reservoir-${reservoir}`,
+        'source-layer': reservoirs[reservoir].sourceLayer,
+        'type': 'fill',
+        'paint': {
+          'fill-color': 'red'
+        }
+      })
+    }
+    
     map
       .addLayer({
         id: 'location-layer',
