@@ -14,9 +14,12 @@ export default ({
   let continuousBg = colors && type === 'continuous' ? gradientBg(colors) : null;
 
   function gradientBg(colors) {
+    let colorArr = ['#fff 0%'];
     for ( let color in colors ) {
-      console.log(color)
+      let idx = parseInt(color) + 1;
+      colorArr.push(`${colors[color]} ${(100/colors.length) * idx}%`)
     }
+    return colorArr.join(',');
   }
 
   switch(type) {

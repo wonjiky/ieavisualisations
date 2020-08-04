@@ -69,10 +69,10 @@ export default props => {
             Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region.region].scale
           ]
         };
-        console.log(
-          Math.min(...tempData.map(d=> parseFloat(d.value))),
-          Math.max(...tempData.map(d=> parseFloat(d.value)))
-        )
+        // console.log(
+        //   Math.min(...tempData.map(d=> parseFloat(d.value))),
+        //   Math.max(...tempData.map(d=> parseFloat(d.value)))
+        // )
 
         for ( let i in tempData ) {
           data.heatmap.features.push({
