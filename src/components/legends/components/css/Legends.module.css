@@ -1,0 +1,51 @@
+.LegendWrapper {
+  margin-top: 20px;
+  min-width: 200px;
+  width: 100%;
+}
+
+.Header {
+  font-weight: bold;
+  font-size: 16px !important;
+  margin: 0 0 10px 0;
+}
+
+.LegendItem__Category {
+  margin: 10px 0;
+  display: flex;
+}
+
+.LegendItem__Continuous {
+  width: 80%;
+}
+
+.Marker__Continuous {
+  height: 15px;
+  width: 100%;
+  /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,27,121,1) 98%, rgba(0,212,255,1) 100%); */
+}
+
+.Label__Continuous {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Markers {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+
+.Round {
+  border-radius: 25px; 
+}
+
+.Stripe {
+  background: repeating-linear-gradient(
+    -55deg,
+    #222,
+    #222 10px,
+    #333 10px,
+    #333 20px
+  ) !important;
+}

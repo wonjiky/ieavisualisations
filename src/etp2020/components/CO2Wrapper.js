@@ -3,6 +3,7 @@ import axios from 'axios'
 import Papa from 'papaparse'
 import CO2 from './CO2'
 import { Controls, Control } from '../../components/controls'
+import { Legends } from '../../components/legends'
 import classes from './css/ETP.module.css'
 
 export default props => {
@@ -16,7 +17,7 @@ export default props => {
   const [active, setActive] = React.useState({ open: false, target: null });
   const [region, setRegion] = React.useState({region: 'US', bounds: regionBounds['US']});
   const regions = [ 'US', 'Europe', 'China' ];
-  const colors = ['#F2F2F2', '#6f6f6f', '#1DBE62', '#FED324', '#E34946'];
+  const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
 
   React.useEffect(() => {
     
@@ -28,8 +29,10 @@ export default props => {
     const regionParam = {
       US: {
         reservoirs: [
-          { url: "mapbox://iea.14tgvncx", sourceLayer: "US_Reservoir_1-76ycw8" },
-          { url: "mapbox://iea.1xmyhl9q", sourceLayer: "US_Reservoir_2-1l8efp" }
+          { url: "mapbox://iea.63h5unlk", sourceLayer: "US_Reservoir_1458-45y6ui" },
+          { url: "mapbox://iea.733wblb1", sourceLayer: "US_Reservoir_23-b0hrl2" },
+          { url: "mapbox://iea.092dk9uv", sourceLayer: "US_Reservoir_67-1u3cbn" },
+          { url: "mapbox://iea.47kfi170", sourceLayer: "US_Reservoir_9101112-1x96uc" }
         ],
         scale: 0.7,
         types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
@@ -66,6 +69,10 @@ export default props => {
             Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region.region].scale
           ]
         };
+        console.log(
+          Math.min(...tempData.map(d=> parseFloat(d.value))),
+          Math.max(...tempData.map(d=> parseFloat(d.value)))
+        )
 
         for ( let i in tempData ) {
           data.heatmap.features.push({
@@ -137,14 +144,27 @@ export default props => {
       >
         {controls.map(control => 
 					<Control key={control.label} {...control} /> )}
-        <div className={classes.Legend}>
-          {data.types.map((d, i) => (
-            <div key={i} className={classes.LegendItem}>
-              <div style={{background: `${colors[i]}`}}></div>
-              <p>{d}</p>
-            </div>
-          ))}
-        </div>
+        <Legends 
+          type={'category'}
+          header={'CO2 Sources'}
+          labels={data.types}
+          colors={colors}
+          round={true}
+        />
+        <Legends
+          type={'category'}
+          header={'Potential CO2 Storage'}
+          labels={['Oil and Gas reservoirs', 'Saline aquifiers']}
+          colors={['#ffe3a3', 'stripe']}
+          round={false}
+        />
+        <Legends
+          type={'continuous'}
+          header={'CO2 Emission'}
+          labels={['0','10']}
+          colors={['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']}
+          round={false}
+        />
       </Controls>
     </>
   )
