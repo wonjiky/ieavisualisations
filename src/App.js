@@ -25,7 +25,7 @@ function App() {
 		{ id: 4, item: 'Weather - by grid - webgl', url: '/weather-grid-1', component: WeatherByGrid, exact: true, pw: password[2], title: 'Weather: by grid - v1' },
 		{ id: 5, item: 'Weather - by grid - vector', url: '/weather-grid-2', component: WeatherByGrid_Vector, exact: true, pw: password[2], title: 'Weather: by grid - v2' },
 		{ id: 6, item: 'ETP2020 - CO2', url: '/ETP2020-co2', component: CO2Map, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
-		{ id: 6, item: 'ETP2020 - CDD', url: '/ETP2020-cdd', component: CDDMap, exact: true, pw: password[3], title: 'ETP2020 - CDD Map' },
+		{ id: 7, item: 'ETP2020 - CDD', url: '/ETP2020-cdd', component: CDDMap, exact: true, pw: password[3], title: 'ETP2020 - CDD Map' },
 	];
 
 	let baseURL = process.env.REACT_APP_DEV;

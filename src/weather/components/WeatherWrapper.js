@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Papa from 'papaparse';
-import { Control, Controls, Labels } from '../../components/controls';
+import { Control, Controls, Slider, Dropdown } from '../../components/controls';
 import Weather from './Weather';
 
 export default function(props) {
@@ -140,11 +140,52 @@ export default function(props) {
 						bottom: '0',
 				}}
 			>
-				{controls.map(control => 
-					<Control key={control.label} {...control} /> )}
-				{/* <Labels 
-					label={timeLabel}
-				/> */}
+			<Dropdown 
+				label={'View by'}
+				options={['country', 'grid']}
+				click={e => setViewType(e)}
+				selected={viewType}
+				active={active}
+				open={e => open(e)}
+				hide={e => hide(e)}
+      />
+			<Dropdown 
+				label={'Indicators'}
+				options={INDICATOR_LIST}
+				click={e => setIndicator(e)}
+				selected={indicator}
+				active={active}
+				open={e => open(e)}
+				hide={e => hide(e)}
+      />
+			<Dropdown 
+				label={'Interval'}
+				options={['day', 'month']}
+				click={value => {
+					if((time.substring(0,3) === 'Apr' && indicator === 'solar radiation') 
+					|| (data.timeRange.length > 10 && indicator === 'solar radiation')) {
+							setInterval(value)
+					} else {
+					 alert('Data by day does not exist. Please select (April, Solar Radiation)')
+					}}
+				}
+				selected={interval}
+				active={active}
+				open={e => open(e)}
+				hide={e => hide(e)}
+      />
+			<Slider
+				height={10}
+        label={'Time'}
+        currTime={currTime}
+        width={'100%'}
+        time={50}
+        range={[0, data.timeRange.length -1]}
+        change={value => setTime(data.timeRange[value])}
+			/>
+				
+				{/* {controls.map(control => 
+					<Control key={control.label} {...control} /> )} */}
 			</Controls>
 		</>
   )

@@ -13,8 +13,12 @@ const TimeSlider = ({ width, height, range, currTime, change, time, label }) => 
 		paddingTop: 10
 	}
 
+
+	console.log(
+		width, height, range, currTime, change, time, label
+	);
+	
 	return (
-		// <div className={classes.Slider}>
 		<div className={[global.ControlContainer, classes.Slider].join(' ')}>
 			{label 
 			? <label className={[global.ControlLabel, classes.SliderLabel].join(' ')}>{label}<span>{currTime}</span></label>
@@ -26,8 +30,8 @@ const TimeSlider = ({ width, height, range, currTime, change, time, label }) => 
 				step={1}
 				mode={1}
 				rootStyle={sliderStyle}
-				// onChange={value => change(value)}
-				onUpdate={value => change(value)}
+				onChange={value => console.log('hello') || change(value)}
+				// onUpdate={value => console.log('hello') || change(value)}
 			>
 				<Rail>
 				{({ getRailProps }) => ( 
