@@ -115,7 +115,9 @@ export default props => {
 
   function storageToggle(storages) {
     let activeStorage = [];
-    for (let storage in storages) {
+    let { pipelines, sources, ...rest } = storages;
+    
+    for (let storage in rest) {
       if ( storage !== 'sources' && storages[storage] ) {
         let value = storage.substring(0,1) === 'a' ? 'Saline aquifiers' : 'Oil and Gas reservoirs';
         activeStorage.push(value);
@@ -180,11 +182,17 @@ export default props => {
           colors={colors}
           selected={legendToggle.sources}
           round={true}
-          click={val => setLegendToggle(
-            !legendToggle.sources.includes(val)
-            ? prev => ({ ...prev, sources: [...prev.sources, val] })
-            : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
-          )}
+          click={val => { 
+            if ( legendToggle.sources.length === 1 && val === legendToggle.sources[0] ){
+              return;
+            } else {
+              setLegendToggle(
+                !legendToggle.sources.includes(val)
+                ? prev => ({ ...prev, sources: [...prev.sources, val] })
+                : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
+              )
+            }
+          }}
         />
         {regions.region === 'US' 
           ? <Legends 
