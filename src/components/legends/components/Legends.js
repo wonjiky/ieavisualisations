@@ -6,7 +6,6 @@ export default ({
   header,
   labels,
   round,
-  toggle,
   selected,
   click,
   type
@@ -24,7 +23,7 @@ export default ({
     }
     return colorArr.join(',');
   }
-  
+
   switch(type) {
     case 'category':
       legend = labels.map((d, i) => (

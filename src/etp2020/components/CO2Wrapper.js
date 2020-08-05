@@ -16,15 +16,15 @@ export default props => {
   const [data, setData] = React.useState(null);
   const [active, setActive] = React.useState({ open: false, target: null });
   const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
-  const [legendToggle, setLegendToggle] = React.useState({ reservoir: true, aquifier: true, sources: [] });
+  const [legendToggle, setLegendToggle] = React.useState({ pipelines: true, reservoir: true, aquifier: true, sources: [] });
   const regionArr = [ 'US', 'Europe', 'China' ];
   const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
 
   React.useEffect(() => {
-    
+    const{ region, bounds }= regions;
     const URL = [
-      axios.get(`${props.baseURL}ETP2020/CO2/${regions.region}_Saline.json`),
-      axios.get(`${props.baseURL}ETP2020/CO2/${regions.region}_emissions.csv`),
+      axios.get(`${props.baseURL}ETP2020/CO2/${region}_Saline.json`),
+      axios.get(`${props.baseURL}ETP2020/CO2/${region}_emissions.csv`),
     ];
 
     const regionParam = {
@@ -39,16 +39,12 @@ export default props => {
         types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
       },
       Europe: {
-        reservoirs: [
-          { url: "mapbox://iea.93t29jsi", sourceLayer: "Europe_Reservoir-2x3vs4" },
-        ],
+        reservoirs: [{ url: "mapbox://iea.93t29jsi", sourceLayer: "Europe_Reservoir-2x3vs4" },],
         scale: 0.7,
         types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
       },
       China: {
-        reservoirs: [
-          { url: "mapbox://iea.0nkpwvw6", sourceLayer: "China_Reservoir-4sfg1q" },
-        ],
+        reservoirs: [{ url: "mapbox://iea.0nkpwvw6", sourceLayer: "China_Reservoir-4sfg1q" },],
         scale: 0.05,
         types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Coal'],
       }
@@ -67,7 +63,7 @@ export default props => {
           types: regionParam[regions.region].types,
           minMax: [
             Math.min(...tempData.map(d=> parseFloat(d.value))),
-            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[regions.region].scale
+            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region].scale
           ]
         };
 
@@ -87,11 +83,12 @@ export default props => {
             }
           })
         };
-        setLegendToggle({ reservoir: true, aquifier: true, sources: regionParam[regions.region].types })
+
+        setLegendToggle({ reservoir: true, aquifier: true, pipelines: true, sources: regionParam[region].types })
         setData(data)
       })
   
-  }, [ props.baseURL, regions.region ]);
+  }, [ props.baseURL, regions ]);
 
   function open(e) {
 		setActive({ open: true, target: e.target.value })
@@ -126,7 +123,15 @@ export default props => {
     }
     return activeStorage;
   }
-  
+
+  function pipelineToggle(storages) {
+    let activeStorage = [];
+    if ( storages.pipelines ) {
+      activeStorage.push('Pipelines');
+    } 
+    return activeStorage;
+  }
+
   if ( !data ) return <div>Loading...</div>
   return (
     <>
@@ -155,7 +160,6 @@ export default props => {
         />
         <Legends
           type={'category'}
-          toggle={legendToggle}
           header={'Potential CO2 Storage'}
           labels={['Oil and Gas reservoirs', 'Saline aquifiers']}
           colors={['#ffe3a3', 'stripe']}
@@ -171,7 +175,6 @@ export default props => {
         />
         <Legends 
           type={'category'}
-          toggle={legendToggle}
           header={'CO2 Sources'}
           labels={data.types}
           colors={colors}
@@ -183,6 +186,23 @@ export default props => {
             : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
           )}
         />
+        {regions.region === 'US' 
+          ? <Legends 
+            type={'category'}
+            header={'CO2 Pipelines'}
+            labels={['Pipelines']}
+            colors={['line']}
+            selected={pipelineToggle(legendToggle)}
+            round={true}
+            click={_ => {
+              setLegendToggle(prev => ({
+                ...prev,
+                pipelines: !legendToggle.pipelines
+              }))
+            }}
+          />
+          : null
+        }
         <div className={classes.Introduction}>
           <p>
             * Zoom in to view CO2 storage <br/>

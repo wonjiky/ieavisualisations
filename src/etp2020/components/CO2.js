@@ -9,10 +9,9 @@ export default ({ data, regions, toggle }) => {
     if(!map) return;
     const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
     const { region, bounds } = regions;
-    const { types, minMax, reservoirs, ...rest } = data;
+    const { types, minMax, reservoirs, pipelines, ...rest } = data;
     
     map.setMaxBounds(bounds);
-
     // ADDING SOURCES
     for ( let reservoir in reservoirs ) {
       map
@@ -48,6 +47,30 @@ export default ({ data, regions, toggle }) => {
           }
         })
     }
+    map
+      .addSource('US-CO2-pipelines', {
+        'type': 'vector',
+        'url': "mapbox://iea.2eoddisy"
+      })
+      .addLayer({
+        'id': 'US-pipelines',
+        'source': 'US-CO2-pipelines',
+        'source-layer': "US_CO2_pipelines-ctl6c0",
+        'type': 'line',
+        'paint': {
+          'line-color': '#fdf787',
+          'line-width': 3,
+          'line-opacity': {
+            stops: [
+              [4, 0.2],
+              [5, 0.6]
+            ]
+          },
+        },
+        layout: {
+          visibility: 'visible'
+        },
+      })
 
     // ADD SALINE AQUIFIER LAYER
     map
@@ -62,8 +85,8 @@ export default ({ data, regions, toggle }) => {
           'fill-pattern': 'pedestrian-polygon',
           'fill-opacity': {
             stops: [
-              [4, 0.6],
-              [5, 0.2]
+              [4, 0.2],
+              [5, 0.6]
             ]
           }
         }
@@ -166,6 +189,8 @@ export default ({ data, regions, toggle }) => {
       map.removeLayer('heatmap-circle')
         .removeLayer('heatmap-layer')
         .removeLayer('aquifier-layer')
+        .removeLayer('US-pipelines')
+        .removeSource('US-CO2-pipelines')
         .removeSource(`${region}-aquifier`)
         .removeSource(`${region}-heatmap`);
       
@@ -174,10 +199,11 @@ export default ({ data, regions, toggle }) => {
 
   React.useEffect(() => {
     if (!map) return;
-    const { reservoir, aquifier, sources } = toggle;
+    const { reservoir, aquifier, pipelines, sources } = toggle;
 
     map
       .setLayoutProperty('aquifier-layer', 'visibility', aquifier ? 'visible' : 'none')
+      .setLayoutProperty('US-pipelines', 'visibility', pipelines ? 'visible' : 'none')
       .setFilter('heatmap-circle', [
         'match',
         ['get', 'type'],
