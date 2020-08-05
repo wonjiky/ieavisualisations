@@ -11,15 +11,26 @@
 }
 
 .LegendItem__Category {
+  cursor: pointer;
   margin: 10px 0;
   display: flex;
 }
 
+.LegendItem__Category:hover .Label_Category {
+  /* border-bottom: 1px solid black; */
+  text-decoration: underline;
+}
+
+.active {
+  opacity: 0.5;
+}
+
 .LegendItem__Continuous {
-  width: 80%;
+  width: 100%;
 }
 
 .Marker__Continuous {
+  border: .5px solid black;
   height: 15px;
   width: 100%;
   /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,27,121,1) 98%, rgba(0,212,255,1) 100%); */
@@ -27,12 +38,15 @@
 
 .Label__Continuous {
   display: flex;
+  margin-top: 5px;
   justify-content: space-between;
+  font-size: 12px;
 }
 
 .Markers {
   width: 15px;
   height: 15px;
+  border: .5px solid black;
   margin-right: 5px;
 }
 

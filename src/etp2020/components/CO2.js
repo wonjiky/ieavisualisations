@@ -2,48 +2,39 @@ import React from 'react'
 // import mapboxgl from 'mapbox-gl';
 import { useCO2Map } from '../../components/customHooks'
 
-export default ({ data, region }) => {
-  
-  const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: region.bounds } });
+export default ({ data, regions, toggle }) => {
+  const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: regions.bounds } });
   
   React.useEffect(() => {
     if(!map) return;
     const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
-    let { types, minMax, reservoirs, ...rest } = data;
-    // let highlightColors = ['black','black','black','black','black'];
-    // let canvas = map.getCanvasContainer();
-    // let start, current, box;
-    // if ( map.getSource(`${region.region}-${source}`))
+    const { region, bounds } = regions;
+    const { types, minMax, reservoirs, ...rest } = data;
+    
+    map.setMaxBounds(bounds);
 
-    /**
-     * ADDING SOURCES
-     *  */    
-
+    // ADDING SOURCES
     for ( let reservoir in reservoirs ) {
       map
-        .addSource(`${region.region}-Reservoir-${reservoir}`, {
+        .addSource(`${region}-Reservoir-${reservoir}`, {
           type: "vector", url: reservoirs[reservoir].url
         })
     }
 
     for ( let source in rest ) {
       map
-        .addSource(`${region.region}-${source}`, {
+        .addSource(`${region}-${source}`, {
           'type': 'geojson',
           'data': rest[source]
         })
     }
 
-
-    /**
-     * RESERVOIR LAYER
-     *  */    
-    
+    // ADD RESERVOIR LAYER
     for ( let reservoir in reservoirs ) {
       map
         .addLayer({
-          'id': `${region.region}-OilGasRsv-${reservoir}`,
-          'source': `${region.region}-Reservoir-${reservoir}`,
+          'id': `${region}-Rsv-${reservoir}`,
+          'source': `${region}-Reservoir-${reservoir}`,
           'source-layer': reservoirs[reservoir].sourceLayer,
           'type': 'fill',
           'paint': {
@@ -58,16 +49,15 @@ export default ({ data, region }) => {
         })
     }
 
-    /**
-     * HEATMAP LAYER
-     *  */
-    
+    // ADD SALINE AQUIFIER LAYER
     map
       .addLayer({
-        id: 'location-layer',
+        id: 'aquifier-layer',
         type: 'fill',
-        source: `${region.region}-location`,
-        // source: 'location',
+        source: `${region}-aquifier`,
+        layout: {
+          visibility: 'visible'
+        },
         paint: {
           'fill-pattern': 'pedestrian-polygon',
           'fill-opacity': {
@@ -77,12 +67,14 @@ export default ({ data, region }) => {
             ]
           }
         }
-      })
+      });
+
+    // ADD HEATMAP LAYER
+    map
       .addLayer({
         id: 'heatmap-layer',
         type: 'heatmap',
-        // source: 'heatmap',
-        source: `${region.region}-heatmap`,
+        source: `${region}-heatmap`,
         maxzoom: 5,
         paint: {
           // increase weight as diameter breast height increases
@@ -134,8 +126,7 @@ export default ({ data, region }) => {
       .addLayer({
         id: 'heatmap-circle',
         type: 'circle',
-        // source: 'heatmap',
-        source: `${region.region}-heatmap`,
+        source: `${region}-heatmap`,
         paint: {
           'circle-radius': 4,
           'circle-color': setColors(types, colors),
@@ -154,7 +145,7 @@ export default ({ data, region }) => {
             ]
           },
         }
-      })
+      });
     
     function setColors(type, colors) {
       colors.forEach((color, idx) => {
@@ -167,13 +158,47 @@ export default ({ data, region }) => {
     }
     
     return () => {
+      for ( let reservoir in reservoirs ) {
+        map
+          .removeLayer(`${region}-Rsv-${reservoir}`)
+          .removeSource(`${region}-Reservoir-${reservoir}`);
+      }
       map.removeLayer('heatmap-circle')
-      map.removeLayer('heatmap-layer')
-      map.removeLayer('location-layer')
-      map.removeSource(`${region.region}-location`)
-      map.removeSource(`${region.region}-heatmap`)
+        .removeLayer('heatmap-layer')
+        .removeLayer('aquifier-layer')
+        .removeSource(`${region}-aquifier`)
+        .removeSource(`${region}-heatmap`);
+      
     }
-  }, [map, region.region, data])
+  }, [map, regions, data]);
+
+  React.useEffect(() => {
+    if (!map) return;
+    const { reservoir, aquifier, sources } = toggle;
+
+    map
+      .setLayoutProperty('aquifier-layer', 'visibility', aquifier ? 'visible' : 'none')
+      .setFilter('heatmap-circle', [
+        'match',
+        ['get', 'type'],
+        sources,
+        true,
+        false
+      ])
+      .setFilter('heatmap-layer', [
+        'match',
+        ['get', 'type'],
+        sources,
+        true,
+        false
+      ]);
+
+    for ( let rsv in data.reservoirs ) {
+      map.setLayoutProperty(`${regions.region}-Rsv-${rsv}`, 'visibility', reservoir ? 'visible' : 'none');
+    }
+
+    
+  }, [map, toggle, data.reservoirs, regions.region]);
   
   return <div ref={mapContainerRef} className='map' />
 }

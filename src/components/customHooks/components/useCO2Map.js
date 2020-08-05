@@ -12,14 +12,14 @@ export default ({ mapConfig }) => {
 	const mapContainerRef = useRef(null);
 
 	useEffect (() => {
-		
 		const map = new mapboxgl.Map({
 			container: mapContainerRef.current,
 			style: "mapbox://styles/iea/ckd8t01qv11hn1iqb8gg7a58w",
-			center: mapConfig.center ? mapConfig.center : [0, 0],
+			center: [-103, 39],
+			zoom: 4,
 			minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 			maxZoom: 5,
-			maxBounds: mapConfig.maxBounds
+			maxBounds: [[-180, 10],[-45, 74]]
 		})
 		
 		const popUp = new mapboxgl.Popup({

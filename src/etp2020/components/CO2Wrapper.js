@@ -9,21 +9,22 @@ import classes from './css/ETP.module.css'
 export default props => {
   
   const regionBounds ={
-    US: [[-190, 10],[-40, 74]],
+    US: [[-180, 10],[-45, 74]],
     China: [[50, 9],[155, 55]],
     Europe : [[-33, 26],[64, 66]]
   };
   const [data, setData] = React.useState(null);
   const [active, setActive] = React.useState({ open: false, target: null });
-  const [region, setRegion] = React.useState({region: 'US', bounds: regionBounds['US']});
-  const regions = [ 'US', 'Europe', 'China' ];
+  const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
+  const [legendToggle, setLegendToggle] = React.useState({ reservoir: true, aquifier: true, sources: [] });
+  const regionArr = [ 'US', 'Europe', 'China' ];
   const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
 
   React.useEffect(() => {
     
     const URL = [
-      axios.get(`${props.baseURL}ETP2020/CO2/${region.region}_Saline.json`),
-      axios.get(`${props.baseURL}ETP2020/CO2/${region.region}_emissions.csv`),
+      axios.get(`${props.baseURL}ETP2020/CO2/${regions.region}_Saline.json`),
+      axios.get(`${props.baseURL}ETP2020/CO2/${regions.region}_emissions.csv`),
     ];
 
     const regionParam = {
@@ -61,18 +62,14 @@ export default props => {
             'type': 'FeatureCollection',
             'features': []
           },
-          reservoirs: regionParam[region.region].reservoirs,
-          location: responses[0].data,
-          types: regionParam[region.region].types,
+          reservoirs: regionParam[regions.region].reservoirs,
+          aquifier: responses[0].data,
+          types: regionParam[regions.region].types,
           minMax: [
             Math.min(...tempData.map(d=> parseFloat(d.value))),
-            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region.region].scale
+            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[regions.region].scale
           ]
         };
-        // console.log(
-        //   Math.min(...tempData.map(d=> parseFloat(d.value))),
-        //   Math.max(...tempData.map(d=> parseFloat(d.value)))
-        // )
 
         for ( let i in tempData ) {
           data.heatmap.features.push({
@@ -90,14 +87,11 @@ export default props => {
             }
           })
         };
-
+        setLegendToggle({ reservoir: true, aquifier: true, sources: regionParam[regions.region].types })
         setData(data)
       })
   
-  }, [
-    props.baseURL, 
-    region.region
-  ]);
+  }, [ props.baseURL, regions.region ]);
 
   function open(e) {
 		setActive({ open: true, target: e.target.value })
@@ -113,58 +107,88 @@ export default props => {
 			id: 1,
 			type: 'dropdown',
 			label: 'Regions', 
-			options: regions,
-			click: value => setRegion({region: value, bounds: regionBounds[value]}),
+			options: regionArr,
+			click: value => setRegions({region: value, bounds: regionBounds[value]}),
 			open: e => open(e),
 			hide: e => hide(e),
 			active: active,
-			selected: region.region
+			selected: regions.region
     }
   ]
+
+  function storageToggle(storages) {
+    let activeStorage = [];
+    for (let storage in storages) {
+      if ( storage !== 'sources' && storages[storage] ) {
+        let value = storage.substring(0,1) === 'a' ? 'Saline aquifiers' : 'Oil and Gas reservoirs';
+        activeStorage.push(value);
+      } 
+    }
+    return activeStorage;
+  }
   
   if ( !data ) return <div>Loading...</div>
   return (
     <>
-      {regions.map((reg, key) => (
-        region.region === reg ? <CO2
-          key={key} 
-          data={data}
-          region={region}
-        />
-        : null
-      ))}
+      <CO2 
+        data={data}
+        toggle={legendToggle}
+        regions={regions}
+      />
       <Controls
         style={{
           flexFlow: 'column',
           top: '40px',
           paddingRight: '20px',
           paddingLeft: '20px',
-          right: '40px',
+          left: '40px',
         }}
       >
         {controls.map(control => 
 					<Control key={control.label} {...control} /> )}
-        <Legends 
-          type={'category'}
-          header={'CO2 Sources'}
-          labels={data.types}
-          colors={colors}
-          round={true}
-        />
-        <Legends
-          type={'category'}
-          header={'Potential CO2 Storage'}
-          labels={['Oil and Gas reservoirs', 'Saline aquifiers']}
-          colors={['#ffe3a3', 'stripe']}
-          round={false}
-        />
         <Legends
           type={'continuous'}
-          header={'CO2 Emission'}
-          labels={['0','10']}
+          header={'CO2 Emission (Gt)'}
+          labels={[0,Math.max(...data.heatmap.features.map(d => parseFloat(d.properties.value)))]}
           colors={['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']}
           round={false}
         />
+        <Legends
+          type={'category'}
+          toggle={legendToggle}
+          header={'Potential CO2 Storage'}
+          labels={['Oil and Gas reservoirs', 'Saline aquifiers']}
+          colors={['#ffe3a3', 'stripe']}
+          selected={storageToggle(legendToggle)}
+          round={false}
+          click={val => {
+            let layer = val.substring(0,1) === 'O' ? 'reservoir' : 'aquifier';
+            setLegendToggle(prev => ({
+              ...prev,
+              [layer]: !legendToggle[layer]
+            }))
+          }}
+        />
+        <Legends 
+          type={'category'}
+          toggle={legendToggle}
+          header={'CO2 Sources'}
+          labels={data.types}
+          colors={colors}
+          selected={legendToggle.sources}
+          round={true}
+          click={val => setLegendToggle(
+            !legendToggle.sources.includes(val)
+            ? prev => ({ ...prev, sources: [...prev.sources, val] })
+            : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
+          )}
+        />
+        <div className={classes.Introduction}>
+          <p>
+            * Zoom in to view CO2 storage <br/>
+            * Click on legend to toggle on/off layers
+          </p>
+        </div>
       </Controls>
     </>
   )

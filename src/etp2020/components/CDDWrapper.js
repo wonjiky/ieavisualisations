@@ -6,7 +6,8 @@ function WeatherByGrid_Vector() {
   const mapConfig = {
     center: [0.729,15.359],
     minZoom: 2.2,
-    maxZoom: 4
+    maxZoom: 4,
+    style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx"
   } 
 
   const layers = [

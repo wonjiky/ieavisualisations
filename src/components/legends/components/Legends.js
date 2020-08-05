@@ -6,6 +6,9 @@ export default ({
   header,
   labels,
   round,
+  toggle,
+  selected,
+  click,
   type
 }) => {
 
@@ -21,11 +24,14 @@ export default ({
     }
     return colorArr.join(',');
   }
-
+  
   switch(type) {
     case 'category':
       legend = labels.map((d, i) => (
-          <div key={i} className={classes.LegendItem__Category}>
+          <div key={i} className={!selected.includes(d) 
+            ? [classes.LegendItem__Category, classes.active].join (' ')
+            : classes.LegendItem__Category} 
+            onClick={() => click(d)}>
             <div 
               className={markers} 
               style={{
@@ -33,7 +39,7 @@ export default ({
                   ? 'repeating-linear-gradient(45deg, #ffe3a3, #ffe3a3 2px, transparent 2px, transparent 5px)' 
                   : colors[i]}`}}
             />
-            <p>{d}</p>
+            <p className={classes.Label_Category}>{d}</p>
           </div>
         ));
       break;
