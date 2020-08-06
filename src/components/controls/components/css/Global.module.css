@@ -6,7 +6,8 @@
   margin-left: -1px;
 }
 
-.ControlLabel {
+.ControlLabel,
+.ButtonLabel {
   display: flex;
   line-height: 1.25rem;
   font-size: .875rem;

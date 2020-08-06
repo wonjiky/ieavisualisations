@@ -1,69 +1,46 @@
 .Button {
-    margin-left: 20px;
+    margin-bottom: 24px;
 }
 
-.ButtonOption {
-    display: inline-block;
+.ButtonOptions {
+    display: flex;
     position: relative;
-    padding: 23px 20px;
+    border: 1px solid #e6e6e6;
 }
 
-.ButtonOption:not(:first-child) {
-    margin-left: -1px;
-  }
+.vertical {
+    flex-flow: column;
+}
 
-.ButtonOption > button {
-    font-size: 1.25rem;
-    background: none;
+.horizontal {
+    flex-flow: row;
+}
+
+.horizontal > .ButtonOption:not(:first-child) {
+    margin-left: -1px;
+}
+
+.vertical > .ButtonOption {
     display: flex;
 }
 
-.ButtonOption > button:before {
+.ButtonOption {
+    flex: 1;
+    box-sizing: border-box;
     cursor: pointer;
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    transition: border .2s linear;
-    border: 1px solid #e6e6e6;
-    content: "";
+    padding: 20px 14px;
+    font-size: 1.25rem;
+    color: #949494;
+    background: #f3f3f3;
+    transition: color .2s linear;
 }
 
-/* .Button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    outline: none;
-    cursor: pointer;
-    font: inherit;
-    margin: auto;
-    padding: 20px;
-    display:flex;
-    font-weight: bold;
+.ButtonOption:hover {
+    color: #000;
+    transition: color .2s linear;
 }
 
-.Success {
-    color: #04f;
-}
-
-.Button:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-}
-
-.Danger {
-    color: #944317;
-} */
-
-.ButtonWrapper {
-    /* display: flex; */    
-}
-
-.Selected {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: red;
+.ButtonOption.Selected {
+    color: #000;
+    background:#fff;
 }

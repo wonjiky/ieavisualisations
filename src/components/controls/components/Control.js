@@ -15,8 +15,8 @@ export default props => {
         hide={props.hide}
         />
       )
-    // case 'button':
-    //   return <Button {...props} />;
+    case 'button':
+      return <Button {...props} />;
     case 'slider':
       return ( 
         <Slider
@@ -30,7 +30,7 @@ export default props => {
           />
       )
     default:
-      return <div>NULL</div>;
+      return null;
   }
 }
   
