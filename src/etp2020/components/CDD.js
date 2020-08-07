@@ -42,6 +42,37 @@ export default function({ layer, overlay, population, years }) {
       }
     })
 
+    for (let i in population.layers) {
+      map.addLayer({
+        id: `LAYER-POP-${i}`,
+        source: `${population.data}-${population.type}-${population.year}-${i}`,
+        'source-layer': population.layers[i].sourceLayer,
+        type: 'circle',
+        layout: {
+          visibility: 'none'
+        },
+        paint: {
+          'circle-radius': 2,
+          'circle-color': popColorsByValues(years),
+        }
+      })
+    }
+
+    function popColorsByValues(year) {
+      const colorTypes = {
+          colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+          range: [0,1,3,5,7,10,15,30,45,50,100,300,400,450,600,700,800]
+      }
+    
+      let result = ["step", ["get", year.toString()], "black"];
+      for ( let i in colorTypes.colors ) {
+        let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+        result.splice(colorIdx, 0, colorTypes.colors[i])
+        result.splice(rangeIdx, 0, colorTypes.range[i])
+      }
+      return result;
+    }
+
     function colorsByValues(type) {
       const colorTypes = {
         CDD: {
@@ -68,50 +99,53 @@ export default function({ layer, overlay, population, years }) {
       for ( let l in layers ) {
         map.removeLayer(`LAYER-${data}-${type}-${year}-${l}`)
       }
-    }
-  }, [map, layer])
-
-  React.useEffect(() => {
-    if(!map) return;
-    console.log(years);
-    const { data, year, type, layers } = population;
-    for (let i in layers) {
-      map.addLayer({
-        id: `LAYER-POP-${i}`,
-        source: `${data}-${type}-${year}-${i}`,
-        'source-layer': layers[i].sourceLayer,
-        type: 'circle',
-        layout: {
-          visibility: 'none'
-        },
-        paint: {
-          'circle-radius': 3,
-          'circle-color': colorsByValues(years),
-        }
-      })
-    }
-    
-    function colorsByValues(year) {
-      const colorTypes = {
-          colors: ['#006837','#1a9850','#66bd63','#a6d96a', '#d9ef8b','#ffffbf', '#fee08b','#fdae61','#f46d43','#d73027','#a50026'],
-          range: [0, 100, 200, 400, 600, 800, 1000, 1600, 2600, 3500, 6000]
-      }
-    
-      let result = ["step", ["get", year.toString()], "black"];
-      for ( let i in colorTypes.colors ) {
-        let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
-        result.splice(colorIdx, 0, colorTypes.colors[i])
-        result.splice(rangeIdx, 0, colorTypes.range[i])
-      }
-      return result;
-    }
-
-    return () => {
       for (let i in layers) {
         map.removeLayer(`LAYER-POP-${i}`)
       }
     }
-  }, [map, population, years])
+  }, [map, population, layer, years])
+
+  // React.useEffect(() => {
+  //   if(!map) return;
+  //   console.log(years);
+  //   const { data, year, type, layers } = population;
+  //   for (let i in layers) {
+  //     map.addLayer({
+  //       id: `LAYER-POP-${i}`,
+  //       source: `${data}-${type}-${year}-${i}`,
+  //       'source-layer': layers[i].sourceLayer,
+  //       type: 'circle',
+  //       layout: {
+  //         visibility: 'none'
+  //       },
+  //       paint: {
+  //         'circle-radius': 2,
+  //         'circle-color': colorsByValues(years),
+  //       }
+  //     })
+  //   }
+    
+  //   function colorsByValues(year) {
+  //     const colorTypes = {
+  //         colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+  //         range: [0,1,3,5,7,10,15,30,45,50,100,300,400,450,600,700,800]
+  //     }
+    
+  //     let result = ["step", ["get", year.toString()], "black"];
+  //     for ( let i in colorTypes.colors ) {
+  //       let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+  //       result.splice(colorIdx, 0, colorTypes.colors[i])
+  //       result.splice(rangeIdx, 0, colorTypes.range[i])
+  //     }
+  //     return result;
+  //   }
+
+  //   return () => {
+  //     for (let i in layers) {
+  //       map.removeLayer(`LAYER-POP-${i}`)
+  //     }
+  //   }
+  // }, [map, population, years])
 
   React.useEffect(() => {
     if (!map) return;

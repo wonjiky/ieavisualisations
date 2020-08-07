@@ -12,7 +12,6 @@ export default ({ mapConfig }) => {
 	const mapContainerRef = useRef(null);
 
 	useEffect (() => {
-		console.log('USE MAP')
 			const map = new mapboxgl.Map({
 				container: mapContainerRef.current,
 				style: "mapbox://styles/iea/ck9jt8mxx028m1ip9gih9yod6",

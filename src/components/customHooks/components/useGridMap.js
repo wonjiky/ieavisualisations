@@ -141,7 +141,6 @@ export default ({ mapConfig, layers }) => {
           });
       });
 	}, [])
-  console.log(map)
 	return {
 			map,
 			popUp,

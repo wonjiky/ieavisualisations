@@ -17,7 +17,10 @@ export default function () {
       style: 'horizontal',
       customStyle: { marginBottom: '12px'},
       selected: mainLayer,
-      click: value => setMainLayer(value),
+      click: value => {
+        setMainLayer(value)
+        setOverlay('None')
+      },
     },
     {
       type: 'button',
@@ -25,14 +28,20 @@ export default function () {
       style: 'horizontal',
       customStyle: { marginBottom: '12px'},
 			selected: year,
-			click: value => setYear(value),
+			click: value => {
+        setYear(value)
+        setOverlay('None')
+      },
     },
     {
       type: 'button',
       options: ['SDS', 'STEPS'],
       style: 'horizontal',
       selected: type,
-      click: value => setType(value),
+      click: value => {
+        setType(value)
+        setOverlay('None')
+      },
     },
     {
       type: 'button',

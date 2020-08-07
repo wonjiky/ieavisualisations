@@ -13,11 +13,6 @@ const TimeSlider = ({ width, height, range, currTime, change, time, label }) => 
 		paddingTop: 10
 	}
 
-
-	console.log(
-		width, height, range, currTime, change, time, label
-	);
-	
 	return (
 		<div className={[global.ControlContainer, classes.Slider].join(' ')}>
 			{label 
@@ -30,7 +25,7 @@ const TimeSlider = ({ width, height, range, currTime, change, time, label }) => 
 				step={1}
 				mode={1}
 				rootStyle={sliderStyle}
-				onChange={value => console.log('hello') || change(value)}
+				onChange={value => change(value)}
 				// onUpdate={value => console.log('hello') || change(value)}
 			>
 				<Rail>
