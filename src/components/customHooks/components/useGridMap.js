@@ -13,7 +13,7 @@ export default ({ mapConfig, layers }) => {
       console.log(mapConfig.style);
 			const map = new mapboxgl.Map({
 				container: mapContainerRef.current,
-        style: mapConfig.style,// ? mapConfig.style : "mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6",
+        style: mapConfig.style ? mapConfig.style : "mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6",
 				center: mapConfig.center ? mapConfig.center : [0, 0],
 				minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 				maxZoom: mapConfig.maxZoom ? mapConfig.maxZoom : 22,
