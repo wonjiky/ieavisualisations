@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEtpMap } from '../../components/customHooks';
-import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLayers';
+// import { colorsByValues } from './util';
 
 export default function({ layer }) {
 
@@ -25,38 +25,8 @@ export default function({ layer }) {
         type: 'circle',
         paint: {
           'circle-opacity': .8,
-          'circle-radius': [
-            'interpolate',
-            ['exponential', 0.5],
-            ['zoom'],
-            3,
-            2,
-            6,
-            5
-          ],
-          'circle-color': [
-            "step",
-            ["get", "val"],
-            "hsla(0, 0%, 8%, 1)",
-            0,
-            "#d53e4f",
-            100,
-            "#f46d43",
-            300,
-            "#fdae61",
-            600,
-            "#fee08b",
-            1000,
-            "#ffffbf",
-            1400,
-            "#e6f598",
-            1600,
-            "#abdda4",
-            1800,
-            "#66c2a5",
-            2300,
-            "#3288bd"
-           ]
+          'circle-radius': 4,
+          'circle-color': colorsByValues(data)
         },
       })  
     }
@@ -72,6 +42,27 @@ export default function({ layer }) {
         // 'line-dasharray': [3,4]
       }
     })
+
+    function colorsByValues(type) {
+      const colorTypes = {
+        CDD: {
+          colors: ['#006837','#1a9850','#66bd63','#a6d96a', '#d9ef8b','#ffffbf', '#fee08b','#fdae61','#f46d43','#d73027','#a50026'],
+          range: [0, 100, 200, 400, 600, 800, 1000, 1600, 2600, 3500, 6000]
+        },
+        HDD: {
+          colors: ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790'],
+          range: [0, 30, 100, 200, 400, 800, 1000, 1600, 2600, 3500, 6000]
+        }
+      }
+    
+      let result = ["step", ["get","val"], "black"];
+      for ( let i in colorTypes[type].colors ){
+        let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+        result.splice(colorIdx, 0, colorTypes[type].colors[i])
+        result.splice(rangeIdx, 0, colorTypes[type].range[i])
+      }
+      return result;
+    }
 
     return () => {
       map.removeLayer('world-shape')
