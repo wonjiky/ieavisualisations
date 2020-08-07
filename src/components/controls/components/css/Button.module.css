@@ -28,8 +28,8 @@
     flex: 1;
     box-sizing: border-box;
     cursor: pointer;
-    padding: 20px 14px;
-    font-size: 1.25rem;
+    padding:15px 12px;
+    font-size: 1rem;
     color: #949494;
     background: #f3f3f3;
     transition: color .2s linear;

@@ -60,6 +60,66 @@ export const ETP_LAYERS = [
       ],
     },
     {
+      data: 'CDD',
+      year: 2018,
+      type: 'SDS',
+      layers: [
+        { url: "mapbox://iea.5otrfv85", sourceLayer: "ETP_CDD_SDS_2017_1-3eseba" },
+        { url: "mapbox://iea.62sxxpmf", sourceLayer: "ETP_CDD_SDS_2017_2-108guv" },
+        { url: "mapbox://iea.16m5y16n", sourceLayer: "ETP_CDD_SDS_2017_3-crwqtj" }
+      ],
+    },
+    {
+      data: 'CDD',
+      year: 2030,
+      type: 'SDS',
+      layers: [
+        { url: "mapbox://iea.d2uxozne", sourceLayer: "ETP_CDD_SDS_2030_1-a225js" },
+        { url: "mapbox://iea.5y2salzu", sourceLayer: "ETP_CDD_SDS_2030_2-b8quer" },
+        { url: "mapbox://iea.5mc9cssb", sourceLayer: "ETP_CDD_SDS_2030_3-7ekuf4" }
+      ],
+    },
+    {
+      data: 'CDD',
+      year: 2070,
+      type: 'SDS',
+      layers: [
+        { url: "mapbox://iea.9cptki9p", sourceLayer: "ETP_CDD_SDS_2070_1-7abetz" },
+        { url: "mapbox://iea.2i93f8fo", sourceLayer: "ETP_CDD_SDS_2070_2-dwzcgq" },
+        { url: "mapbox://iea.9f266pma", sourceLayer: "ETP_CDD_SDS_2070_3-9a7iou" }
+      ],
+    },
+    {
+      data: 'CDD',
+      year: 2018,
+      type: 'STEPS',
+      layers: [
+        { url: "mapbox://iea.1zvgv9i8", sourceLayer: "ETP_CDD_STEPS_2017_1-66fi0o" },
+        { url: "mapbox://iea.a4dzqj7u", sourceLayer: "ETP_CDD_STEPS_2017_2-2fe8ba" },
+        { url: "mapbox://iea.4m6yp9af", sourceLayer: "ETP_CDD_STEPS_2017_3-6ach3w" }
+      ],
+    },
+    {
+      data: 'CDD',
+      year: 2030,
+      type: 'STEPS',
+      layers: [
+        { url: "mapbox://iea.7qa6v4n9", sourceLayer: "ETP_CDD_STEPS_2030_1-9ogcvu" },
+        { url: "mapbox://iea.d6w3pr3g", sourceLayer: "ETP_CDD_STEPS_2030_2-7kgb4j" },
+        { url: "mapbox://iea.cmvqbbl5", sourceLayer: "ETP_CDD_STEPS_2030_3-8l1gbx" }
+      ],
+    },
+    {
+      data: 'CDD',
+      year: 2070,
+      type: 'STEPS',
+      layers: [
+        { url: "mapbox://iea.blhli9op", sourceLayer: "ETP_CDD_STEPS_2070_1-6rfl8i" },
+        { url: "mapbox://iea.0r7rtf3n", sourceLayer: "ETP_CDD_STEPS_2070_2-6ulj7d" },
+        { url: "mapbox://iea.1rq9exi1", sourceLayer: "ETP_CDD_STEPS_2070_3-9gg4gg" }
+      ],
+    },
+    {
       data: 'LAYER',
       year: '',
       type: 'border',

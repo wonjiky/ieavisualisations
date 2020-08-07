@@ -27,6 +27,7 @@ export default props => {
       axios.get(`${props.baseURL}ETP2020/CO2/${region}_emissions.csv`),
     ];
 
+    const types =  ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'];
     const regionParam = {
       US: {
         reservoirs: [
@@ -36,17 +37,17 @@ export default props => {
           { url: "mapbox://iea.47kfi170", sourceLayer: "US_Reservoir_9101112-1x96uc" }
         ],
         scale: 0.7,
-        types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
+        types: types,
       },
       Europe: {
         reservoirs: [{ url: "mapbox://iea.93t29jsi", sourceLayer: "Europe_Reservoir-2x3vs4" },],
         scale: 0.7,
-        types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Power'],
+        types: types,
       },
       China: {
         reservoirs: [{ url: "mapbox://iea.0nkpwvw6", sourceLayer: "China_Reservoir-4sfg1q" },],
         scale: 0.05,
-        types: ['Iron steel', 'Cement', 'Refining', 'Chemicals', 'Coal'],
+        types: types,
       }
     }
 

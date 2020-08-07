@@ -14,8 +14,9 @@ export default function () {
 			type: 'button',
 			options: ['HDD','CDD'],
       style: 'horizontal',
+      customStyle: { marginBottom: '12px'},
       selected: mainLayer,
-      click: value => console.log(value),
+      click: value => setMainLayer(value),
     },
     {
       type: 'button',

@@ -29,6 +29,8 @@ export default ({ mapConfig }) => {
     map.on("load", () => {
       setPopUp(popUp);
       setMap(map);
+
+      
       for (let hdd_layers in ETP_LAYERS) {
         let tempLayers = ETP_LAYERS[hdd_layers].layers;
         let type = ETP_LAYERS[hdd_layers];
