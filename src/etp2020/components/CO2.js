@@ -222,8 +222,6 @@ export default ({ data, regions, toggle }) => {
     for ( let rsv in data.reservoirs ) {
       map.setLayoutProperty(`${regions.region}-Rsv-${rsv}`, 'visibility', reservoir ? 'visible' : 'none');
     }
-
-    
   }, [map, toggle, data.reservoirs, regions.region]);
   
   return <div ref={mapContainerRef} className='map' />

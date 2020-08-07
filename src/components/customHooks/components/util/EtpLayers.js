@@ -126,5 +126,15 @@ export const ETP_LAYERS = [
       layers: [
         { url: "mapbox://iea.6etmm149", sourceLayer: "World_map_by_Region-6plcrh" }
       ]
+    },
+    {
+      data: 'LAYER',
+      year: '',
+      type: 'pop',
+      layers: [
+        { url: "mapbox://iea.836i240d", sourceLayer: "ETP_POP_1-0h9zmz" },
+        { url: "mapbox://iea.cxfj93uk", sourceLayer: "ETP_POP_2-790e6v" },
+        { url: "mapbox://iea.7h88wmkw", sourceLayer: "ETP_POP_3-awrtnm" }
+      ]
     }
 ];

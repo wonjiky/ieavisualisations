@@ -10,7 +10,6 @@ export default ({ mapConfig, layers }) => {
 	const [popUp, setPopUp] = useState(null);
 	const mapContainerRef = useRef(null);
 	useEffect (() => {
-      console.log(mapConfig.style);
 			const map = new mapboxgl.Map({
 				container: mapContainerRef.current,
         style: mapConfig.style ? mapConfig.style : "mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6",
@@ -142,7 +141,6 @@ export default ({ mapConfig, layers }) => {
           });
       });
 	}, [])
-
 	return {
 			map,
 			popUp,
