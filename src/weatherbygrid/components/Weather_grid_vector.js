@@ -51,6 +51,8 @@ function WeatherByGrid_Vector() {
         })
     }
   })
+
+  
   return <div ref={mapContainerRef} className='map'/>
 }
 

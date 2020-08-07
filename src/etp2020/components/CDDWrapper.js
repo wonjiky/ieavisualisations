@@ -8,6 +8,7 @@ export default function () {
   const [mainLayer, setMainLayer] = React.useState('HDD');
   const [year, setYear] = React.useState(2018);
   const [type, setType] = React.useState('SDS');
+  const [overlay, setOverlay] = React.useState('None');
 
   const controls = [
 		{ 
@@ -35,20 +36,25 @@ export default function () {
     },
     {
       type: 'button',
-      label: 'Layers',
-      options: ['Population', 'Need of heating', 'Need of cooling', 'Need of dehumidification'],
-      click: value => console.log(value),
+      label: 'Overly layers',
+      options: ['None', 'Population', 'Need of heating', 'Need of cooling', 'Need of dehumidification'],
+      click: value => setOverlay(value),
       style: 'vertical',
-			selected: 'Need of heating',
+			selected: overlay,
     }
   ]
 
   let data = [ ...ETP_LAYERS ];
   let layer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
+  let population = data.filter(d => d.data === 'LAYER' && d.type === 'pop')[0];
+  
   return (
     <>
       <CDD
         layer={layer}
+        population={population}
+        years={year}
+        overlay={overlay}
       />
       <Controls
         style={{
