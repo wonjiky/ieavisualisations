@@ -15,7 +15,7 @@ export default props => {
   };
   const [data, setData] = React.useState(null);
   const [active, setActive] = React.useState({ open: false, target: null });
-  const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
+  const [regions, setRegions] = React.useState({region: 'China', bounds: regionBounds['China']});
   const [legendToggle, setLegendToggle] = React.useState({ reservoir: true, hubs: false, aquifer: true, sources: [] });
   const regionArr = [ 'US', 'Europe', 'China' ];
   const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
@@ -152,7 +152,7 @@ export default props => {
         toggle={legendToggle}
         regions={regions}
       />
-      <Controls
+      {/* <Controls
         style={{
           flexFlow: 'column',
           top: '40px',
@@ -167,14 +167,14 @@ export default props => {
           header={'CO2 emission (Mt/year)'}
           // labels={[0, `${`]}
           labels={[0, maxVal]}
-          colors={['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']}
+          colors={['#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506']}
           round={false}
         />
         <Legends
           type={'category'}
           header={'Potential CO2 storage'}
           labels={['Oil and gas reservoirs', 'Saline aquifers']}
-          colors={['#ffe3a3', 'stripe']}
+          colors={['#5b6162', 'stripe']}
           selected={storageToggle(legendToggle)}
           round={false}
           click={val => {
@@ -228,7 +228,7 @@ export default props => {
             * Click on legend to switch on/off layers
           </p>
         </div>
-      </Controls>
+      </Controls> */}
     </>
   )
 }

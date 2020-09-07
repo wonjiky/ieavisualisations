@@ -3,6 +3,7 @@ import React from 'react'
 import { useCO2Map } from '../../components/customHooks'
 
 export default ({ data, regions, toggle }) => {
+  
   const { map, popUp, mapContainerRef } = useCO2Map({ mapConfig: { maxBounds: regions.bounds } });
   
   React.useEffect(() => {
@@ -37,11 +38,11 @@ export default ({ data, regions, toggle }) => {
           'source-layer': reservoirs[reservoir].sourceLayer,
           'type': 'fill',
           'paint': {
-            'fill-color': '#ffe3a3',
+            'fill-color': '#5b6162',
             'fill-opacity': {
               stops: [
-                [4, 0.6],
-                [5, 0.2]
+                [4, 0.7],
+                [5, 0.3]
               ]
             }
           }
@@ -82,7 +83,7 @@ export default ({ data, regions, toggle }) => {
           visibility: 'visible'
         },
         paint: {
-          'fill-pattern': 'pedestrian-polygon',
+          'fill-pattern': 'aquifer-layer-01',
           'fill-opacity': {
             stops: [
               [4, 0.2],
@@ -187,16 +188,20 @@ export default ({ data, regions, toggle }) => {
             ['linear'],
             ['heatmap-density'],
             0, 'rgba(0,0,0,0)',
-            // 0.2, '#ffeda0',
-            // 0.4, '#fed976',
-            // 0.6, '#feb24C',
-            // 0.8, '#fd8d3c',
+            .1,'#fff7bc',
+            .2,'#fee391',
+            .3,'#fec44f',
+            .5,'#fe9929',
+            .6,'#ec7014',
+            .7,'#cc4c02',
+            .8,'#993404',
+            1,'#662506'
+            
+            // 0.2, '#fee5d9',
+            // 0.4, '#fcae91',
+            // 0.6, '#fb6a4a',
+            // 0.8, '#de2d26',
             // 1, '#a50f15'
-            0.2, '#fee5d9',
-            0.4, '#fcae91',
-            0.6, '#fb6a4a',
-            0.8, '#de2d26',
-            1, '#a50f15'
           ],
           // increase radius as zoom increases
           'heatmap-radius': {
@@ -228,7 +233,7 @@ export default ({ data, regions, toggle }) => {
               [5, 1]
             ]
           },
-          'circle-stroke-color': 'white',
+          'circle-stroke-color': 'black',
           'circle-stroke-width': .5,
           'circle-stroke-opacity': {
             stops: [

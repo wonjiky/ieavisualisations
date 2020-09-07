@@ -36,7 +36,7 @@ export default ({
             <div 
               className={markers} 
               style={{
-                background: `${colors[i] === 'stripe' ? 'repeating-linear-gradient(45deg, #ffe3a3, #ffe3a3 2px, transparent 2px, transparent 5px)' 
+                background: `${colors[i] === 'stripe' ? 'repeating-linear-gradient(135deg, #4f7d82, #4f7d82 2px, transparent 3px, transparent 5px)' 
                   : colors[i] === 'symbol' ? 'black' 
                   : colors[i]}`,
               }}

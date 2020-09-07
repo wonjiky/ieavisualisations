@@ -2,7 +2,8 @@ import React from 'react'
 import classes from './css/Dropdown.module.css'
 import global from './css/Global.module.css'
 
-export default ({ label, options, click, selected, active, open, hide }) => {
+export default ({ label, options, click, selected, top, active, open, hide }) => {
+  let dropdownDir = top ? { top: 0 } : { bottom: 0 };
   return (
     <div className={[global.ControlContainer, classes.Dropdown].join(' ')}>
       <label className={global.ControlLabel}>
@@ -13,7 +14,9 @@ export default ({ label, options, click, selected, active, open, hide }) => {
       </button>     
       <div className={active.open && active.target === label 
         ? [classes.DropdownOptions, classes.active].join(' ') 
-        : classes.DropdownOptions}>
+        : classes.DropdownOptions}
+        style={dropdownDir}
+        >
         <div>
           <ul>
             {options.map(item => 

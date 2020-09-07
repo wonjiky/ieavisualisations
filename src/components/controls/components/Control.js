@@ -9,6 +9,7 @@ export default props => {
         label={props.label}
         options={props.options}
         click={props.click}
+        top={props.top}
         selected={props.selected}
         active={props.active}
         open={props.open}
@@ -29,6 +30,12 @@ export default props => {
           change={props.change}
           />
       )
+    case 'divider':
+      return <div style={{ 
+        width: '100%', 
+        border: '0.5px solid #e6e6e6', 
+        marginBottom: `${props.marginBottom ? props.marginBottom : 0}px`, 
+        marginTop: `${props.marginTop ? props.marginTop : 0}px`, }} />
     default:
       return null;
   }

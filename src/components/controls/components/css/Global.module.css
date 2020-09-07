@@ -16,7 +16,12 @@
 .ControlContainer > button {
   padding: 4px 20px 0 0;
   font-size: 1.25rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   background: none;
+  text-align:left;
+  /* display: block; */
+  /* width: 200px; */
 }
 
 .ControlContainer > button:before {

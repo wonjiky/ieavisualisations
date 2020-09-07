@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEtpMap } from '../../components/customHooks';
+import { useCDDMap } from '../../components/customHooks';
 
 export default function({ layer, overlay, population, years }) {
 
@@ -10,12 +10,11 @@ export default function({ layer, overlay, population, years }) {
     style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx"
   } 
 
-  const { map, popUp, mapContainerRef } = useEtpMap({ mapConfig });
+  const { map, popUp, mapContainerRef } = useCDDMap({ mapConfig });
 
   React.useEffect(() => {
     if(!map) return;
     const { data, year, type, layers } = layer;
-    console.log(data, type, year, layers)
     for ( let l in layers ) {
       map.addLayer({
         id: `LAYER-${data}-${type}-${year}-${l}`,
@@ -149,7 +148,6 @@ export default function({ layer, overlay, population, years }) {
 
   React.useEffect(() => {
     if (!map) return;
-    console.log(overlay);
     for ( let i = 0; i < 3; i ++ ) {
       map.setLayoutProperty(`LAYER-POP-${i}`, 'visibility', overlay === 'Population'  ? 'visible' : 'none');
     }

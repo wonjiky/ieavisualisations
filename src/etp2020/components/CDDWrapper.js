@@ -1,16 +1,20 @@
 import React from 'react'
+import axios from 'axios'
+import Papa from 'papaparse'
 import CDD from './CDD'
 import { Controls, Control } from '../../components/controls'
-import { Bar } from '../../components/barGraph'
+import { Bars } from '../../components/bars'
 import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLayers'
 
-export default function () {
+export default function (props) {
 
   const [mainLayer, setMainLayer] = React.useState('HDD');
   const [year, setYear] = React.useState(2018);
   const [active, setActive] = React.useState({ open: false, target: null });
+  const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
   const [overlay, setOverlay] = React.useState('None');
+  const [region, setRegion] = React.useState('World'); 
 
   const controls = [
 		{ 
@@ -45,60 +49,64 @@ export default function () {
         setOverlay('None')
       },
     },
-    // {
-    //   type: 'dropdown',
-    //   label: 'Overlay layers',
-    //   options: ['None', 'Population', 'Need of heating', 'Need of cooling', 'Need of dehumidification'],
-    //   click: value => setOverlay(value),
-    //   style: 'vertical',
-    //   open: e => open(e),
-    //   hide: e => hide(e),
-    //   active: active,
-		// 	selected: overlay,
-    // },
     {
       type: 'button',
-      // label: 'Overly layers',
       options: mainLayer === 'HDD' 
-        ? ['None', 'Population', 'Need of cooling', 'Need of dehumidification']
-        : ['None', 'Population', 'Need of heating', 'Need of dehumidification'],
+        ? ['None', 'Population', 'Need of heating']
+        : ['None', 'Population', 'Need of cooling'],
       click: value => setOverlay(value),
       style: 'vertical',
 			selected: overlay,
     },
     {
+      type: 'divider',
+      marginBottom: 24
+    },
+    {
       type: 'dropdown',
       label: 'Regions',
       options: [
-        'All',
+        'World',
+        'Africa',
         'Asia Pacific',
         'Central & South America',
-        'North America',
         'Eurasia',
         'Europe',
         'Middle East',
-        'Africa',
+        'North America'
       ],
-      click: value => setOverlay(value),
+      top: true,
+      click: value => setRegion(value),
       style: 'vertical',
       open: e => open(e),
       hide: e => hide(e),
       active: active,
-      selected: overlay,
+      selected: region,
     }
   ];
 
-  const variables = [
-    {
-      label: 'Population needing cooling (%)'
+  const finalIndicators = {
+    CDD: {
+     label: 'Population needing cooling',
+     data: []
     },
-    {
-      label: 'Population needing heating (%)',
+    HDD: {
+      label: 'Population needing heating',
+      data: []
     },
-    {
-      label: 'Population living within (%)',
+    LIV: {
+      label: 'Population living within',
+      data: []
     },
-  ]
+  };
+
+  React.useEffect(() => { 
+    axios.get(`${props.baseURL}ETP2020/CDD/indicators.csv`)
+      .then(response => {
+        const temp = Papa.parse(response.data, { header: true }).data;
+        setIndicators(temp);
+      })
+  },[])
 
   let data = [ ...ETP_LAYERS ];
   let layer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
@@ -113,6 +121,37 @@ export default function () {
 		setActive({ open: false, target: null })
 	}
   
+  if (!indicators) return <div></div>
+  let indicatorsCopy = [ ...indicators ];
+  const tempIndicators = indicatorsCopy.filter(d => d[""] === region)[0];
+
+  console.log(tempIndicators);
+  for ( let i in tempIndicators ){
+    if ( year === Number(i.substring(0,4)) 
+      && type.substring(0,3) === i.substring(5,8)) {
+        let labeltype = type === 'SDS' ? i.substring(9) : i.substring(11);
+        function setLabel(e) {
+          return e === 'HDD_a' || e === 'CDD_a'
+            ? 'All'
+            : e === 'HDD_b' || e === 'CDD_b'
+            ? 'Of which high to very high'
+            : e === 'LIVING_a'
+            ? 'Moderate to high district heating feasibility'
+            : 'Heat pumps cost effectiveness'  
+        }
+        if ( type === 'SDS' ) {
+          let type = i.substring(9,12);
+          finalIndicators[type].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]) })
+        } else {
+          let type = i.substring(11,14)
+          console.log(tempIndicators[i] * 100)
+          finalIndicators[type].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]).toFixed(0) })
+        }
+    }
+  }
+  
+
+  console.log(finalIndicators)
   return (
     <>
       <CDD
@@ -132,8 +171,8 @@ export default function () {
       > 
         {controls.map((control, idx) => 
           <Control key={idx} {...control} /> )}
-        {variables.map((variable,idx) => 
-          <Bar key={idx} {...variable} /> )}
+        {Object.values(finalIndicators).map((finalIndicator, idx) => 
+          <Bars key={idx} {...finalIndicator} /> )}
       </Controls>
     </>
   )
