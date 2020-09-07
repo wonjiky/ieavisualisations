@@ -120,6 +120,60 @@ export const ETP_LAYERS = [
       ],
     },
     {
+      data: 'NFC',
+      year: 2019,
+      type: 'STEPS',
+      layers: [
+        { url: "mapbox://iea.9c5gspqz", sourceLayer: "NFC_26_19_1-3ntpci" },
+        { url: "mapbox://iea.2pf7cvzf", sourceLayer: "NFC_26_19_2-dnrlz4" }
+      ],
+    },
+    {
+      data: 'NFC',
+      year: 2030,
+      type: 'STEPS',
+      layers: [
+        { url: "mapbox://iea.48f7ovqx", sourceLayer: "NFC_26_30_1-b1bp9o" },
+        { url: "mapbox://iea.2mhhd6zd", sourceLayer: "NFC_26_30_2-1kzg4u" }
+      ],
+    },
+    {
+      data: 'NFC',
+      year: 2070,
+      type: 'STEPS',
+      layers: [
+        { url: "mapbox://iea.43jed355", sourceLayer: "NFC_26_70_1-0jspl6" },
+        { url: "mapbox://iea.dilpmjgx", sourceLayer: "NFC_26_70_2-2zeorg" }
+      ],
+    },
+    {
+      data: 'NFC',
+      year: 2019,
+      type: 'SDS',
+      layers: [
+        { url: "mapbox://iea.a213uh7n", sourceLayer: "NFC_45_19_1-3fnbrj" },
+        { url: "mapbox://iea.ca2txbyo", sourceLayer: "NFC_45_19_2-2fl5j3" }
+      ],
+    },
+    {
+      data: 'NFC',
+      year: 2030,
+      type: 'SDS',
+      layers: [
+        { url: "mapbox://iea.5h28otdp", sourceLayer: "NFC_45_30_1-9nfo1h" },
+        { url: "mapbox://iea.74tf784b", sourceLayer: "NFC_45_30_2-4oxbun" }
+      ],
+    },
+    {
+      data: 'NFC',
+      year: 2070,
+      type: 'SDS',
+      layers: [
+        { url: "mapbox://iea.5tfils8b", sourceLayer: "NFC_45_70_1-1hbhl2" },
+        { url: "mapbox://iea.0sxusqxn", sourceLayer: "NFC_45_70_2-1k1zo4" }
+      ],
+    },
+    {
       data: 'LAYER',
       year: '',
       type: 'border',

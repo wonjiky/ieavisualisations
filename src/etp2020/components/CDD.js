@@ -15,7 +15,7 @@ export default function({ layer, overlay, population, years }) {
   React.useEffect(() => {
     if(!map) return;
     const { data, year, type, layers } = layer;
-
+    console.log(data, type, year, layers)
     for ( let l in layers ) {
       map.addLayer({
         id: `LAYER-${data}-${type}-${year}-${l}`,
@@ -24,23 +24,23 @@ export default function({ layer, overlay, population, years }) {
         type: 'circle',
         paint: {
           'circle-opacity': .8,
-          'circle-radius': 4,
+          'circle-radius': 3,
           'circle-color': colorsByValues(data)
         },
       })  
     }
 
-    map.addLayer({
-      id: 'world-shape',
-      source: 'shape',
-      'source-layer': "World_map_by_Region-6plcrh",
-      type: 'line',
-      paint: {
-        'line-color': 'black',
-        'line-width': 0.7,
-        // 'line-dasharray': [3,4]
-      }
-    })
+    map
+      .addLayer({
+        id: 'world-shape',
+        source: 'shape',
+        'source-layer': "World_map_by_Region-6plcrh",
+        type: 'line',
+        paint: {
+          'line-color': 'black',
+          'line-width': 0.7,
+        }
+      })
 
     for (let i in population.layers) {
       map.addLayer({
@@ -52,7 +52,7 @@ export default function({ layer, overlay, population, years }) {
           visibility: 'none'
         },
         paint: {
-          'circle-radius': 2,
+          'circle-radius': 3,
           'circle-color': popColorsByValues(years),
         }
       })
@@ -149,6 +149,7 @@ export default function({ layer, overlay, population, years }) {
 
   React.useEffect(() => {
     if (!map) return;
+    console.log(overlay);
     for ( let i = 0; i < 3; i ++ ) {
       map.setLayoutProperty(`LAYER-POP-${i}`, 'visibility', overlay === 'Population'  ? 'visible' : 'none');
     }

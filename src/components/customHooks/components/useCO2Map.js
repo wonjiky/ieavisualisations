@@ -19,7 +19,7 @@ export default ({ mapConfig }) => {
 			zoom: 4,
 			minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 			maxZoom: 5,
-			maxBounds: [[-180, 10],[-45, 74]]
+			// maxBounds: [[-180, 10],[-45, 74]]
 		})
 		
 		const popUp = new mapboxgl.Popup({

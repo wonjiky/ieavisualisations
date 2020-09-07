@@ -1,5 +1,7 @@
 import React from 'react'
 import classes from './css/Legends.module.css'
+import { find } from 'lodash';
+import { solidBorder } from '../../customHooks/components/util/useMapStyle';
 
 export default ({
   colors,
@@ -34,10 +36,13 @@ export default ({
             <div 
               className={markers} 
               style={{
-                background: `${colors[i] === 'stripe' 
-                  ? 'repeating-linear-gradient(45deg, #ffe3a3, #ffe3a3 2px, transparent 2px, transparent 5px)' 
-                  : colors[i]}`}}
-            />
+                background: `${colors[i] === 'stripe' ? 'repeating-linear-gradient(45deg, #ffe3a3, #ffe3a3 2px, transparent 2px, transparent 5px)' 
+                  : colors[i] === 'symbol' ? 'black' 
+                  : colors[i]}`,
+              }}
+            >
+              {colors[i] === 'symbol' && <div className={classes.SymbolRound}/>}
+            </div>
             <p className={classes.Label_Category}>{d}</p>
           </div>
         ));
@@ -57,11 +62,36 @@ export default ({
     default:
     legend = null;
   }
+  
+  const findSubpowerFromText = (text, sub = '2') => {
+		let tempLowestIndex = Number.MAX_SAFE_INTEGER;
+		let tempLowestWord;
+		let found = false;
+    let tempIndex = text.search(sub);
+    if (tempIndex < tempLowestIndex && tempIndex !== -1) {
+      tempLowestIndex = tempIndex;
+      tempLowestWord = sub;
+      found = true;
+    }
 
+		if (found) {
+			return [
+				text.substring(0, tempLowestIndex),
+				text.substring(
+					tempLowestIndex,
+					tempLowestIndex + tempLowestWord.length
+				),
+				text.substring(tempLowestIndex + tempLowestWord.length)
+			];
+		} else {
+			return false;
+		}
+  };
+  let t = findSubpowerFromText(header);
 
   return (
     <div className={classes.LegendWrapper}>
-      {header ? <h5 className={classes.Header}>{header}</h5> : null}
+      {header ? <h5 className={classes.Header}>{t[0]}<sub>{t[1]}</sub>{t[2]}</h5> : null}
       {legend}
     </div>
   )

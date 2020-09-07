@@ -9,7 +9,7 @@ export default ({ data, regions, toggle }) => {
     if(!map) return;
     const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
     const { region, bounds } = regions;
-    const { types, minMax, reservoirs, pipelines, ...rest } = data;
+    const { types, minMax, reservoirs, hubs, ...rest } = data; //pipelines
     
     map.setMaxBounds(bounds);
     // ADDING SOURCES
@@ -47,37 +47,37 @@ export default ({ data, regions, toggle }) => {
           }
         })
     }
-    map
-      .addSource('US-CO2-pipelines', {
-        'type': 'vector',
-        'url': "mapbox://iea.2eoddisy"
-      })
-      .addLayer({
-        'id': 'US-pipelines',
-        'source': 'US-CO2-pipelines',
-        'source-layer': "US_CO2_pipelines-ctl6c0",
-        'type': 'line',
-        'paint': {
-          'line-color': '#fdf787',
-          'line-width': 3,
-          'line-opacity': {
-            stops: [
-              [4, 0.2],
-              [5, 0.6]
-            ]
-          },
-        },
-        layout: {
-          visibility: 'visible'
-        },
-      })
+    // map
+    //   .addSource('US-CO2-pipelines', {
+    //     'type': 'vector',
+    //     'url': "mapbox://iea.2eoddisy"
+    //   })
+    //   .addLayer({
+    //     'id': 'US-pipelines',
+    //     'source': 'US-CO2-pipelines',
+    //     'source-layer': "US_CO2_pipelines-ctl6c0",
+    //     'type': 'line',
+    //     'paint': {
+    //       'line-color': '#fdf787',
+    //       'line-width': 3,
+    //       'line-opacity': {
+    //         stops: [
+    //           [4, 0.2],
+    //           [5, 0.6]
+    //         ]
+    //       },
+    //     },
+    //     layout: {
+    //       visibility: 'visible'
+    //     },
+    //   })
 
-    // ADD SALINE AQUIFIER LAYER
+    // ADD SALINE aquifer LAYER
     map
       .addLayer({
-        id: 'aquifier-layer',
+        id: 'aquifer-layer',
         type: 'fill',
-        source: `${region}-aquifier`,
+        source: `${region}-aquifer`,
         layout: {
           visibility: 'visible'
         },
@@ -91,6 +91,58 @@ export default ({ data, regions, toggle }) => {
           }
         }
       });
+    
+    map
+      .addSource('EU-CO2-hubs', {
+        'type': 'vector',
+        'url': "mapbox://iea.a28h96yl"
+      })
+      .addLayer({
+        'id': 'EU-hubs2',
+        'source': 'EU-CO2-hubs',
+        'source-layer': "Europe_hubs-7liayx",
+        'type': 'circle',
+        'paint': {
+          'circle-radius': 10,
+          'circle-color': 'black',
+          'circle-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, .6]
+            ]
+          },
+          'circle-stroke-color': 'white',
+          'circle-stroke-width': 2,
+          'circle-stroke-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, 1]
+            ]
+          },
+        },
+        layout: {
+          visibility: 'visible'
+        },
+      })
+      .addLayer({
+        'id': 'EU-hubs',
+        'source': 'EU-CO2-hubs',
+        'source-layer': "Europe_hubs-7liayx",
+        'type': 'circle',
+        'paint': {
+          'circle-color': 'white',
+          'circle-radius': 5,
+          'circle-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, 1]
+            ]
+          },
+        },
+        layout: {
+          visibility: 'visible'
+        },
+      })
 
     // ADD HEATMAP LAYER
     map
@@ -101,6 +153,18 @@ export default ({ data, regions, toggle }) => {
         maxzoom: 5,
         paint: {
           // increase weight as diameter breast height increases
+          // 'heatmap-weight': [
+          //   'interpolate',
+          //   ['linear'],
+          //   ['get','value'],
+          //   0,0,225,1
+          // ],
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2,1,7,5
+          ],
           'heatmap-weight': {
             property: 'value',
             type: 'exponential',
@@ -110,12 +174,12 @@ export default ({ data, regions, toggle }) => {
             ]
           },
           // increase intensity as zoom level increases
-          'heatmap-intensity': {
-            stops: [
-              [11, 1],
-              [15, 19]
-            ]
-          },
+          // 'heatmap-intensity': {
+          //   stops: [
+          //     [4, 3],
+          //     [4, 5]
+          //   ]
+          // },
           // assign color values be applied to points depending on their density
           // ['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']
           'heatmap-color': [
@@ -123,6 +187,11 @@ export default ({ data, regions, toggle }) => {
             ['linear'],
             ['heatmap-density'],
             0, 'rgba(0,0,0,0)',
+            // 0.2, '#ffeda0',
+            // 0.4, '#fed976',
+            // 0.6, '#feb24C',
+            // 0.8, '#fd8d3c',
+            // 1, '#a50f15'
             0.2, '#fee5d9',
             0.4, '#fcae91',
             0.6, '#fb6a4a',
@@ -156,7 +225,7 @@ export default ({ data, regions, toggle }) => {
           'circle-opacity': {
             stops: [
               [4.5, 0],
-              [5, 0.7]
+              [5, 1]
             ]
           },
           'circle-stroke-color': 'white',
@@ -186,24 +255,28 @@ export default ({ data, regions, toggle }) => {
           .removeLayer(`${region}-Rsv-${reservoir}`)
           .removeSource(`${region}-Reservoir-${reservoir}`);
       }
-      map.removeLayer('heatmap-circle')
+      map
+        .removeLayer('heatmap-circle')
         .removeLayer('heatmap-layer')
-        .removeLayer('aquifier-layer')
-        .removeLayer('US-pipelines')
-        .removeSource('US-CO2-pipelines')
-        .removeSource(`${region}-aquifier`)
+        .removeLayer('aquifer-layer')
+        .removeLayer('EU-hubs')
+        .removeLayer('EU-hubs2')
+        .removeSource('EU-CO2-hubs')
+        .removeSource(`${region}-aquifer`)
         .removeSource(`${region}-heatmap`);
-      
+        // .removeLayer('US-pipelines')
+        // .removeSource('US-CO2-pipelines')
     }
   }, [map, regions, data]);
 
   React.useEffect(() => {
     if (!map) return;
-    const { reservoir, aquifier, pipelines, sources } = toggle;
-
+    const { reservoir, aquifer, pipelines, hubs, sources } = toggle;
     map
-      .setLayoutProperty('aquifier-layer', 'visibility', aquifier ? 'visible' : 'none')
-      .setLayoutProperty('US-pipelines', 'visibility', pipelines ? 'visible' : 'none')
+      .setLayoutProperty('aquifer-layer', 'visibility', aquifer ? 'visible' : 'none')
+      // .setLayoutProperty('US-pipelines', 'visibility', pipelines ? 'visible' : 'none')
+      .setLayoutProperty('EU-hubs', 'visibility', hubs ? 'visible' : 'none')
+      .setLayoutProperty('EU-hubs2', 'visibility', hubs ? 'visible' : 'none')
       .setFilter('heatmap-circle', [
         'match',
         ['get', 'type'],
