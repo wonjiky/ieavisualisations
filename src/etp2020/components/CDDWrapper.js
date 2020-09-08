@@ -9,7 +9,7 @@ import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLaye
 export default function (props) {
 
   const [mainLayer, setMainLayer] = React.useState('HDD');
-  const [year, setYear] = React.useState(2018);
+  const [year, setYear] = React.useState(2019);
   const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
@@ -30,7 +30,7 @@ export default function (props) {
     },
     {
       type: 'button',
-      options: [2018, 2030, 2070],
+      options: [2019, 2030, 2070],
       style: 'horizontal',
       customStyle: { marginBottom: '12px'},
 			selected: year,
@@ -113,19 +113,23 @@ export default function (props) {
   let population = data.filter(d => d.data === 'LAYER' && d.type === 'pop')[0];
 
   function open(e) {
-		setActive({ open: true, target: e.target.value })
-	}
+    setActive({ open: true, target: e.target.value })
+  }
 
-	function hide(e) {
-		if(e && e.relatedTarget) e.relatedTarget.click();
-		setActive({ open: false, target: null })
-	}
+  const hide = React.useCallback(() => {
+    setActive({ open: false, target: null })
+    document.removeEventListener('click', hide)
+  },[])
+
+  React.useEffect(() => {
+    if (!active.open) return;
+    document.addEventListener('click', hide)
+  },[ active.open, hide ])
   
   if (!indicators) return <div></div>
   let indicatorsCopy = [ ...indicators ];
   const tempIndicators = indicatorsCopy.filter(d => d[""] === region)[0];
 
-  console.log(tempIndicators);
   for ( let i in tempIndicators ){
     if ( year === Number(i.substring(0,4)) 
       && type.substring(0,3) === i.substring(5,8)) {
@@ -144,14 +148,11 @@ export default function (props) {
           finalIndicators[type].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]) })
         } else {
           let type = i.substring(11,14)
-          console.log(tempIndicators[i] * 100)
           finalIndicators[type].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]).toFixed(0) })
         }
     }
   }
   
-
-  console.log(finalIndicators)
   return (
     <>
       <CDD

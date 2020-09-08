@@ -9,10 +9,11 @@ export default ({ label, options, click, selected, top, active, open, hide }) =>
       <label className={global.ControlLabel}>
         {label}
       </label>
-      <button value={label} onClick={e => open(e)} onBlur={e => hide(e)}>
+      {/* <button value={label} onClick={e => open(e)} onBlur={e => hide(e)}> */}
+      <button value={label} onClick={e => open(e)}>
         {selected}
       </button>     
-      <div className={active.open && active.target === label 
+      <div id='dropdown' className={active.open && active.target === label 
         ? [classes.DropdownOptions, classes.active].join(' ') 
         : classes.DropdownOptions}
         style={dropdownDir}

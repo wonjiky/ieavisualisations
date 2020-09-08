@@ -1,26 +1,28 @@
 @font-face {
   font-family: 'Graphik';
-  src: local('Graphik'), url('./fonts/Graphik-Bold.otf'), format('otf');
-  font-weight: medium;
-  font-style: medium;
+  src: local('Graphik'), url('./fonts/Graphik-Regular.otf'), format('opentype');
+  font-weight: 400;
 }
 
 @font-face {
   font-family: 'Graphik';
-  src: local('Graphik'), url('./fonts/Graphik-Regular.otf'), format('otf');
+  src: local('Graphik-Medium'), url('./fonts/Graphik-Bold.otf'), format('opentype');
+  font-weight: 600;
 }
 
 body {
   font-family: 'Graphik';
+  font-weight: 400;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 button {
+  font-family: 'Graphik';
   border: none;
   padding: 0;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 button:focus {
