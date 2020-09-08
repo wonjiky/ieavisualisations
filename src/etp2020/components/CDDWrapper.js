@@ -13,14 +13,13 @@ export default function (props) {
   const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
-  const [popOverlayToggle, setPopOverlayToggle] = React.useState('None');
+  const [overlayToggle, setoverlayToggle] = React.useState('None');
   const [region, setRegion] = React.useState('World'); 
   
   let data = [ ...ETP_LAYERS ];
   let mainOverlayLayer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
-  let needLayer = data.filter(d => d.data === 'NFC' && d.type === type)[0]
+  let needLayer = data.filter(d => d.data === (mainLayer === 'HDD' ? 'NFH' : 'NFC') && d.type === type && d.year === 2070)[0]
   let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop')[0];
-  console.log(needLayer);
 
   let controls = [
 		{ 
@@ -31,7 +30,7 @@ export default function (props) {
       selected: mainLayer,
       click: value => {
         setMainLayer(value)
-        setPopOverlayToggle('None')
+        setoverlayToggle('None')
       },
     },
     {
@@ -42,7 +41,7 @@ export default function (props) {
 			selected: year,
 			click: value => {
         setYear(value)
-        setPopOverlayToggle('None')
+        setoverlayToggle('None')
       },
     },
     {
@@ -52,17 +51,17 @@ export default function (props) {
       selected: type,
       click: value => {
         setType(value)
-        setPopOverlayToggle('None')
+        setoverlayToggle('None')
       },
     },
     {
       type: 'button',
       options: mainLayer === 'HDD' 
-        ? ['None', 'Population', 'Need of heating']
-        : ['None', 'Population', 'Need of cooling'],
-      click: value => setPopOverlayToggle(value),
+        ? ['None', 'Need of heating']
+        : ['None', 'Need of cooling'],
+      click: value => setoverlayToggle(value),
       style: 'vertical',
-			selected: popOverlayToggle,
+			selected: overlayToggle,
     },
     {
       type: 'divider',
@@ -156,16 +155,15 @@ export default function (props) {
         }
     }
   }
-  
+
   return (
     <>
       <CDD
         years={year}
         mainOverlayLayer={mainOverlayLayer}
         popLayer={popLayer}
-        popOverlayToggle={popOverlayToggle}
-        needOverlay={needLayer}
-        needOverLayToggle={[]}
+        overlayToggle={overlayToggle}
+        needLayer={needLayer}
       />
       <Controls
         style={{

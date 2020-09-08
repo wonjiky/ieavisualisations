@@ -5,9 +5,9 @@ export default function({
   years,
   mainOverlayLayer, 
   popLayer, 
-  popOverlayToggle, 
+  overlayToggle, 
   needLayer,
-  neddLayerToggle,
+  needOverLayToggle,
 }) {
 
   const mapConfig = {
@@ -32,12 +32,16 @@ export default function({
         type: 'circle',
         paint: {
           'circle-opacity': .8,
-          'circle-radius': 3,
+          'circle-radius': {
+            stops: [
+              [2, 1.2],
+              [4, 3]
+            ]
+          },
           'circle-color': colorsByValues(data)
         },
       })  
     }
-
 
     // World Shape (Outline)
     map
@@ -69,22 +73,30 @@ export default function({
       })
     }
 
-    // for (let i in needLayer.layers) {
-    //   map.addLayer({
-    //     id: `LAYER-NEED-${i}`,
-    //     source: `${needLayer.data}-${needLayer.type}-${needLayer.year}-${i}`,
-    //     'source-layer': needLayer.layers[i].sourceLayer,
-    //     type: 'circle',
-    //     layout: {
-    //       visibility: 'none'
-    //     },
-    //     paint: {
-    //       'circle-radius': 3,
-    //       'circle-stroke-color': 'red',
-    //       // 'circle-color': popColorsByValues(years),
-    //     }
-    //   })
-    // }
+    for (let i in needLayer.layers) {
+      let color = needLayer.data === 'NFH' ? 'red' : 'blue';
+      map.addLayer({
+        id: `LAYER-NEED-${i}`,
+        source: `${needLayer.data}-${needLayer.type}-${needLayer.year}-${i}`,
+        'source-layer': needLayer.layers[i].sourceLayer,
+        type: 'circle',
+        layout: {
+          visibility: 'none'
+        },
+        paint: {
+          // 'circle-radius': 3,
+          'circle-radius': {
+            stops: [
+              [2, .5],
+              [4, 3]
+            ]
+          },
+          'circle-color': 'transparent',
+          'circle-stroke-width': 0.5,
+          'circle-stroke-color': color,
+        }
+      })
+    }
 
     function popColorsByValues(year) {
       const colorTypes = {
@@ -130,8 +142,12 @@ export default function({
       for (let i in layers) {
         map.removeLayer(`LAYER-POP-${i}`)
       }
+
+      for (let i in needLayer.layers) {
+        map.removeLayer(`LAYER-NEED-${i}`)
+      }
     }
-  }, [map, popLayer, mainOverlayLayer, years])
+  }, [map, popLayer, needLayer, mainOverlayLayer, years])
 
   // React.useEffect(() => {
   //   if(!map) return;
@@ -177,12 +193,15 @@ export default function({
 
   React.useEffect(() => {
     if (!map) return;
-    for ( let i = 0; i < 3; i ++ ) {
-      map.setLayoutProperty(`LAYER-POP-${i}`, 'visibility', popOverlayToggle === 'Population'  ? 'visible' : 'none');
-    }
-  }, [map, popOverlayToggle]);
-  
+      // for ( let i = 0; i < 3; i ++ ) {
+      //   map.setLayoutProperty(`LAYER-POP-${i}`, 'visibility', overlayToggle === 'Population'  ? 'visible' : 'none');
+      // }
 
+      for ( let i = 0; i < 2; i ++ ) {
+        map.setLayoutProperty(`LAYER-NEED-${i}`, 'visibility', overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling'  ? 'visible' : 'none');
+      }
+  }, [map, overlayToggle]);
+  
   return <div ref={mapContainerRef} className='map'/>
 }
 
