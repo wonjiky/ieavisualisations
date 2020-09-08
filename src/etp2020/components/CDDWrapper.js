@@ -132,11 +132,11 @@ export default function (props) {
         let labeltype = type === 'SDS' ? i.substring(9) : i.substring(11);
         function setLabel(e) {
           return e === 'HDD_a' || e === 'CDD_a'
-            ? 'All'
+            ? 'All population'
             : e === 'HDD_b' || e === 'CDD_b'
-            ? 'Of which high to very high'
+            ? 'of which high to very high'
             : e === 'LIVING_a'
-            ? 'Moderate to high district heating feasibility'
+            ? 'District heating (from moderate-high to very high) potential'
             : 'Heat pumps cost effectiveness'  
         }
         if ( type === 'SDS' ) {

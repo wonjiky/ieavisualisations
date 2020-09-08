@@ -40,7 +40,6 @@ export default ({ mapConfig }) => {
         }
       }
       
-      
       map.addSource('shape', { type: "vector", url:  "mapbox://iea.6etmm149" });  
 
     });
