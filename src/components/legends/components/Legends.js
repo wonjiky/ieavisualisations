@@ -9,6 +9,8 @@ export default ({
   labels,
   round,
   selected,
+  legendStyle,
+  subInHeader,
   click,
   type
 }) => {
@@ -18,14 +20,13 @@ export default ({
   let continuousBg = colors && type === 'continuous' ? gradientBg(colors) : null;
 
   function gradientBg(colors) {
-    let colorArr = ['#fff 0%'];
+    let colorArr = [];
     for ( let color in colors ) {
       let idx = parseInt(color) + 1;
       colorArr.push(`${colors[color]} ${(100/colors.length) * idx}%`)
     }
     return colorArr.join(',');
   }
-
   switch(type) {
     case 'category':
       legend = labels.map((d, i) => (
@@ -90,8 +91,13 @@ export default ({
   let t = findSubpowerFromText(header);
 
   return (
-    <div className={classes.LegendWrapper}>
-      {header ? <h5 className={classes.Header}>{t[0]}<sub>{t[1]}</sub>{t[2]}</h5> : null}
+    <div className={classes.LegendWrapper} style={legendStyle}>
+      {header && subInHeader 
+        ? <h5 className={classes.Header}>{t[0]}<sub>{t[1]}</sub>{t[2]}</h5> 
+        : header && !subInHeader
+        ? <h5 className={classes.Header}>{header}</h5> 
+        : null
+      }
       {legend}
     </div>
   )

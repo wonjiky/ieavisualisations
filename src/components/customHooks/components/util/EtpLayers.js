@@ -124,8 +124,7 @@ export const ETP_LAYERS = [
       year: 2019,
       type: 'SDS',
       layers: [
-        { url: "mapbox://iea.9c5gspqz", sourceLayer: "NFC_26_19_1-3ntpci" },
-        { url: "mapbox://iea.2pf7cvzf", sourceLayer: "NFC_26_19_2-dnrlz4" }
+        { url: "mapbox://iea.deztaidt", sourceLayer: "NFC_SDS_19-devpo2" },
       ],
     },
     {
@@ -133,8 +132,7 @@ export const ETP_LAYERS = [
       year: 2030,
       type: 'SDS',
       layers: [
-        { url: "mapbox://iea.48f7ovqx", sourceLayer: "NFC_26_30_1-b1bp9o" },
-        { url: "mapbox://iea.2mhhd6zd", sourceLayer: "NFC_26_30_2-1kzg4u" }
+        { url: "mapbox://iea.a09nxrgk", sourceLayer: "NFC_SDS_30-82kxub" },
       ],
     },
     {
@@ -142,8 +140,7 @@ export const ETP_LAYERS = [
       year: 2070,
       type: 'SDS',
       layers: [
-        { url: "mapbox://iea.43jed355", sourceLayer: "NFC_26_70_1-0jspl6" },
-        { url: "mapbox://iea.dilpmjgx", sourceLayer: "NFC_26_70_2-2zeorg" }
+        { url: "mapbox://iea.4ue08r37", sourceLayer: "NFC_SDS_70-c5x072" },
       ],
     },
     {
@@ -151,8 +148,7 @@ export const ETP_LAYERS = [
       year: 2019,
       type: 'STEPS',
       layers: [
-        { url: "mapbox://iea.a213uh7n", sourceLayer: "NFC_45_19_1-3fnbrj" },
-        { url: "mapbox://iea.ca2txbyo", sourceLayer: "NFC_45_19_2-2fl5j3" }
+        { url: "mapbox://iea.da8uu0m4", sourceLayer: "NFC_STEPS_19-9ragxv" },
       ],
     },
     {
@@ -160,8 +156,7 @@ export const ETP_LAYERS = [
       year: 2030,
       type: 'STEPS',
       layers: [
-        { url: "mapbox://iea.5h28otdp", sourceLayer: "NFC_45_30_1-9nfo1h" },
-        { url: "mapbox://iea.74tf784b", sourceLayer: "NFC_45_30_2-4oxbun" }
+        { url: "mapbox://iea.73nkhk51", sourceLayer: "NFC_STEPS_30-7t8i2o" },
       ],
     },
     {
@@ -169,8 +164,7 @@ export const ETP_LAYERS = [
       year: 2070,
       type: 'STEPS',
       layers: [
-        { url: "mapbox://iea.5tfils8b", sourceLayer: "NFC_45_70_1-1hbhl2" },
-        { url: "mapbox://iea.0sxusqxn", sourceLayer: "NFC_45_70_2-1k1zo4" }
+        { url: "mapbox://iea.7akfkye5", sourceLayer: "NFC_STEPS_70-8rv5e0" },
       ],
     },
     {
@@ -178,8 +172,7 @@ export const ETP_LAYERS = [
       year: 2019,
       type: 'SDS',
       layers: [
-        { url: "mapbox://iea.9ni42prm", sourceLayer: "NFH_26_19_1-9bahit" },
-        { url: "mapbox://iea.92slwye6", sourceLayer: "NFH_26_19_2-3crkis" }
+        { url: "mapbox://iea.37naoe8p", sourceLayer: "NFH_SDS_19-6ud8qi" },
       ],
     },
     {
@@ -187,17 +180,15 @@ export const ETP_LAYERS = [
       year: 2030,
       type: 'SDS',
       layers: [
-        { url: "mapbox://iea.10d0mi38", sourceLayer: "NFH_26_30_1-5d9v8k" },
-        { url: "mapbox://iea.d40dsajo", sourceLayer: "NFH_26_30_2-2sftz8" }
+        { url: "mapbox://iea.5x5i07fl", sourceLayer: "NFH_SDS_30-avgoti" },
       ],
-    },
+    }, 
     {
       data: 'NFH',
       year: 2070,
       type: 'SDS',
       layers: [
-        { url: "mapbox://iea.7zhai1i5", sourceLayer: "NFH_26_70_1-b6xgqr" },
-        { url: "mapbox://iea.1czxwp30", sourceLayer: "NFH_26_70_2-b8ljk4" }
+        { url: "mapbox://iea.a89quh5y", sourceLayer: "NFH_SDS_70-075cbp" },
       ],
     },
     {
@@ -205,8 +196,7 @@ export const ETP_LAYERS = [
       year: 2019,
       type: 'STEPS',
       layers: [
-        { url: "mapbox://iea.2myru6wk", sourceLayer: "NFH_45_19_1-ds37ip" },
-        { url: "mapbox://iea.7gmesia9", sourceLayer: "NFH_45_19_2-307cx3" }
+        { url: "mapbox://iea.auddvbyk", sourceLayer: "NFH_STEPS_19-bm4owu" },
       ],
     },
     {
@@ -214,8 +204,7 @@ export const ETP_LAYERS = [
       year: 2030,
       type: 'STEPS',
       layers: [
-        { url: "mapbox://iea.7ar35w46", sourceLayer: "NFH_45_30-1-25rxuk" },
-        { url: "mapbox://iea.30cm5v22", sourceLayer: "NFH_45_30_2-cer6ih" }
+        { url: "mapbox://iea.93y4zxg3", sourceLayer: "NFH_STEPS_30-8ehqag" },
       ],
     },
     {
@@ -223,8 +212,7 @@ export const ETP_LAYERS = [
       year: 2070,
       type: 'STEPS',
       layers: [
-        { url: "mapbox://iea.9da2te15", sourceLayer: "NFH_45_70_1-9r2byn" },
-        { url: "mapbox://iea.1g9qyd1n", sourceLayer: "NFH_45_70_2-86eerc" }
+        { url: "mapbox://iea.37qiaxwj", sourceLayer: "NFH_STEPS_70-as9kgw" },
       ],
     },
     {
@@ -237,12 +225,32 @@ export const ETP_LAYERS = [
     },
     {
       data: 'LAYER',
-      year: '',
+      year: 2019,
       type: 'pop',
       layers: [
-        { url: "mapbox://iea.836i240d", sourceLayer: "ETP_POP_1-0h9zmz" },
-        { url: "mapbox://iea.cxfj93uk", sourceLayer: "ETP_POP_2-790e6v" },
-        { url: "mapbox://iea.7h88wmkw", sourceLayer: "ETP_POP_3-awrtnm" }
+        { url: "mapbox://iea.8s1ow4el", sourceLayer: "POP_19_1-crs9cq" },
+        { url: "mapbox://iea.2ref1rjn", sourceLayer: "POP_19_2-cu5klb" },
+        { url: "mapbox://iea.c70m26nk", sourceLayer: "POP_19_3-brpr4h" }
       ]
-    }
+    },
+    {
+      data: 'LAYER',
+      year: 2030,
+      type: 'pop',
+      layers: [
+        { url: "mapbox://iea.d1k3bg8g", sourceLayer: "POP_30_1-2ahqch" },
+        { url: "mapbox://iea.43xywz1y", sourceLayer: "POP_30_2-4o8xes" },
+        { url: "mapbox://iea.4gpkmb8b", sourceLayer: "POP_30_3-ac57yk" }
+      ]
+    },
+    {
+      data: 'LAYER',
+      year: 2070,
+      type: 'pop',
+      layers: [
+        { url: "mapbox://iea.97sb98v6", sourceLayer: "POP_70_1-95z7k1" },
+        { url: "mapbox://iea.0nucmo2r", sourceLayer: "POP_70_2-05c7k8" },
+        { url: "mapbox://iea.9j92mupc", sourceLayer: "POP_70_3-cmvbb5" }
+      ]
+    },
 ];

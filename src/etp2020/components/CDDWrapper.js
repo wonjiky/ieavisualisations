@@ -3,6 +3,7 @@ import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
 import { Controls, Control } from '../../components/controls'
+import { Legends } from '../../components/legends'
 import { Bars } from '../../components/bars'
 import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLayers'
 
@@ -19,7 +20,7 @@ export default function (props) {
   let data = [ ...ETP_LAYERS ];
   let mainOverlayLayer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
   let needLayer = data.filter(d => d.data === (mainLayer === 'HDD' ? 'NFH' : 'NFC') && d.type === type && d.year === 2070)[0]
-  let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop')[0];
+  let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop' && d.year === year)[0];
 
   let controls = [
 		{ 
@@ -57,15 +58,19 @@ export default function (props) {
     {
       type: 'button',
       options: mainLayer === 'HDD' 
-        ? ['None', 'Need of heating']
-        : ['None', 'Need of cooling'],
+        ? ['None', 'Population', 'Need of heating']
+        : ['None', 'Population', 'Need of cooling'],
       click: value => setoverlayToggle(value),
       style: 'vertical',
 			selected: overlayToggle,
-    },
+    }
+  ];
+
+  let dropdown = [
     {
       type: 'divider',
-      marginBottom: 24
+      marginBottom: 24,
+      marginTop: 24,
     },
     {
       type: 'dropdown',
@@ -88,7 +93,7 @@ export default function (props) {
       active: active,
       selected: region,
     }
-  ];
+  ]
 
   const finalIndicators = {
     CDD: {
@@ -177,6 +182,28 @@ export default function (props) {
       > 
         {controls.map((control, idx) => 
           <Control key={idx} {...control} /> )}
+        <Legends
+          type={'continuous'}
+          legendStyle={{marginTop: '0px'}}
+          header={mainLayer === 'HDD' ? 'Heating degree days' : 'Cooling degree days'}
+          subInHeader={false}
+          labels={mainLayer === 'HDD' ? [0, 6000] : [0, 12000]}
+          colors={mainLayer === 'HDD' 
+            ? ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790']
+            : ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326']}
+          round={false}
+        />
+        <Legends
+          type={'continuous'}
+          legendStyle={{marginTop: '10px'}}
+          header={'Population'}
+          subInHeader={false}
+          labels={[0,17000000]}
+          colors={['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023']}
+          round={false}
+        />
+        {dropdown.map((drop, idx) => 
+          <Control key={idx} {...drop} /> )}
         {Object.values(finalIndicators).map((finalIndicator, idx) => 
           <Bars key={idx} {...finalIndicator} /> )}
       </Controls>
