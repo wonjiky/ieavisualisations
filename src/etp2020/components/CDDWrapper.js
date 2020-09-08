@@ -163,6 +163,7 @@ export default function (props) {
         mainOverlayLayer={mainOverlayLayer}
         popLayer={popLayer}
         overlayToggle={overlayToggle}
+        selectedRegion={region}
         needLayer={needLayer}
       />
       <Controls

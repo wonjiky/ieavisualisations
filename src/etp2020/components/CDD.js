@@ -5,9 +5,9 @@ export default function({
   years,
   mainOverlayLayer, 
   popLayer, 
-  overlayToggle, 
   needLayer,
-  needOverLayToggle,
+  overlayToggle, 
+  selectedRegion,
 }) {
 
   const mapConfig = {
@@ -52,6 +52,7 @@ export default function({
         type: 'line',
         paint: {
           'line-color': 'black',
+          // 'line-opacity': 1,
           'line-width': 0.7,
         }
       })
@@ -84,7 +85,6 @@ export default function({
           visibility: 'none'
         },
         paint: {
-          // 'circle-radius': 3,
           'circle-radius': {
             stops: [
               [2, .5],
@@ -201,6 +201,40 @@ export default function({
         map.setLayoutProperty(`LAYER-NEED-${i}`, 'visibility', overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling'  ? 'visible' : 'none');
       }
   }, [map, overlayToggle]);
+
+  React.useEffect(() => {
+    if (!map) return;
+    let all = ['Africa', 'Asia Pacific', 'Central & South America', 'Eurasia', 'Europe', 'Middle East', 'North America'];
+
+    let coords = {
+      'North America': {zoom: 3, center: [-112.133,55.728]},
+      'Central & South America': {zoom: 3.19, center: [-62.401,-21.183]},
+      'Africa': { zoom: 3.39, center: [20.744, 0.649]},
+      'Eurasia': { zoom: 3.18, center: [104.941,63.163] },
+      'Middle East': { zoom: 4, center: [51.204, 24.357]},
+      'Asia Pacific': { zoom: 2.78, center: [123.760, 10.204] },
+      'Europe': { zoom: 3.7, center: [20.374,56.708]},
+    }
+    
+    if (selectedRegion !== 'World') {
+      map
+        .setPaintProperty('world-shape', 'line-opacity', ['case',['match', ['get', 'Aggregated'], [selectedRegion], true, false], 1, 0.1])
+        .flyTo({
+          center: coords[selectedRegion].center,
+          zoom: coords[selectedRegion].zoom,
+          essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
+
+    } else {
+      map
+        .setPaintProperty('world-shape', 'line-opacity', ['case',['match', ['get', 'Aggregated'], all, true, false], 1, 0.1])
+        .flyTo({
+          center: [-20,35],
+          zoom: 2,
+          essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
+    }
+  }, [map, selectedRegion])
   
   return <div ref={mapContainerRef} className='map'/>
 }

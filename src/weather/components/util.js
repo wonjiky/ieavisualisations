@@ -51,6 +51,8 @@ export function colorsByVariables(countries, type, viewUnit) {
 	})
 	colors.splice(0,0, 'case');
 	colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');
+
+	console.log(colors);
 	return colors;
 }
 
