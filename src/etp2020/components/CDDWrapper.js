@@ -13,10 +13,16 @@ export default function (props) {
   const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
-  const [overlay, setOverlay] = React.useState('None');
+  const [popOverlayToggle, setPopOverlayToggle] = React.useState('None');
   const [region, setRegion] = React.useState('World'); 
+  
+  let data = [ ...ETP_LAYERS ];
+  let mainOverlayLayer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
+  let needLayer = data.filter(d => d.data === 'NFC' && d.type === type)[0]
+  let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop')[0];
+  console.log(needLayer);
 
-  const controls = [
+  let controls = [
 		{ 
 			type: 'button',
 			options: ['HDD','CDD'],
@@ -25,7 +31,7 @@ export default function (props) {
       selected: mainLayer,
       click: value => {
         setMainLayer(value)
-        setOverlay('None')
+        setPopOverlayToggle('None')
       },
     },
     {
@@ -36,7 +42,7 @@ export default function (props) {
 			selected: year,
 			click: value => {
         setYear(value)
-        setOverlay('None')
+        setPopOverlayToggle('None')
       },
     },
     {
@@ -46,7 +52,7 @@ export default function (props) {
       selected: type,
       click: value => {
         setType(value)
-        setOverlay('None')
+        setPopOverlayToggle('None')
       },
     },
     {
@@ -54,9 +60,9 @@ export default function (props) {
       options: mainLayer === 'HDD' 
         ? ['None', 'Population', 'Need of heating']
         : ['None', 'Population', 'Need of cooling'],
-      click: value => setOverlay(value),
+      click: value => setPopOverlayToggle(value),
       style: 'vertical',
-			selected: overlay,
+			selected: popOverlayToggle,
     },
     {
       type: 'divider',
@@ -100,25 +106,23 @@ export default function (props) {
     },
   };
 
-  React.useEffect(() => { 
-    axios.get(`${props.baseURL}ETP2020/CDD/indicators.csv`)
-      .then(response => {
-        const temp = Papa.parse(response.data, { header: true }).data;
-        setIndicators(temp);
-      })
-  },[])
 
-  let data = [ ...ETP_LAYERS ];
-  let layer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
-  let population = data.filter(d => d.data === 'LAYER' && d.type === 'pop')[0];
-
-  function open(e) {
+  const open = e => {
     setActive({ open: true, target: e.target.value })
   }
 
   const hide = React.useCallback(() => {
     setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
+  },[])
+
+
+  React.useEffect(() => { 
+    axios.get(`${props.baseURL}ETP2020/CDD/indicators.csv`)
+      .then(response => {
+        const temp = Papa.parse(response.data, { header: true }).data;
+        setIndicators(temp);
+      })
   },[])
 
   React.useEffect(() => {
@@ -156,10 +160,12 @@ export default function (props) {
   return (
     <>
       <CDD
-        layer={layer}
-        population={population}
         years={year}
-        overlay={overlay}
+        mainOverlayLayer={mainOverlayLayer}
+        popLayer={popLayer}
+        popOverlayToggle={popOverlayToggle}
+        needOverlay={needLayer}
+        needOverLayToggle={[]}
       />
       <Controls
         style={{

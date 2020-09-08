@@ -1,7 +1,14 @@
 import React from 'react'
 import { useCDDMap } from '../../components/customHooks';
 
-export default function({ layer, overlay, population, years }) {
+export default function({ 
+  years,
+  mainOverlayLayer, 
+  popLayer, 
+  popOverlayToggle, 
+  needLayer,
+  neddLayerToggle,
+}) {
 
   const mapConfig = {
     center: [0.729,15.359],
@@ -14,7 +21,9 @@ export default function({ layer, overlay, population, years }) {
 
   React.useEffect(() => {
     if(!map) return;
-    const { data, year, type, layers } = layer;
+    const { data, year, type, layers } = mainOverlayLayer;
+
+    // HDD &  CDD Layers
     for ( let l in layers ) {
       map.addLayer({
         id: `LAYER-${data}-${type}-${year}-${l}`,
@@ -29,6 +38,8 @@ export default function({ layer, overlay, population, years }) {
       })  
     }
 
+
+    // World Shape (Outline)
     map
       .addLayer({
         id: 'world-shape',
@@ -41,11 +52,12 @@ export default function({ layer, overlay, population, years }) {
         }
       })
 
-    for (let i in population.layers) {
+    // Population Layer
+    for (let i in popLayer.layers) {
       map.addLayer({
         id: `LAYER-POP-${i}`,
-        source: `${population.data}-${population.type}-${population.year}-${i}`,
-        'source-layer': population.layers[i].sourceLayer,
+        source: `${popLayer.data}-${popLayer.type}-${popLayer.year}-${i}`,
+        'source-layer': popLayer.layers[i].sourceLayer,
         type: 'circle',
         layout: {
           visibility: 'none'
@@ -56,6 +68,23 @@ export default function({ layer, overlay, population, years }) {
         }
       })
     }
+
+    // for (let i in needLayer.layers) {
+    //   map.addLayer({
+    //     id: `LAYER-NEED-${i}`,
+    //     source: `${needLayer.data}-${needLayer.type}-${needLayer.year}-${i}`,
+    //     'source-layer': needLayer.layers[i].sourceLayer,
+    //     type: 'circle',
+    //     layout: {
+    //       visibility: 'none'
+    //     },
+    //     paint: {
+    //       'circle-radius': 3,
+    //       'circle-stroke-color': 'red',
+    //       // 'circle-color': popColorsByValues(years),
+    //     }
+    //   })
+    // }
 
     function popColorsByValues(year) {
       const colorTypes = {
@@ -102,7 +131,7 @@ export default function({ layer, overlay, population, years }) {
         map.removeLayer(`LAYER-POP-${i}`)
       }
     }
-  }, [map, population, layer, years])
+  }, [map, popLayer, mainOverlayLayer, years])
 
   // React.useEffect(() => {
   //   if(!map) return;
@@ -149,9 +178,9 @@ export default function({ layer, overlay, population, years }) {
   React.useEffect(() => {
     if (!map) return;
     for ( let i = 0; i < 3; i ++ ) {
-      map.setLayoutProperty(`LAYER-POP-${i}`, 'visibility', overlay === 'Population'  ? 'visible' : 'none');
+      map.setLayoutProperty(`LAYER-POP-${i}`, 'visibility', popOverlayToggle === 'Population'  ? 'visible' : 'none');
     }
-  }, [map, overlay]);
+  }, [map, popOverlayToggle]);
   
 
   return <div ref={mapContainerRef} className='map'/>

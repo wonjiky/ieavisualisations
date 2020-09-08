@@ -152,7 +152,7 @@ export default props => {
         toggle={legendToggle}
         regions={regions}
       />
-      {/* <Controls
+      <Controls
         style={{
           flexFlow: 'column',
           top: '40px',
@@ -228,7 +228,7 @@ export default props => {
             * Click on legend to switch on/off layers
           </p>
         </div>
-      </Controls> */}
+      </Controls>
     </>
   )
 }
