@@ -178,6 +178,7 @@ export default function (props) {
           paddingRight: '20px',
           paddingLeft: '20px',
           left: '40px',
+          height: 'calc(80vh)'
         }}
       > 
         {controls.map((control, idx) => 
