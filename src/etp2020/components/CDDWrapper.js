@@ -32,7 +32,6 @@ export default function (props) {
       selected: hdd,
       click: value => {
         setHdd(value)
-        setoverlayToggle('None')
       },
     },
     {
@@ -43,7 +42,6 @@ export default function (props) {
 			selected: year,
 			click: value => {
         setYear(value)
-        setoverlayToggle('None')
       },
     },
     {
@@ -53,7 +51,6 @@ export default function (props) {
       selected: type,
       click: value => {
         setType(value)
-        setoverlayToggle('None')
       },
     },
     {

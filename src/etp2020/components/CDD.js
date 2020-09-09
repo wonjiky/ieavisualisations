@@ -46,6 +46,28 @@ export default function({
         },
       })
     }
+
+    for ( let i in allLayers.layers ) {
+      map.addLayer({
+        id: `POP-${i}`,
+        source: `${allLayers.data}-${allLayers.type}-${allLayers.year}-${i}`,
+        'source-layer': allLayers.layers[i].sourceLayer,
+        type: 'circle',
+        layout: {
+          visibility: 'none'
+        },
+        paint: {
+          'circle-opacity': 1,
+          'circle-radius': {
+            stops: [
+              [2, 1.2],
+              [4, 3]
+            ]
+          },
+          'circle-color': 'black'
+        },
+      })
+    }
     
     // HDD &  CDD Layers
     // for ( let l in layers ) {
@@ -188,22 +210,24 @@ export default function({
 
     for ( let i = 0; i <= 4; i ++ ) {
       
-      let layer = `ALL-LAYERS-${i}`;
+      let layer = `ALL-LAYERS-${i}`, popLayer = `POP-${i}`;
       let year = years.toString().substring(2,4);
-      let mainColor = years === 2019 ? `${hdd}_${year}` :  `${hdd}_${type}_${year}`;
-      let nf = type === 'HDD' ? 'NFH' : 'NFC';
-      let nfColor = years === 2019 ? `${nf}_${year}` : `${nf}_${type}_${year}`;
-      let popColor = `POP_${years}`
-      
-      if ( overlayToggle !== 'None' ) {
-        map.setPaintProperty(layer, overlayToggle === 'Population' ? 'circle-color' : 'circle-opacity', overlayToggle === 'Population'
-          ? popColors(popColor)
-          : ["case", ["==", ["get", nfColor ],0], 0.2, 1]
-        );
+      let mainColor = years === 2019 ? `${hdd}_${year}` : `${hdd}_${type}_${year}`,  popColor = `POP_${years}`;
+      let nf = type === 'HDD' ? 'NFH' : 'NFC', nfColor = years === 2019 ? `${nf}_${year}` : `${nf}_${type}_${year}`;
+
+      if ( overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling' ) {
+        map
+          .setPaintProperty(layer, 'circle-opacity',["case", ["==", ["get", nfColor ],0], 0.2, 1])
+          .setLayoutProperty(popLayer, 'visibility', 'none');
+      } else if ( overlayToggle === 'Population') {
+        map
+          .setLayoutProperty(popLayer, 'visibility', 'visible')
+          .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
       } else {
-        console.log(mainColor);
-        map.setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
-        map.setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
+        map
+          .setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
+          .setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
+          .setLayoutProperty(popLayer, 'visibility', 'none');
       }
     }
 
@@ -211,7 +235,6 @@ export default function({
       const colorTypes = {
         CDD: {
           colors: ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326'],
-          
           range: [0, 100, 180, 350, 700, 1500, 2600, 3400, 4200, 4600, 4800, 5000, 5200]
         },
         HDD: {
@@ -219,31 +242,26 @@ export default function({
           range: [0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
         }
       }
-
       let result = ["step", ["get", valueType], "#363636"];
-      
       for ( let i in colorTypes[hdd].colors ){
         let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
         result.splice(colorIdx, 0, colorTypes[hdd].colors[i])
         result.splice(rangeIdx, 0, colorTypes[hdd].range[i])
       }
-      
       return result;
     }
 
     function popColors(valueType) {
       const colorScheme = {
-          colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
-          range: [0, 1000, 5000, 35000, 70000, 130000, 300000, 650000, 1000000, 1500000, 2000000, 2500000, 3000000, 4000000, 5000000, 7000000, 8000000,]
+          colors: ["#363636", '#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+          range: [1, 10, 1000, 5000, 35000, 70000, 130000, 300000, 650000, 1000000, 1500000, 2000000, 2500000, 3000000, 4000000, 5000000, 7000000, 8000000]
       }
-    
       let result = ["step", ["get", valueType], "#363636"];
       for ( let i in colorScheme.colors ) {
         let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
         result.splice(colorIdx, 0, colorScheme.colors[i])
         result.splice(rangeIdx, 0, colorScheme.range[i])
       }
-      console.log(result);
       return result;
     }
 
