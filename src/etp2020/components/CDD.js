@@ -11,6 +11,7 @@ export default function({
   type,
   hdd,
   allLayers, 
+  layers,
   selectedRegion,
 }) {
 
@@ -28,11 +29,11 @@ export default function({
     if(!map) return;
     // const { data, year, type, layers } = mainOverlayLayer;
     
-    for ( let i in allLayers.layers ) {
+    for ( let i in layers.layers ) {
       map.addLayer({
-        id: `${allLayers.data}-${i}`,
-        source: `${allLayers.data}-${allLayers.type}-${allLayers.year}-${i}`,
-        'source-layer': allLayers.layers[i].sourceLayer,
+        id: `${layers.data}-${i}`,
+        source: `${layers.data}-${layers.type}-${layers.year}-${i}`,
+        'source-layer': layers.layers[i].sourceLayer,
         type: 'circle',
         paint: {
           'circle-opacity': 1,
@@ -210,20 +211,23 @@ export default function({
 
     for ( let i = 0; i <= 4; i ++ ) {
       
-      let layer = `ALL-LAYERS-${i}`, popLayer = `POP-${i}`;
+      let layer = `LAYERS-${i}`, popLayer = `POP-${i}`;
       let year = years.toString().substring(2,4);
       let mainColor = years === 2019 ? `${hdd}_${year}` : `${hdd}_${type}_${year}`,  popColor = `POP_${years}`;
-      let nf = type === 'HDD' ? 'NFH' : 'NFC', nfColor = years === 2019 ? `${nf}_${year}` : `${nf}_${type}_${year}`;
+      let nf = hdd === 'HDD' ? 'NFH' : 'NFC', nfColor = years === 2019 ? `${nf}_${year}` : `${nf}_${type}_${year}`;
 
       if ( overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling' ) {
         map
-          .setPaintProperty(layer, 'circle-opacity',["case", ["==", ["get", nfColor ],0], 0.2, 1])
+          .setPaintProperty(layer, 'circle-opacity',["case", ["==", ["get", nfColor ], 
+          nf === 'NFC' ? 0 : -1], 0.2, 1])
           .setLayoutProperty(popLayer, 'visibility', 'none');
-      } else if ( overlayToggle === 'Population') {
-        map
-          .setLayoutProperty(popLayer, 'visibility', 'visible')
-          .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
-      } else {
+      } 
+      // else if ( overlayToggle === 'Population') {
+      //   map
+      //     .setLayoutProperty(popLayer, 'visibility', 'visible')
+      //     .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
+      // } 
+      else {
         map
           .setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
           .setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
@@ -267,23 +271,23 @@ export default function({
 
   },[map, type, hdd, overlayToggle, years])
 
-  // React.useEffect(() => {
-  //   if (!map) return;
+  React.useEffect(() => {
+    if (!map) return;
 
-  //     const { data, year, type, layers } = mainOverlayLayer;
-  //     for ( let i in layers ) {
-  //       map.setPaintProperty(`LAYER-${data}-${type}-${year}-${i}`, 'circle-opacity', overlayToggle === 'Population'  ? 0.1 : 1);  
-  //     }  
+      // const { data, year, type, layers } = mainOverlayLayer;
+      // for ( let i in layers ) {
+      //   map.setPaintProperty(`LAYER-${data}-${type}-${year}-${i}`, 'circle-opacity', overlayToggle === 'Population'  ? 0.1 : 1);  
+      // }  
 
-  //     for ( let i = 0; i < 3; i ++ ) {
-  //       map.setLayoutProperty( `LAYER-POP-${years}-${i}`, 'visibility', overlayToggle === 'Population'  ? 'visible' : 'none');
-  //     }
+      // for ( let i = 0; i < 3; i ++ ) {
+      //   map.setLayoutProperty( `LAYER-POP-${years}-${i}`, 'visibility', overlayToggle === 'Population'  ? 'visible' : 'none');
+      // }
 
-  //     for ( let i = 0; i < 1; i ++ ) {
-  //       map.setLayoutProperty(`LAYER-NEED-${i}`, 'visibility', overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling'  ? 'visible' : 'none');
-  //     }
+      // for ( let i = 0; i < 1; i ++ ) {
+      //   map.setLayoutProperty(`LAYER-NEED-${i}`, 'visibility', overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling'  ? 'visible' : 'none');
+      // }
 
-  // }, [map, overlayToggle, years, mainOverlayLayer,allLayers.layers ]);
+  }, [map, overlayToggle]);
 
   React.useEffect(() => {
     if (!map) return;

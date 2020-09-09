@@ -12,6 +12,18 @@ export const ETP_LAYERS = [
       ],      
     },
     {
+      data: 'LAYERS',
+      year: '',
+      type: '',
+      layers: [
+        { url: "mapbox://iea.7ipv7pvh", sourceLayer: "HDDCDD_1-586z47" },
+        { url: "mapbox://iea.bna4nen9", sourceLayer: "HDDCDD_2-0dewmx" },
+        { url: "mapbox://iea.19ul8u2a", sourceLayer: "HDDCDD_3-b0kl1l" },
+        { url: "mapbox://iea.be237zrt", sourceLayer: "HDDCDD_4-0v39eb" },
+        { url: "mapbox://iea.18yig51e", sourceLayer: "HDDCDD_5-boy2wn" }
+      ],      
+    },
+    {
       data: 'HDD',
       year: 2019,
       type: 'SDS',

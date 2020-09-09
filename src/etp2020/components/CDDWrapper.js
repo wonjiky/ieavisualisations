@@ -19,6 +19,7 @@ export default function (props) {
   
   let data = [ ...ETP_LAYERS ];
   let allLayers = data.filter(d => d.data === 'ALL-LAYERS')[0];
+  let layers = data.filter(d => d.data === 'LAYERS')[0];
   let mainOverlayLayer = data.filter(d => d.data === hdd && d.type === type && d.year === year)[0];
   let needLayer = data.filter(d => d.data === (hdd === 'HDD' ? 'NFH' : 'NFC') && d.type === type && d.year === 2070)[0]
   let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop' && d.year === year)[0];
@@ -168,6 +169,7 @@ export default function (props) {
         allLayers={allLayers}
         overlayToggle={overlayToggle}
         selectedRegion={region}
+        layers={layers}
         type={type}
         hdd={hdd}
         needLayer={needLayer}
