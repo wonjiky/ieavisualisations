@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl';
-import { dottedBorderA, dottedBorderB, solidBorder } from './util/useMapStyle';
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
@@ -14,12 +13,13 @@ export default ({ mapConfig }) => {
 	useEffect (() => {
 		const map = new mapboxgl.Map({
 			container: mapContainerRef.current,
-			style: "mapbox://styles/iea/ckd8t01qv11hn1iqb8gg7a58w",
+			// style: "mapbox://styles/iea/ckd8t01qv11hn1iqb8gg7a58w",
+			style: "mapbox://styles/iea/ck9mv6pv834351ipiu0p02w80",
 			center: [-103, 39],
 			zoom: 4,
 			minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 			maxZoom: 5,
-			// maxBounds: [[-180, 10],[-45, 74]]
+			maxBounds: [[-180, 10],[-45, 74]]
 		})
 		
 		const popUp = new mapboxgl.Popup({
@@ -28,9 +28,6 @@ export default ({ mapConfig }) => {
 		});
 		
 		map.on("load", () => {
-			const lineWidth = .3;
-			const lineColor = 'black';
-			const invertLineColor = 'white';
 			setPopUp(popUp);
 			setMap(map);
 

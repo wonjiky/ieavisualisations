@@ -1,5 +1,4 @@
 import React from 'react'
-// import mapboxgl from 'mapbox-gl';
 import { useCO2Map } from '../../components/customHooks'
 
 export default ({ data, regions, toggle }) => {
@@ -38,7 +37,7 @@ export default ({ data, regions, toggle }) => {
           'source-layer': reservoirs[reservoir].sourceLayer,
           'type': 'fill',
           'paint': {
-            'fill-color': '#5b6162',
+            'fill-color': '#3f4937',
             'fill-opacity': {
               stops: [
                 [4, 0.7],
@@ -83,6 +82,7 @@ export default ({ data, regions, toggle }) => {
           visibility: 'visible'
         },
         paint: {
+          // 'fill-pattern': 'college-11',
           'fill-pattern': 'aquifer-layer-01',
           'fill-opacity': {
             stops: [
@@ -153,13 +153,6 @@ export default ({ data, regions, toggle }) => {
         source: `${region}-heatmap`,
         maxzoom: 5,
         paint: {
-          // increase weight as diameter breast height increases
-          // 'heatmap-weight': [
-          //   'interpolate',
-          //   ['linear'],
-          //   ['get','value'],
-          //   0,0,225,1
-          // ],
           'heatmap-intensity': [
             'interpolate',
             ['linear'],
@@ -174,34 +167,20 @@ export default ({ data, regions, toggle }) => {
               [minMax[1], 1]
             ]
           },
-          // increase intensity as zoom level increases
-          // 'heatmap-intensity': {
-          //   stops: [
-          //     [4, 3],
-          //     [4, 5]
-          //   ]
-          // },
           // assign color values be applied to points depending on their density
-          // ['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']
           'heatmap-color': [
             'interpolate',
             ['linear'],
             ['heatmap-density'],
             0, 'rgba(0,0,0,0)',
-            .1,'#fff7bc',
-            .2,'#fee391',
-            .3,'#fec44f',
-            .5,'#fe9929',
-            .6,'#ec7014',
-            .7,'#cc4c02',
-            .8,'#993404',
-            1,'#662506'
-            
-            // 0.2, '#fee5d9',
-            // 0.4, '#fcae91',
-            // 0.6, '#fb6a4a',
-            // 0.8, '#de2d26',
-            // 1, '#a50f15'
+            .1,'#ebad50',
+            .2,'#d29844',
+            .3,'#bb8439',
+            .5,'#a3702e',
+            .6,'#855720',
+            .7,'#704516',
+            .8,'#5a330c',
+            1,'#442101'
           ],
           // increase radius as zoom increases
           'heatmap-radius': {

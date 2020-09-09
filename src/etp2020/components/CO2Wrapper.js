@@ -15,7 +15,7 @@ export default props => {
   };
   const [data, setData] = React.useState(null);
   const [active, setActive] = React.useState({ open: false, target: null });
-  const [regions, setRegions] = React.useState({region: 'China', bounds: regionBounds['China']});
+  const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
   const [legendToggle, setLegendToggle] = React.useState({ reservoir: true, hubs: false, aquifer: true, sources: [] });
   const regionArr = [ 'US', 'Europe', 'China' ];
   const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
@@ -167,7 +167,7 @@ export default props => {
           header={'CO2 emission (Mt/year)'}
           // labels={[0, `${`]}
           labels={[0, maxVal]}
-          colors={['#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506']}
+          colors={['#ebad50', '#d29844', '#bb8439', '#a3702e', '#855720', '#704516', '#5a330c', '#442101']}
           round={false}
         />
         <Legends

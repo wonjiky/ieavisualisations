@@ -69,8 +69,8 @@ export default function (props) {
   let dropdown = [
     {
       type: 'divider',
-      marginBottom: 24,
-      marginTop: 24,
+      marginBottom: 15,
+      marginTop: 15,
     },
     {
       type: 'dropdown',
@@ -178,7 +178,6 @@ export default function (props) {
           paddingRight: '20px',
           paddingLeft: '20px',
           left: '40px',
-          height: 'calc(80vh)'
         }}
       > 
         {controls.map((control, idx) => 
@@ -188,7 +187,7 @@ export default function (props) {
           legendStyle={{marginTop: '0px'}}
           header={mainLayer === 'HDD' ? 'Heating degree days' : 'Cooling degree days'}
           subInHeader={false}
-          labels={mainLayer === 'HDD' ? [0, 6000] : [0, 12000]}
+          labels={mainLayer === 'HDD' ? [0, 12000] : [0, 6000]}
           colors={mainLayer === 'HDD' 
             ? ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790']
             : ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326']}
@@ -196,10 +195,10 @@ export default function (props) {
         />
         <Legends
           type={'continuous'}
-          legendStyle={{marginTop: '10px'}}
+          legendStyle={{marginTop: '5px'}}
           header={'Population'}
           subInHeader={false}
-          labels={[0,17000000]}
+          labels={[0,30000]}
           colors={['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023']}
           round={false}
         />

@@ -10,12 +10,13 @@
 .ButtonLabel {
   display: flex;
   line-height: 1.25rem;
-  font-size: .875rem;
+  font-size: .6rem;
 }
 
 .ControlContainer > button {
   padding: 4px 20px 0 0;
-  font-size: 1.25rem;
+  /* font-size: 1.25rem; */
+  font-size: .8rem;
   white-space: nowrap;
   text-overflow: ellipsis;
   background: none;

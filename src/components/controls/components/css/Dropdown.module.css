@@ -1,6 +1,7 @@
 .Dropdown {
-  min-width: 200px;
-  padding: 12px 20px;
+  /* min-width: 200px; */
+  /* padding: 12px 20px; */
+  padding: 6px 12px;
 }
 
 .DropdownOptions {

@@ -6,8 +6,10 @@
 
 .Header {
   font-weight: 600;
-  font-size: 16px !important;
-  margin: 0 0 10px 0;
+  font-size: .6rem !important;
+  margin: 0 0 3px 0;
+  /* font-size: 16px !important; */
+  /* margin: 0 0 10px 0; */
 }
 
 .LegendItem__Category {
@@ -31,7 +33,7 @@
 
 .Marker__Continuous {
   border: .5px solid black;
-  height: 15px;
+  height: 10px;
   width: 100%;
   /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,27,121,1) 98%, rgba(0,212,255,1) 100%); */
 }
@@ -40,7 +42,7 @@
   display: flex;
   margin-top: 5px;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .Markers {

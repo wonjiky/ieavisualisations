@@ -1,6 +1,5 @@
 import React from 'react'
 import { useCDDMap } from '../../components/customHooks';
-import { isCompositeComponent } from 'react-dom/test-utils';
 
 export default function({ 
   years,
