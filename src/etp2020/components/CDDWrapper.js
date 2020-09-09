@@ -9,7 +9,7 @@ import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLaye
 
 export default function (props) {
 
-  const [mainLayer, setMainLayer] = React.useState('HDD');
+  const [hdd, setHdd] = React.useState('HDD');
   const [year, setYear] = React.useState(2019);
   const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
@@ -18,8 +18,9 @@ export default function (props) {
   const [region, setRegion] = React.useState('World'); 
   
   let data = [ ...ETP_LAYERS ];
-  let mainOverlayLayer = data.filter(d => d.data === mainLayer && d.type === type && d.year === year)[0];
-  let needLayer = data.filter(d => d.data === (mainLayer === 'HDD' ? 'NFH' : 'NFC') && d.type === type && d.year === 2070)[0]
+  let allLayers = data.filter(d => d.data === 'ALL-LAYERS')[0];
+  let mainOverlayLayer = data.filter(d => d.data === hdd && d.type === type && d.year === year)[0];
+  let needLayer = data.filter(d => d.data === (hdd === 'HDD' ? 'NFH' : 'NFC') && d.type === type && d.year === 2070)[0]
   let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop' && d.year === year)[0];
 
   let controls = [
@@ -28,9 +29,9 @@ export default function (props) {
 			options: ['HDD','CDD'],
       style: 'horizontal',
       customStyle: { marginBottom: '12px'},
-      selected: mainLayer,
+      selected: hdd,
       click: value => {
-        setMainLayer(value)
+        setHdd(value)
         setoverlayToggle('None')
       },
     },
@@ -57,7 +58,7 @@ export default function (props) {
     },
     {
       type: 'button',
-      options: mainLayer === 'HDD' 
+      options: hdd === 'HDD' 
         ? ['None', 'Population', 'Need of heating']
         : ['None', 'Population', 'Need of cooling'],
       click: value => setoverlayToggle(value),
@@ -167,8 +168,11 @@ export default function (props) {
         years={year}
         mainOverlayLayer={mainOverlayLayer}
         popLayer={popLayer}
+        allLayers={allLayers}
         overlayToggle={overlayToggle}
         selectedRegion={region}
+        type={type}
+        hdd={hdd}
         needLayer={needLayer}
       />
       <Controls
@@ -185,10 +189,10 @@ export default function (props) {
         <Legends
           type={'continuous'}
           legendStyle={{marginTop: '0px'}}
-          header={mainLayer === 'HDD' ? 'Heating degree days' : 'Cooling degree days'}
+          header={hdd === 'HDD' ? 'Heating degree days' : 'Cooling degree days'}
           subInHeader={false}
-          labels={mainLayer === 'HDD' ? [0, 12000] : [0, 6000]}
-          colors={mainLayer === 'HDD' 
+          labels={hdd === 'HDD' ? [0, 12000] : [0, 6000]}
+          colors={hdd === 'HDD' 
             ? ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790']
             : ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326']}
           round={false}

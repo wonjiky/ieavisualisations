@@ -1,12 +1,16 @@
 import React from 'react'
 import { useCDDMap } from '../../components/customHooks';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 export default function({ 
   years,
   mainOverlayLayer, 
   popLayer, 
   needLayer,
-  overlayToggle, 
+  overlayToggle,
+  type,
+  hdd,
+  allLayers, 
   selectedRegion,
 }) {
 
@@ -18,77 +22,97 @@ export default function({
   } 
 
   const { map, popUp, mapContainerRef } = useCDDMap({ mapConfig });
-
+  
   React.useEffect(() => {
+    
     if(!map) return;
-    const { data, year, type, layers } = mainOverlayLayer;
-
-    // HDD &  CDD Layers
-    for ( let l in layers ) {
+    // const { data, year, type, layers } = mainOverlayLayer;
+    
+    for ( let i in allLayers.layers ) {
       map.addLayer({
-        id: `LAYER-${data}-${type}-${year}-${l}`,
-        source: `${data}-${type}-${year}-${l}`,
-        'source-layer': layers[l].sourceLayer,
+        id: `${allLayers.data}-${i}`,
+        source: `${allLayers.data}-${allLayers.type}-${allLayers.year}-${i}`,
+        'source-layer': allLayers.layers[i].sourceLayer,
         type: 'circle',
         paint: {
-          'circle-opacity': .9,
+          'circle-opacity': 1,
           'circle-radius': {
             stops: [
               [2, 1.2],
               [4, 3]
             ]
           },
-          'circle-color': colorsByValues(data)
+          'circle-color': 'black'
         },
-      })  
-    }
-
-    // Population Layer
-    for (let i in popLayer.layers) {
-      map.addLayer({
-        id: `LAYER-POP-${year}-${i}`,
-        source: `${popLayer.data}-${popLayer.type}-${popLayer.year}-${i}`,
-        'source-layer': popLayer.layers[i].sourceLayer,
-        type: 'circle',
-        layout: {
-          visibility: 'none'
-        },
-        paint: {
-          'circle-radius': {
-            stops: [
-              [2, 1.2],
-              [4, 3.5]
-            ]
-          },
-          'circle-color': popColorsByValues(years),
-        }
       })
     }
+    
+    // HDD &  CDD Layers
+    // for ( let l in layers ) {
+    //   map.addLayer({
+    //     id: `LAYER-${data}-${type}-${year}-${l}`,
+    //     source: `${data}-${type}-${year}-${l}`,
+    //     'source-layer': layers[l].sourceLayer,
+    //     type: 'circle',
+    //     paint: {
+    //       'circle-opacity': .9,
+    //       'circle-radius': {
+    //         stops: [
+    //           [2, 1.2],
+    //           [4, 3]
+    //         ]
+    //       },
+    //       'circle-color': colorsByValues(data)
+    //     },
+    //   })  
+    // }
 
-    for (let i in needLayer.layers) {
-      map.addLayer({
-        id: `LAYER-NEED-${i}`,
-        source: `${needLayer.data}-${needLayer.type}-${needLayer.year}-${i}`,
-        'source-layer': needLayer.layers[i].sourceLayer,
-        type: 'circle',
-        layout: {
-          visibility: 'none'
-        },
-        paint: {
-          'circle-radius': {
-            stops: [
-              [2, 1.2],
-              [4, 3.5]
-            ]
-          },
-          // 'circle-color': '#8aaaad',
-          'circle-color': '#363636',
-          'circle-opacity': 0.9,
-          // 'circle-stroke-width': 0.5,
-          // 'circle-stroke-color': color,
-        }
-      })
-    }
+    // // Population Layer
+    // for (let i in popLayer.layers) {
+    //   map.addLayer({
+    //     id: `LAYER-POP-${year}-${i}`,
+    //     source: `${popLayer.data}-${popLayer.type}-${popLayer.year}-${i}`,
+    //     'source-layer': popLayer.layers[i].sourceLayer,
+    //     type: 'circle',
+    //     layout: {
+    //       visibility: 'none'
+    //     },
+    //     paint: {
+    //       'circle-radius': {
+    //         stops: [
+    //           [2, 1.2],
+    //           [4, 3.5]
+    //         ]
+    //       },
+    //       'circle-color': popColorsByValues(years),
+    //     }
+    //   })
+    // }
+
+    // for (let i in needLayer.layers) {
+    //   map.addLayer({
+    //     id: `LAYER-NEED-${i}`,
+    //     source: `${needLayer.data}-${needLayer.type}-${needLayer.year}-${i}`,
+    //     'source-layer': needLayer.layers[i].sourceLayer,
+    //     type: 'circle',
+    //     layout: {
+    //       visibility: 'none'
+    //     },
+    //     paint: {
+    //       'circle-radius': {
+    //         stops: [
+    //           [2, 1.2],
+    //           [4, 3.5]
+    //         ]
+    //       },
+    //       // 'circle-color': '#8aaaad',
+    //       'circle-color': '#363636',
+    //       'circle-opacity': 0.9,
+    //       // 'circle-stroke-width': 0.5,
+    //       // 'circle-stroke-color': color,
+    //     }
+    //   })
+    // }
     
     // World Shape (Outline)
     map
@@ -104,40 +128,86 @@ export default function({
         }
       })
 
-    function popColorsByValues(year) {
-      const colorTypes = {
-          colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
-          range: [
-            0,
-            1000,
-            5000,
-            35000,
-            70000,
-            130000,
-            300000,
-            650000,
-            1000000,
-            1500000,
-            2000000,
-            2500000,
-            3000000,
-            4000000,
-            5000000,
-            7000000,
-            8000000,
-          ]
-      }
+    // function popColorsByValues(year) {
+    //   const colorTypes = {
+    //       colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+    //       range: [0, 1000, 5000, 35000, 70000, 130000, 300000, 650000, 1000000, 1500000, 2000000, 2500000, 3000000, 4000000, 5000000, 7000000, 8000000,]
+    //   }
     
-      let result = ["step", ["get", 'value'], "black"];
-      for ( let i in colorTypes.colors ) {
-        let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
-        result.splice(colorIdx, 0, colorTypes.colors[i])
-        result.splice(rangeIdx, 0, colorTypes.range[i])
+    //   let result = ["step", ["get", 'value'], "black"];
+    //   for ( let i in colorTypes.colors ) {
+    //     let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+    //     result.splice(colorIdx, 0, colorTypes.colors[i])
+    //     result.splice(rangeIdx, 0, colorTypes.range[i])
+    //   }
+    //   return result;
+    // }
+
+    // function colorsByValues(type) {
+    //   const colorTypes = {
+    //     CDD: {
+    //       colors: ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326'],
+          
+    //       range: [0, 100, 180, 350, 700, 1500, 2600, 3400, 4200, 4600, 4800, 5000, 5200]
+    //     },
+    //     HDD: {
+    //       colors: ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790'],
+    //       range: [0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
+    //     }
+    //   }
+
+    //   let result = ["step", ["get","val"], "black"];
+    //   for ( let i in colorTypes[type].colors ){
+    //     let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+    //     result.splice(colorIdx, 0, colorTypes[type].colors[i])
+    //     result.splice(rangeIdx, 0, colorTypes[type].range[i])
+    //   }
+    //   return result;
+    // }
+
+    return () => {
+      map.removeLayer('world-shape')
+      
+      // for ( let l in layers ) {
+      //   map.removeLayer(`LAYER-${data}-${type}-${year}-${l}`)
+      // }
+      
+      // for (let i in layers) {
+      //   map.removeLayer(`LAYER-POP-${year}-${i}`)
+      // }
+
+      // for (let i in needLayer.layers) {
+      //   map.removeLayer(`LAYER-NEED-${i}`)
+      // }
+    }
+  // }, [map, popLayer, needLayer, mainOverlayLayer, allLayers, years])
+  }, [map, allLayers]);
+
+  React.useEffect(() => {
+    if (!map) return;
+
+    for ( let i = 0; i <= 4; i ++ ) {
+      
+      let layer = `ALL-LAYERS-${i}`;
+      let year = years.toString().substring(2,4);
+      let mainColor = years === 2019 ? `${hdd}_${year}` :  `${hdd}_${type}_${year}`;
+      let nf = type === 'HDD' ? 'NFH' : 'NFC';
+      let nfColor = years === 2019 ? `${nf}_${year}` : `${nf}_${type}_${year}`;
+      let popColor = `POP_${years}`
+      
+      if ( overlayToggle !== 'None' ) {
+        map.setPaintProperty(layer, overlayToggle === 'Population' ? 'circle-color' : 'circle-opacity', overlayToggle === 'Population'
+          ? popColors(popColor)
+          : ["case", ["==", ["get", nfColor ],0], 0.2, 1]
+        );
+      } else {
+        console.log(mainColor);
+        map.setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
+        map.setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
       }
-      return result;
     }
 
-    function colorsByValues(type) {
+    function mainLayerColors(valueType, hdd) {
       const colorTypes = {
         CDD: {
           colors: ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326'],
@@ -150,48 +220,52 @@ export default function({
         }
       }
 
-      let result = ["step", ["get","val"], "black"];
-      for ( let i in colorTypes[type].colors ){
+      let result = ["step", ["get", valueType], "#363636"];
+      
+      for ( let i in colorTypes[hdd].colors ){
         let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
-        result.splice(colorIdx, 0, colorTypes[type].colors[i])
-        result.splice(rangeIdx, 0, colorTypes[type].range[i])
+        result.splice(colorIdx, 0, colorTypes[hdd].colors[i])
+        result.splice(rangeIdx, 0, colorTypes[hdd].range[i])
       }
+      
       return result;
     }
 
-    return () => {
-      map.removeLayer('world-shape')
-      for ( let l in layers ) {
-        map.removeLayer(`LAYER-${data}-${type}-${year}-${l}`)
+    function popColors(valueType) {
+      const colorScheme = {
+          colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+          range: [0, 1000, 5000, 35000, 70000, 130000, 300000, 650000, 1000000, 1500000, 2000000, 2500000, 3000000, 4000000, 5000000, 7000000, 8000000,]
       }
-      
-      for (let i in layers) {
-        map.removeLayer(`LAYER-POP-${year}-${i}`)
+    
+      let result = ["step", ["get", valueType], "#363636"];
+      for ( let i in colorScheme.colors ) {
+        let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+        result.splice(colorIdx, 0, colorScheme.colors[i])
+        result.splice(rangeIdx, 0, colorScheme.range[i])
       }
-
-      for (let i in needLayer.layers) {
-        map.removeLayer(`LAYER-NEED-${i}`)
-      }
+      console.log(result);
+      return result;
     }
-  }, [map, popLayer, needLayer, mainOverlayLayer, years])
 
-  React.useEffect(() => {
-    if (!map) return;
+  },[map, type, hdd, overlayToggle, years])
 
-      const { data, year, type, layers } = mainOverlayLayer;
-      for ( let i in layers ) {
-        map.setPaintProperty(`LAYER-${data}-${type}-${year}-${i}`, 'circle-opacity', overlayToggle === 'Population'  ? 0.1 : 1);  
-      }  
+  // React.useEffect(() => {
+  //   if (!map) return;
 
-      for ( let i = 0; i < 3; i ++ ) {
-        map.setLayoutProperty( `LAYER-POP-${years}-${i}`, 'visibility', overlayToggle === 'Population'  ? 'visible' : 'none');
-      }
+  //     const { data, year, type, layers } = mainOverlayLayer;
+  //     for ( let i in layers ) {
+  //       map.setPaintProperty(`LAYER-${data}-${type}-${year}-${i}`, 'circle-opacity', overlayToggle === 'Population'  ? 0.1 : 1);  
+  //     }  
 
-      for ( let i = 0; i < 1; i ++ ) {
-        map.setLayoutProperty(`LAYER-NEED-${i}`, 'visibility', overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling'  ? 'visible' : 'none');
-      }
+  //     for ( let i = 0; i < 3; i ++ ) {
+  //       map.setLayoutProperty( `LAYER-POP-${years}-${i}`, 'visibility', overlayToggle === 'Population'  ? 'visible' : 'none');
+  //     }
 
-  }, [map, overlayToggle, years, mainOverlayLayer ]);
+  //     for ( let i = 0; i < 1; i ++ ) {
+  //       map.setLayoutProperty(`LAYER-NEED-${i}`, 'visibility', overlayToggle === 'Need of heating' || overlayToggle === 'Need of cooling'  ? 'visible' : 'none');
+  //     }
+
+  // }, [map, overlayToggle, years, mainOverlayLayer,allLayers.layers ]);
 
   React.useEffect(() => {
     if (!map) return;
