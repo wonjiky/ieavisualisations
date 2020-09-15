@@ -1,5 +1,5 @@
 .Button {
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 }
 
 .ButtonOptions {
@@ -28,8 +28,8 @@
     flex: 1;
     box-sizing: border-box;
     cursor: pointer;
-    padding:10px 12px;
-    font-size: .7rem;
+    padding:10px 14px;
+    font-size: .8rem;
     color: #949494;
     background: #f3f3f3;
     transition: color .2s linear;

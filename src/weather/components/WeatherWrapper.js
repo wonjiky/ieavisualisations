@@ -127,7 +127,7 @@ export default function(props) {
 	}
 
 	return (
-		<>
+		<div className='container'>
 			<Weather
 				data={data}
 				time={time}
@@ -187,6 +187,6 @@ export default function(props) {
 				{/* {controls.map(control => 
 					<Control key={control.label} {...control} /> )} */}
 			</Controls>
-		</>
+		</div>
   )
 };

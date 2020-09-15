@@ -53,7 +53,7 @@ function WeatherByGrid_Vector() {
   })
 
   
-  return <div ref={mapContainerRef} className='map'/>
+  return <div className='container'><div ref={mapContainerRef} className='map'/></div>
 }
 
 export default WeatherByGrid_Vector

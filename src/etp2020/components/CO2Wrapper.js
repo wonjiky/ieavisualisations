@@ -4,6 +4,7 @@ import Papa from 'papaparse'
 import CO2 from './CO2'
 import { Controls, Control } from '../../components/controls'
 import { Legends } from '../../components/legends'
+import { Wrapper, NewControls } from '../../components/newControls'
 import classes from './css/ETP.module.css'
 
 export default props => {
@@ -21,7 +22,8 @@ export default props => {
   const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
 
   React.useEffect(() => {
-    const{ region, bounds }= regions;
+    const{ region }= regions;
+
     const URL = [
       axios.get(`${props.baseURL}ETP2020/CO2/${region}_Saline.json`),
       axios.get(`${props.baseURL}ETP2020/CO2/${region}_emissions.csv`),
@@ -95,16 +97,21 @@ export default props => {
 		setActive({ open: true, target: e.target.value })
 	}
 
-	function hide(e) {
-		if(e && e.relatedTarget) e.relatedTarget.click();
-		setActive({ open: false, target: null })
-	}
+  const hide = React.useCallback(() => {
+    setActive({ open: false, target: null })
+    document.removeEventListener('click', hide)
+  },[])
+
+  React.useEffect(() => {
+    if (!active.open) return;
+    document.addEventListener('click', hide)
+  },[ active.open, hide ])
 
   let controls = [
 		{ 
 			id: 1,
-			type: 'dropdown',
-			label: 'Regions', 
+			type: 'button',
+			// label: 'Regions', 
 			options: regionArr,
 			click: value => setRegions({region: value, bounds: regionBounds[value]}),
 			open: e => open(e),
@@ -126,27 +133,17 @@ export default props => {
     return activeStorage;
   }
 
-  // function pipelineToggle(storages) {
-  //   let activeStorage = [];
-  //   if ( storages.pipelines ) {
-  //     activeStorage.push('Pipelines');
-  //   } 
-  //   return activeStorage;
-  // }
-  
   function hubsToggle(storages) {
     let activeStorage = [];
     if ( storages.hubs ) {
       activeStorage.push('Hubs');
     }
-
     return activeStorage;
   }
 
   if ( !data ) return <div>Loading...</div>
-  const maxVal = Math.max(...data.heatmap.features.map(d => parseFloat(d.properties.value))).toFixed(0);
   return (
-    <>
+    <div className='container'>
       <CO2 
         data={data}
         toggle={legendToggle}
@@ -155,18 +152,18 @@ export default props => {
       <Controls
         style={{
           flexFlow: 'column',
-          top: '40px',
+          top: '20px',
+          left: '20px',
           paddingRight: '20px',
           paddingLeft: '20px',
-          left: '40px',
         }}
       >
-        {controls.map(control => <Control key={control.label} {...control} /> )}
+        {controls.map((control, idx) => <Control key={idx} {...control} /> )}
         <Legends
           type={'continuous'}
           header={'CO2 emission (Mt/year)'}
           // labels={[0, `${`]}
-          labels={[0, maxVal]}
+          labels={[0, 225]}
           colors={['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700']}
           round={false}
         />
@@ -221,7 +218,6 @@ export default props => {
           />
           : null
         }
-
         <div className={classes.Introduction}>
           <p>
             * Zoom in to view CO<sub>2</sub> storage and plants<br/>
@@ -229,24 +225,6 @@ export default props => {
           </p>
         </div>
       </Controls>
-    </>
+    </div>
   )
 }
-
-        {/* {regions.region === 'US' 
-          ? <Legends 
-            type={'category'}
-            header={`CO2 Pipelines`}
-            labels={['Pipelines']}
-            colors={['line']}
-            selected={pipelineToggle(legendToggle)}
-            round={true}
-            click={_ => {
-              setLegendToggle(prev => ({
-                ...prev,
-                pipelines: !legendToggle.pipelines
-              }))
-            }}
-          />
-          : null
-        } */}

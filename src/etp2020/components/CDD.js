@@ -1,8 +1,8 @@
 import React from 'react'
-import { useCDDMap } from '../../components/customHooks';
-import { isCompositeComponent } from 'react-dom/test-utils';
+import { useCDDMap } from '../../components/customHooks'
+import PropTypes from 'prop-types'
 
-export default function({ 
+function CDD({ 
   years,
   mainOverlayLayer, 
   popLayer, 
@@ -252,7 +252,6 @@ export default function({
         result.splice(colorIdx, 0, colorTypes[hdd].colors[i])
         result.splice(rangeIdx, 0, colorTypes[hdd].range[i])
       }
-      console.log(result);
       return result;
     }
 
@@ -327,6 +326,7 @@ export default function({
   return <div ref={mapContainerRef} className='map'/>
 }
 
+export default CDD;
 
 // map
     //   .on('mousemove', `hdd-${i}`, function(e) {

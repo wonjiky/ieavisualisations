@@ -38,39 +38,9 @@ export default ({ data, regions, toggle }) => {
           'type': 'fill',
           'paint': {
             'fill-color': '#b1b2a8',
-            // 'fill-opacity': {
-            //   stops: [
-            //     [4, 0.7],
-            //     [5, 0.3]
-            //   ]
-            // }
           }
         })
     }
-    // map
-    //   .addSource('US-CO2-pipelines', {
-    //     'type': 'vector',
-    //     'url': "mapbox://iea.2eoddisy"
-    //   })
-    //   .addLayer({
-    //     'id': 'US-pipelines',
-    //     'source': 'US-CO2-pipelines',
-    //     'source-layer': "US_CO2_pipelines-ctl6c0",
-    //     'type': 'line',
-    //     'paint': {
-    //       'line-color': '#fdf787',
-    //       'line-width': 3,
-    //       'line-opacity': {
-    //         stops: [
-    //           [4, 0.2],
-    //           [5, 0.6]
-    //         ]
-    //       },
-    //     },
-    //     layout: {
-    //       visibility: 'visible'
-    //     },
-    //   })
 
     // ADD SALINE aquifer LAYER
     map
@@ -145,7 +115,6 @@ export default ({ data, regions, toggle }) => {
       })
 
     // ADD HEATMAP LAYER
-    console.log(minMax);
     map
       .addLayer({
         id: 'heatmap-layer',
@@ -262,17 +231,14 @@ export default ({ data, regions, toggle }) => {
         .removeSource('EU-CO2-hubs')
         .removeSource(`${region}-aquifer`)
         .removeSource(`${region}-heatmap`);
-        // .removeLayer('US-pipelines')
-        // .removeSource('US-CO2-pipelines')
     }
   }, [map, regions, data]);
 
   React.useEffect(() => {
     if (!map) return;
-    const { reservoir, aquifer, pipelines, hubs, sources } = toggle;
+    const { reservoir, aquifer, hubs, sources } = toggle;
     map
       .setLayoutProperty('aquifer-layer', 'visibility', aquifer ? 'visible' : 'none')
-      // .setLayoutProperty('US-pipelines', 'visibility', pipelines ? 'visible' : 'none')
       .setLayoutProperty('EU-hubs', 'visibility', hubs ? 'visible' : 'none')
       .setLayoutProperty('EU-hubs2', 'visibility', hubs ? 'visible' : 'none')
       .setFilter('heatmap-circle', [

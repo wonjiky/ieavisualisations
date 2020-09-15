@@ -2,19 +2,20 @@ import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
+import PropTypes from 'prop-types';
 import { Controls, Control } from '../../components/controls'
 import { Legends } from '../../components/legends'
 import { Bars } from '../../components/bars'
 import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLayers'
 
-export default function (props) {
-
+function CDDWrapper(props) {
+  
   const [hdd, setHdd] = React.useState('HDD');
   const [year, setYear] = React.useState(2019);
   const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
-  const [overlayToggle, setoverlayToggle] = React.useState('None');
+  const [overlayToggle, setOverlayToggle] = React.useState('None');
   const [region, setRegion] = React.useState('World'); 
   
   let data = [ ...ETP_LAYERS ];
@@ -29,7 +30,6 @@ export default function (props) {
 			type: 'button',
 			options: ['HDD','CDD'],
       style: 'horizontal',
-      customStyle: { marginBottom: '12px'},
       selected: hdd,
       click: value => {
         setHdd(value)
@@ -39,7 +39,6 @@ export default function (props) {
       type: 'button',
       options: [2019, 2030, 2070],
       style: 'horizontal',
-      customStyle: { marginBottom: '12px'},
 			selected: year,
 			click: value => {
         setYear(value)
@@ -59,10 +58,25 @@ export default function (props) {
       options: hdd === 'HDD' 
         ? ['None', 'Population', 'Need of heating']
         : ['None', 'Population', 'Need of cooling'],
-      click: value => setoverlayToggle(value),
+      click: value => setOverlayToggle(value),
       style: 'vertical',
-			selected: overlayToggle,
-    }
+      selected: overlayToggle,
+    },
+    {
+      type: 'toggle',
+      options: 'Population',
+      click: value => setOverlayToggle(value),
+      style: 'vertical',
+      selected: overlayToggle,
+    },
+    {
+      type: 'toggle',
+      options: hdd === 'HDD' ? 'Need of heating' : 'Need of cooling',
+      click: value => setOverlayToggle(value),
+      style: 'vertical',
+      selected: overlayToggle,
+      customStyle: { marginBottom: 'px'}
+    },
   ];
 
   let dropdown = [
@@ -126,7 +140,7 @@ export default function (props) {
         const temp = Papa.parse(response.data, { header: true }).data;
         setIndicators(temp);
       })
-  },[])
+  },[props.baseURL])
 
   React.useEffect(() => {
     if (!active.open) return;
@@ -159,9 +173,8 @@ export default function (props) {
         }
     }
   }
-
   return (
-    <>
+    <div className='container'>
       <CDD
         years={year}
         mainOverlayLayer={mainOverlayLayer}
@@ -177,14 +190,29 @@ export default function (props) {
       <Controls
         style={{
           flexFlow: 'column',
-          top: '40px',
+          top: '20px',
+          left: '20px',
           paddingRight: '20px',
           paddingLeft: '20px',
-          left: '40px',
         }}
       > 
         {controls.map((control, idx) => 
           <Control key={idx} {...control} /> )}
+        
+        {dropdown.map((drop, idx) => 
+          <Control key={idx} {...drop} /> )}
+        {Object.values(finalIndicators).map((finalIndicator, idx) => 
+          <Bars key={idx} {...finalIndicator} /> )}
+      </Controls>
+      <Controls
+        style={{
+          flexFlow: 'column',
+          top: '20px',
+          right: '20px',
+          paddingRight: '20px',
+          paddingLeft: '20px',
+        }}
+      >
         <Legends
           type={'continuous'}
           legendStyle={{marginTop: '0px'}}
@@ -205,11 +233,10 @@ export default function (props) {
           colors={['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023']}
           round={false}
         />
-        {dropdown.map((drop, idx) => 
-          <Control key={idx} {...drop} /> )}
-        {Object.values(finalIndicators).map((finalIndicator, idx) => 
-          <Bars key={idx} {...finalIndicator} /> )}
       </Controls>
-    </>
+      </div>
   )
 }
+
+export default CDDWrapper;
+

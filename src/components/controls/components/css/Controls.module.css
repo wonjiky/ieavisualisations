@@ -1,9 +1,8 @@
 .ControlWrapper {
-  position: fixed;
+  position: absolute;
   display: flex;
   /* width: 100%; */
   /* bottom:0; */
-  /* background: rgba(255,255,255, 0.5); */
   width: 250px;
   background: #fff;
   padding: 15px 40px;

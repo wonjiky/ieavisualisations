@@ -1,0 +1,46 @@
+.Toggle {
+  margin-bottom: 12px;
+}
+
+.ToggleOptions {
+  display: flex;
+  position: relative;
+  border: 1px solid #e6e6e6;
+}
+
+.vertical {
+  flex-flow: column;
+}
+
+.horizontal {
+  flex-flow: row;
+}
+
+.horizontal > .ToggleOption:not(:first-child) {
+  margin-left: -1px;
+}
+
+.vertical > .ButtonOption {
+  display: flex;
+}
+
+.ToggleOption {
+  flex: 1;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding:10px 14px;
+  font-size: .8rem;
+  color: #949494;
+  background: #f3f3f3;
+  transition: color .2s linear;
+}
+
+.ButtonOption:hover {
+  color: #000;
+  transition: color .2s linear;
+}
+
+.ButtonOption.Selected {
+  color: #000;
+  background:#fff;
+}

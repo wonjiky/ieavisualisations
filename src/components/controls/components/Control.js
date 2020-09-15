@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Slider, Dropdown } from '../index';
+import { Button, Slider, Toggle, Dropdown } from '../index';
 
 export default props => {
   switch (props.type) {
@@ -18,6 +18,8 @@ export default props => {
       )
     case 'button':
       return <Button {...props} />;
+    case 'toggle':
+      return <Toggle {...props} />;
     case 'slider':
       return ( 
         <Slider

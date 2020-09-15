@@ -54,4 +54,3 @@ const useCDDMap = ({ mapConfig, test }) => {
 }
 
 export default useCDDMap;
-
