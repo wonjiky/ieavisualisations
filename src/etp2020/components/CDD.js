@@ -222,11 +222,11 @@ export default function({
           nf === 'NFC' ? 0 : -1], 0.2, 1])
           .setLayoutProperty(popLayer, 'visibility', 'none');
       } 
-      // else if ( overlayToggle === 'Population') {
-      //   map
-      //     .setLayoutProperty(popLayer, 'visibility', 'visible')
-      //     .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
-      // } 
+      else if ( overlayToggle === 'Population') {
+        map
+          .setLayoutProperty(popLayer, 'visibility', 'visible')
+          .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
+      } 
       else {
         map
           .setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
@@ -252,6 +252,7 @@ export default function({
         result.splice(colorIdx, 0, colorTypes[hdd].colors[i])
         result.splice(rangeIdx, 0, colorTypes[hdd].range[i])
       }
+      console.log(result);
       return result;
     }
 

@@ -37,13 +37,13 @@ export default ({ data, regions, toggle }) => {
           'source-layer': reservoirs[reservoir].sourceLayer,
           'type': 'fill',
           'paint': {
-            'fill-color': '#3f4937',
-            'fill-opacity': {
-              stops: [
-                [4, 0.7],
-                [5, 0.3]
-              ]
-            }
+            'fill-color': '#b1b2a8',
+            // 'fill-opacity': {
+            //   stops: [
+            //     [4, 0.7],
+            //     [5, 0.3]
+            //   ]
+            // }
           }
         })
     }
@@ -82,7 +82,6 @@ export default ({ data, regions, toggle }) => {
           visibility: 'visible'
         },
         paint: {
-          // 'fill-pattern': 'college-11',
           'fill-pattern': 'aquifer-layer-01',
           'fill-opacity': {
             stops: [
@@ -146,6 +145,7 @@ export default ({ data, regions, toggle }) => {
       })
 
     // ADD HEATMAP LAYER
+    console.log(minMax);
     map
       .addLayer({
         id: 'heatmap-layer',
@@ -157,43 +157,57 @@ export default ({ data, regions, toggle }) => {
             'interpolate',
             ['linear'],
             ['zoom'],
-            2,1,7,5
+            2,
+            3,
+            4,
+            10
           ],
           'heatmap-weight': {
             property: 'value',
             type: 'exponential',
             stops: [
               [minMax[0], 0],
-              [minMax[1], 1]
+              [225, 1]
+              // [minMax[1], 1]
             ]
           },
+          'heatmap-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2,
+            5,
+            4,
+            25
+            ],
           // assign color values be applied to points depending on their density
           'heatmap-color': [
             'interpolate',
             ['linear'],
             ['heatmap-density'],
             0, 'rgba(0,0,0,0)',
-            .1,'#ebad50',
-            .2,'#d29844',
-            .3,'#bb8439',
-            .5,'#a3702e',
-            .6,'#855720',
-            .7,'#704516',
-            .8,'#5a330c',
-            1,'#442101'
+            .1,'#e3a850',
+            .2,'#da8142',
+            .3,'#d36337',
+            .5,'#ce5030',
+            .6,'#c21e1e',
+            .7,'#a02115',
+            .8,'#8a230f',
+            .9,'#78240a',
+            1,'#522700'
           ],
           // increase radius as zoom increases
-          'heatmap-radius': {
-            stops: [
-              [3, 15],
-              [5, 20]
-            ]
-          },
+          // 'heatmap-radius': {
+          //   stops: [
+          //     [3, 15],
+          //     [5, 20]
+          //   ]
+          // },
           // decrease opacity to transition into the circle layer
           'heatmap-opacity': {
             default: 1,
             stops: [
-              [4, 1],
+              [4.5, 1],
               [5, 0]
             ]
           },

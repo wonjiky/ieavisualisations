@@ -13,7 +13,6 @@ export default ({ mapConfig }) => {
 	useEffect (() => {
 		const map = new mapboxgl.Map({
 			container: mapContainerRef.current,
-			// style: "mapbox://styles/iea/ckd8t01qv11hn1iqb8gg7a58w",
 			style: "mapbox://styles/iea/ck9mv6pv834351ipiu0p02w80",
 			center: [-103, 39],
 			zoom: 4,

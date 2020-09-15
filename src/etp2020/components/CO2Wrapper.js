@@ -167,7 +167,7 @@ export default props => {
           header={'CO2 emission (Mt/year)'}
           // labels={[0, `${`]}
           labels={[0, maxVal]}
-          colors={['#ebad50', '#d29844', '#bb8439', '#a3702e', '#855720', '#704516', '#5a330c', '#442101']}
+          colors={['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700']}
           round={false}
         />
         <Legends
