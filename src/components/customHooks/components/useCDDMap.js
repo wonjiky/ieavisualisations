@@ -4,14 +4,15 @@ import { ETP_LAYERS } from './util/EtpLayers'
 import "mapbox-gl/dist/mapbox-gl.css"
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
-export default ({ mapConfig }) => {
+
+const useCDDMap = ({ mapConfig, test }) => {
 
 	const [map, setMap] = useState(null);
 	const [popUp, setPopUp] = useState(null);
 	const mapContainerRef = useRef(null);
-
+  
   useEffect (() => {
-    
+
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: mapConfig.style,
@@ -45,12 +46,12 @@ export default ({ mapConfig }) => {
     });
 	}, [])
 
-	return {
+  return {
 			map,
 			popUp,
 			mapContainerRef
 	}
-            
 }
 
+export default useCDDMap;
 

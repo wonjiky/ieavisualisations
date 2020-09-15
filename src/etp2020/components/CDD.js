@@ -19,7 +19,7 @@ export default function({
     center: [0.729,15.359],
     minZoom: 2,
     maxZoom: 4,
-    style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx"
+    style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
   } 
 
   const { map, popUp, mapContainerRef } = useCDDMap({ mapConfig });
