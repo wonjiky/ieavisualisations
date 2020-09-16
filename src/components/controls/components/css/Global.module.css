@@ -7,22 +7,26 @@
 }
 
 .ControlLabel,
-.ButtonLabel {
+.RadioToggleLabel {
   display: flex;
   line-height: 1.25rem;
-  font-size: .6rem;
+  font-size: .7rem;
 }
 
 .ControlContainer > button {
   padding: 4px 20px 0 0;
   /* font-size: 1.25rem; */
-  font-size: .8rem;
+  font-size: 1rem;
   white-space: nowrap;
   text-overflow: ellipsis;
   background: none;
   text-align:left;
   /* display: block; */
   /* width: 200px; */
+}
+
+.ControlContainer.dark > button {
+  color: #fff !important;
 }
 
 .ControlContainer > button:before {
@@ -39,7 +43,6 @@
 }
 
 .ControlContainer > button:hover:before {
-  /* transition: border .2s linear; */
   z-index:1;
   border-color: #949494;
 }
@@ -70,61 +73,10 @@
   flex-flow: column;
   margin: 0 !important;
 }
-/* .ControlWrapper {
-  position: absolute;
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  width: 300px;
-  background: white;
-  margin: 20px 20px;
-  padding: 30px 20px;
-  box-sizing: border-box;
-}
 
-.ControlWrapper h1 {
-  margin: 0;
-  color: #525252;
+.ControlDivider:before {
+  display: block;
+  border-bottom: 1px solid #e6e6e6;
+  height:1px;
+  content: ""  
 }
-
-.ControlWrapper ul {
-  display: flex;
-  list-style: none;
-  margin: 0 0 10px 0;
-  padding: 0;
-}
-
-.Slider {
-  margin-bottom: 30px;
-}
-
-.SliderType {
-  text-align: center;
-}
-
-.ControlWrapper li {
-  width: 100%;
-  cursor: pointer;
-  padding: 7px;
-  font-weight: 800;
-  box-sizing:border-box;
-}
-
-.Select {
-  margin-bottom: 20px;
-}
-
-.Options {
-  background: #e3e3e3;
-  color: #525252;
-}
-
-.selected {
-  background: #525252;
-  color: #e3e3e3;
-}
-
-.Indicator {
-  flex-flow: column;
-  margin: 0 !important;
-} */

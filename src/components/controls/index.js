@@ -1,7 +1,7 @@
 export { default as Control } from './components/Control';
 export { default as Controls } from './components/Controls';
-export { default as Button } from './components/Button';
+export { default as RadioToggle } from './components/RadioToggle';
 export { default as Slider } from './components/Slider';
 export { default as Labels } from './components/Labels';
-export { default as Toggle } from './components/Toggle';
+export { default as CheckToggle } from './components/CheckToggle';
 export { default as Dropdown } from './components/Dropdown';

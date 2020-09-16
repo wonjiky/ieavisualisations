@@ -1,7 +1,11 @@
 .LegendWrapper {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   min-width: 200px;
   width: 100%;
+}
+
+.LegendWrapper:nth-last-child(1) {
+  margin-bottom: 0px;
 }
 
 .LegendItem__Category {
@@ -18,7 +22,7 @@
 
 .Header {
   font-weight: 600;
-  font-size: 1rem !important;
+  font-size: .8rem !important;
   margin: 0 0 3px 0;
 }
 
@@ -41,7 +45,7 @@
   display: flex;
   margin-top: 5px;
   justify-content: space-between;
-  font-size: .8rem;
+  font-size: .7rem;
 }
 
 .Markers {
@@ -55,8 +59,8 @@
 }
 
 .SymbolRound {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 15px; 
   margin: 0px;
   background: white;

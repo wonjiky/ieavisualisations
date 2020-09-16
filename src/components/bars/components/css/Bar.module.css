@@ -1,5 +1,5 @@
 .Bar {
-  font-size: .6rem;
+  font-size: .7rem;
   margin-top: 10px;
 }
 
@@ -23,6 +23,18 @@
 
 .Bar_Percentage {
   position: absolute;
-  background-color: #adadad;
+  background: #adadad;
   height:100%;
+}
+
+.BarLabel.dark {
+  color: white;
+}
+
+.Bar_Wrapper.dark {
+  border: 1px solid #fff;
+}
+
+.Bar_Percentage.dark {
+  background: #fff !important;
 }

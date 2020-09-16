@@ -1,0 +1,70 @@
+.RadioToggle {
+    margin-bottom: 14px;
+}
+
+.RadioToggleOption.dark {
+    color: rgba(255,255,255,0.4) !important;
+    background: rgba(111, 111, 111, 0.8) !important;
+}
+
+.RadioToggle:nth-last-child(1) {
+    margin: 0;
+}
+
+.RadioToggleOptions {
+    display: flex;
+    position: relative;
+}
+
+.vertical {
+    flex-flow: column;
+}
+
+.horizontal {
+    flex-flow: row;
+}
+
+.horizontal > .RadioToggleOption:not(:first-child) {
+    margin: 0 0 0 -1px;
+}
+
+.horizontal > .RadioToggleOption {
+    margin: 0;
+}
+
+.vertical > .RadioToggleOption {
+    display: flex;
+}
+
+.RadioToggleOption {
+    flex: 1;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding:10px 14px;
+    font-size: 0.9rem;
+    /* color: #949494;
+    background: #f3f3f3; */
+    color: rgba(0,0,0, 0.6);
+    background: rgba(255,255,255, 0.6);
+    transition: color .2s linear;
+}
+
+.RadioToggleOption:hover {
+    color: #000;
+    transition: color .2s linear;
+}
+
+.RadioToggleOption.Selected {
+    color: #000;
+    background:#fff;
+}
+
+.RadioToggleOption.dark:hover {
+    color: #fff !important;
+    transition: color .2s linear;
+}
+
+.RadioToggleOption.Selected.dark {
+    color: white !important;
+    background: rgba(27,27,27,0.8) !important;
+}

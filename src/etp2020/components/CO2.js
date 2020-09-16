@@ -81,8 +81,7 @@ export default ({ data, regions, toggle }) => {
               [5, .6]
             ]
           },
-          'circle-stroke-color': 'white',
-          'circle-stroke-width': 2,
+          
           'circle-stroke-opacity': {
             stops: [
               [4.5, 0],

@@ -45,7 +45,7 @@
 	}
 }
 
-@media screen and (max-width: 1479px) and (min-width: 1480px) {
+@media screen and (max-width: 1479px) and (min-width: 1280px) {
 	.container {
 		width: calc(100vw - 96px);
 	}

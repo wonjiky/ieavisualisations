@@ -1,0 +1,72 @@
+.CheckToggle:nth-last-child(1) {
+  margin: 0 !important;
+}
+
+.CheckToggleOptions {
+  display: flex;
+  position: relative;
+  /* border: 1px solid #e6e6e6; */
+}
+
+.CheckToggle.vertical { 
+  margin-bottom: 4px;
+}
+
+.CheckToggle.horizontal { 
+  margin-right: 4px;
+}
+
+.vertical {
+  flex-flow: column;
+}
+
+.horizontal {
+  flex-flow: row;
+}
+
+.horizontal > .CheckToggleOption:not(:first-child) {
+  margin-left: -1px;
+}
+
+.vertical > .ButtonOption {
+  display: flex;
+}
+
+.CheckToggleOption {
+  flex: 1;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding:10px 14px;
+  margin: 0;
+  font-size: 0.9rem;
+  /* color: #949494;
+  background: #f3f3f3; */
+  color: rgba(0,0,0,0.6);
+  background: rgba(255,255,255,0.7);
+  transition: color .2s linear;
+}
+
+.CheckToggleOption.dark {
+  color: rgba(255,255,255,0.4) !important;
+  background: rgba(111, 111, 111, 0.8) !important;
+}
+
+.CheckToggleOption:hover {
+  color: #000;
+  transition: color .2s linear;
+}
+
+.CheckToggleOption.dark:hover {
+  color: #fff !important;
+  transition: color .2s linear;
+}
+
+.CheckToggleOption.Selected {
+  color: #000;
+  background:#fff;
+}
+
+.CheckToggleOption.Selected.dark {
+  color: #fff !important;
+  background: rgba(27,27,27,0.8) !important;
+}

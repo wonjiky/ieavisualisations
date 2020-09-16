@@ -47,7 +47,7 @@
   cursor: pointer;
   width: 100%;
   font-weight: normal;
-  font-size: 1.25rem;
+  font-size: 0.8rem;
   background: transparent;
   box-sizing:border-box;
   padding: 7px;
@@ -58,18 +58,4 @@
 
 .Options:hover {
   background: #e6e6e6;
-
 }
-
-/* ul {
-  display: flex;
-  list-style: none;
-  margin: 0 0 10px 0;
-  padding: 0;
-}
-li {
-  width: 100%;
-  cursor: pointer;
-  padding: 7px;
-  box-sizing:border-box;
-} */

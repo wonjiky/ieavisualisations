@@ -1,25 +1,17 @@
 import React from 'react'
-import { Button, Slider, Toggle, Dropdown } from '../index';
+import { RadioToggle, Slider, CheckToggle, Dropdown } from '../index'
+import global from './css/Global.module.css'
 
 export default props => {
   switch (props.type) {
     case 'dropdown':
       return (
-        <Dropdown 
-        label={props.label}
-        options={props.options}
-        click={props.click}
-        top={props.top}
-        selected={props.selected}
-        active={props.active}
-        open={props.open}
-        hide={props.hide}
-        />
+        <Dropdown {...props} />
       )
-    case 'button':
-      return <Button {...props} />;
-    case 'toggle':
-      return <Toggle {...props} />;
+    case 'radio':
+      return <RadioToggle {...props} />;
+    case 'check':
+      return <CheckToggle {...props} />;
     case 'slider':
       return ( 
         <Slider
@@ -33,9 +25,8 @@ export default props => {
           />
       )
     case 'divider':
-      return <div style={{ 
+      return <div className={global.ControlDivider} style={{ 
         width: '100%', 
-        border: '0.5px solid #e6e6e6', 
         marginBottom: `${props.marginBottom ? props.marginBottom : 0}px`, 
         marginTop: `${props.marginTop ? props.marginTop : 0}px`, }} />
     default:

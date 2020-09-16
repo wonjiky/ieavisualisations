@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
-import PropTypes from 'prop-types';
 import { Controls, Control } from '../../components/controls'
 import { Legends } from '../../components/legends'
 import { Bars } from '../../components/bars'
@@ -15,79 +14,71 @@ function CDDWrapper(props) {
   const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
-  const [overlayToggle, setOverlayToggle] = React.useState('None');
   const [region, setRegion] = React.useState('World'); 
+  const [needFor, setNeedFor] = React.useState(false);
+  const [selectedPop, setPopulation] = React.useState(false);
   
   let data = [ ...ETP_LAYERS ];
-  let allLayers = data.filter(d => d.data === 'ALL-LAYERS')[0];
   let layers = data.filter(d => d.data === 'LAYERS')[0];
-  let mainOverlayLayer = data.filter(d => d.data === hdd && d.type === type && d.year === year)[0];
-  let needLayer = data.filter(d => d.data === (hdd === 'HDD' ? 'NFH' : 'NFC') && d.type === type && d.year === 2070)[0]
-  let popLayer = data.filter(d => d.data === 'LAYER' && d.type === 'pop' && d.year === year)[0];
 
   let controls = [
 		{ 
-			type: 'button',
+			type: 'radio',
 			options: ['HDD','CDD'],
       style: 'horizontal',
       selected: hdd,
+      dark: true,
       click: value => {
         setHdd(value)
       },
     },
     {
-      type: 'button',
+      type: 'radio',
       options: [2019, 2030, 2070],
       style: 'horizontal',
-			selected: year,
+      selected: year,
+      dark: true,
 			click: value => {
         setYear(value)
       },
     },
     {
-      type: 'button',
+      type: 'radio',
       options: ['SDS', 'STEPS'],
       style: 'horizontal',
       selected: type,
       click: value => {
         setType(value)
       },
+      dark: true,
     },
     {
-      type: 'button',
-      options: hdd === 'HDD' 
-        ? ['None', 'Population', 'Need of heating']
-        : ['None', 'Population', 'Need of cooling'],
-      click: value => setOverlayToggle(value),
-      style: 'vertical',
-      selected: overlayToggle,
-    },
-    {
-      type: 'toggle',
-      options: 'Population',
-      click: value => setOverlayToggle(value),
-      style: 'vertical',
-      selected: overlayToggle,
-    },
-    {
-      type: 'toggle',
-      options: hdd === 'HDD' ? 'Need of heating' : 'Need of cooling',
-      click: value => setOverlayToggle(value),
-      style: 'vertical',
-      selected: overlayToggle,
-      customStyle: { marginBottom: 'px'}
-    },
+      type: 'check',
+      options: [
+        {
+          title: 'Population',
+          click: _ => setPopulation(!selectedPop),
+          style: 'vertical',
+          selected: selectedPop,
+          dark: true,
+        },
+        {
+          title: hdd === 'HDD' ? 'Need of heating' : 'Need of cooling',
+          click: _ => setNeedFor(!needFor),
+          style: 'vertical',
+          selected: needFor,
+          customStyle: { marginBottom: 'px'},
+          dark: true,
+        }
+      ]
+    }
   ];
 
   let dropdown = [
     {
-      type: 'divider',
-      marginBottom: 15,
-      marginTop: 15,
-    },
-    {
       type: 'dropdown',
       label: 'Regions',
+      dark: true,
       options: [
         'World',
         'Africa',
@@ -106,7 +97,28 @@ function CDDWrapper(props) {
       active: active,
       selected: region,
     }
-  ]
+  ];
+
+  let legends = [
+    {
+      type: 'continuous',
+      header: hdd === 'HDD' ? 'Heating degree days' : 'Cooling degree days',
+      subInHeader: false,
+      labels: hdd === 'HDD' ? [0, 12000] : [0, 6000],
+      colors: hdd === 'HDD' 
+        ? ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790']
+        : ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326'],
+      round: false
+    },
+    {
+      type: 'continuous',
+      header: 'Population',
+      subInHeader: false,
+      labels: [0,30000],
+      colors: ['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+      round: false
+    }
+  ];
 
   const finalIndicators = {
     CDD: {
@@ -123,7 +135,6 @@ function CDDWrapper(props) {
     },
   };
 
-
   const open = e => {
     setActive({ open: true, target: e.target.value })
   }
@@ -132,7 +143,6 @@ function CDDWrapper(props) {
     setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
   },[])
-
 
   React.useEffect(() => { 
     axios.get(`${props.baseURL}ETP2020/CDD/indicators.csv`)
@@ -177,64 +187,51 @@ function CDDWrapper(props) {
     <div className='container'>
       <CDD
         years={year}
-        mainOverlayLayer={mainOverlayLayer}
-        popLayer={popLayer}
-        allLayers={allLayers}
-        overlayToggle={overlayToggle}
         selectedRegion={region}
         layers={layers}
+        needFor={needFor}
+        selectedPop={selectedPop}
         type={type}
         hdd={hdd}
-        needLayer={needLayer}
       />
       <Controls
         style={{
           flexFlow: 'column',
           top: '20px',
           left: '20px',
-          paddingRight: '20px',
-          paddingLeft: '20px',
+          padding: '0',
+          background: 'none'
         }}
       > 
         {controls.map((control, idx) => 
           <Control key={idx} {...control} /> )}
-        
+      </Controls>
+      <Controls
+        dark
+        style={{
+          flexFlow: 'column',
+          bottom: '35px',
+          left: '20px',
+          width: '230px'
+        }}
+      >
         {dropdown.map((drop, idx) => 
           <Control key={idx} {...drop} /> )}
         {Object.values(finalIndicators).map((finalIndicator, idx) => 
-          <Bars key={idx} {...finalIndicator} /> )}
+          <Bars key={idx} dark {...finalIndicator} /> )}
       </Controls>
       <Controls
+        dark
         style={{
           flexFlow: 'column',
-          top: '20px',
+          bottom: '35px',
           right: '20px',
-          paddingRight: '20px',
-          paddingLeft: '20px',
         }}
       >
-        <Legends
-          type={'continuous'}
-          legendStyle={{marginTop: '0px'}}
-          header={hdd === 'HDD' ? 'Heating degree days' : 'Cooling degree days'}
-          subInHeader={false}
-          labels={hdd === 'HDD' ? [0, 12000] : [0, 6000]}
-          colors={hdd === 'HDD' 
-            ? ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790']
-            : ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326']}
-          round={false}
-        />
-        <Legends
-          type={'continuous'}
-          legendStyle={{marginTop: '5px'}}
-          header={'Population'}
-          subInHeader={false}
-          labels={[0,30000]}
-          colors={['#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023']}
-          round={false}
-        />
+        {legends.map((legend, idx) => 
+          <Legends key={idx} {...legend} />)}
       </Controls>
-      </div>
+    </div>
   )
 }
 

@@ -110,8 +110,7 @@ export default props => {
   let controls = [
 		{ 
 			id: 1,
-			type: 'button',
-			// label: 'Regions', 
+			type: 'radio',
 			options: regionArr,
 			click: value => setRegions({region: value, bounds: regionBounds[value]}),
 			open: e => open(e),
@@ -152,17 +151,26 @@ export default props => {
       <Controls
         style={{
           flexFlow: 'column',
-          top: '20px',
+          bottom: '400px',
           left: '20px',
-          paddingRight: '20px',
-          paddingLeft: '20px',
+          background:'none',
+          padding: '0',
+          width: '229px'
         }}
       >
         {controls.map((control, idx) => <Control key={idx} {...control} /> )}
+      </Controls>
+      <Controls
+        style={{
+          flexFlow: 'column',
+          bottom: '35px',
+          left: '20px',
+          width: '229px'
+        }}
+      >
         <Legends
           type={'continuous'}
           header={'CO2 emission (Mt/year)'}
-          // labels={[0, `${`]}
           labels={[0, 225]}
           colors={['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700']}
           round={false}
