@@ -151,7 +151,7 @@ export default props => {
       <Controls
         style={{
           flexFlow: 'column',
-          bottom: '400px',
+          top: '20px',
           left: '20px',
           background:'none',
           padding: '0',
