@@ -1,7 +1,7 @@
 import React from 'react';
 import { Weather } from './weather';
 import { GTF_Flow, GTF_Vector } from './gtf';
-import { WeatherByGrid, WeatherByGrid_Vector } from './weatherbygrid';
+import { WeatherByGrid_Vector } from './weatherbygrid';
 import { CO2Map, CDDMap } from './etp2020';
 import { Auth } from './components/fakeAuth';
 import { Route, Link, Switch } from 'react-router-dom';

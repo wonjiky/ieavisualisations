@@ -1,0 +1,23 @@
+.Button {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  background: transparent;
+  transition: background .19s linear;
+  border-radius: 50%;
+}
+
+.Button > svg {
+  height: 17px;
+  margin-top: 3px;
+}
+
+.Button:hover {
+  transition: background .19s linear;
+  background-color: rgba(0,0,0,.05);
+  border-radius: 50%;
+}
+
+.dark:hover {
+  background: hsla(0,0%,100%,.15);
+}

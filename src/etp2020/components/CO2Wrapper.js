@@ -2,9 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
 import CO2 from './CO2'
-import { Controls, Control } from '../../components/controls'
+import { Controls, Control, ControlContainer } from '../../components/controls'
 import { Legends } from '../../components/legends'
-import { Wrapper, NewControls } from '../../components/newControls'
 import classes from './css/ETP.module.css'
 
 export default props => {
@@ -111,7 +110,8 @@ export default props => {
 		{ 
 			id: 1,
 			type: 'radio',
-			options: regionArr,
+      options: regionArr,
+      style: 'horizontal',
 			click: value => setRegions({region: value, bounds: regionBounds[value]}),
 			open: e => open(e),
 			hide: e => hide(e),
@@ -148,91 +148,93 @@ export default props => {
         toggle={legendToggle}
         regions={regions}
       />
-      <Controls
-        style={{
-          flexFlow: 'column',
-          top: '20px',
-          left: '20px',
-          background:'none',
-          padding: '0',
-          width: '229px'
-        }}
-      >
-        {controls.map((control, idx) => <Control key={idx} {...control} /> )}
-      </Controls>
-      <Controls
-        style={{
-          flexFlow: 'column',
-          bottom: '35px',
-          left: '20px',
-          width: '229px'
-        }}
-      >
-        <Legends
-          type={'continuous'}
-          header={'CO2 emission (Mt/year)'}
-          labels={[0, 225]}
-          colors={['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700']}
-          round={false}
-        />
-        <Legends
-          type={'category'}
-          header={'Potential CO2 storage'}
-          labels={['Oil and gas reservoirs', 'Saline aquifers']}
-          colors={['#5b6162', 'stripe']}
-          selected={storageToggle(legendToggle)}
-          round={false}
-          click={val => {
-            let layer = val.substring(0,1) === 'O' ? 'reservoir' : 'aquifer';
-            setLegendToggle(prev => ({
-              ...prev,
-              [layer]: !legendToggle[layer]
-            }))
+      <ControlContainer>
+        <Controls
+          style={{
+            flexFlow: 'column',
+            top: '20px',
+            left: '20px',
+            background:'none',
+            padding: '0',
+            width: '229px'
           }}
-        />
-        <Legends 
-          type={'category'}
-          header={'CO2 sources'}
-          labels={data.types}
-          colors={colors}
-          selected={legendToggle.sources}
-          round={true}
-          click={val => { 
-            if ( legendToggle.sources.length === 1 && val === legendToggle.sources[0] ){
-              return;
-            } else {
-              setLegendToggle(
-                !legendToggle.sources.includes(val)
-                ? prev => ({ ...prev, sources: [...prev.sources, val] })
-                : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
-              )
-            }
+        >
+          {controls.map((control, idx) => <Control key={idx} {...control} /> )}
+        </Controls>
+        <Controls
+          style={{
+            flexFlow: 'column',
+            bottom: '35px',
+            left: '20px',
+            width: '229px'
           }}
-        />
-        {regions.region === 'Europe' 
-          ? <Legends 
+        >
+          <Legends
+            type={'continuous'}
+            header={'CO2 emission (Mt/year)'}
+            labels={[0, 225]}
+            colors={['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700']}
+            round={false}
+          />
+          <Legends
             type={'category'}
-            header={`CO2 Hubs`}
-            labels={['Hubs']}
-            colors={['symbol']}
-            selected={hubsToggle(legendToggle)}
-            round
-            click={_ => {
+            header={'Potential CO2 storage'}
+            labels={['Oil and gas reservoirs', 'Saline aquifers']}
+            colors={['#5b6162', 'stripe']}
+            selected={storageToggle(legendToggle)}
+            round={false}
+            click={val => {
+              let layer = val.substring(0,1) === 'O' ? 'reservoir' : 'aquifer';
               setLegendToggle(prev => ({
                 ...prev,
-                hubs: !legendToggle.hubs
+                [layer]: !legendToggle[layer]
               }))
             }}
           />
-          : null
-        }
-        <div className={classes.Introduction}>
-          <p>
-            * Zoom in to view CO<sub>2</sub> storage and plants<br/>
-            * Click on legend to switch on/off layers
-          </p>
-        </div>
-      </Controls>
+          <Legends 
+            type={'category'}
+            header={'CO2 sources'}
+            labels={data.types}
+            colors={colors}
+            selected={legendToggle.sources}
+            round={true}
+            click={val => { 
+              if ( legendToggle.sources.length === 1 && val === legendToggle.sources[0] ){
+                return;
+              } else {
+                setLegendToggle(
+                  !legendToggle.sources.includes(val)
+                  ? prev => ({ ...prev, sources: [...prev.sources, val] })
+                  : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
+                )
+              }
+            }}
+          />
+          {regions.region === 'Europe' 
+            ? <Legends 
+              type={'category'}
+              header={`CO2 Hubs`}
+              labels={['Hubs']}
+              colors={['symbol']}
+              selected={hubsToggle(legendToggle)}
+              round
+              click={_ => {
+                setLegendToggle(prev => ({
+                  ...prev,
+                  hubs: !legendToggle.hubs
+                }))
+              }}
+            />
+            : null
+          }
+          <div className={classes.Introduction}>
+            <p>
+              * Zoom in to view CO<sub>2</sub> storage and plants<br/>
+              * Click on legend to switch on/off layers
+            </p>
+          </div>
+        </Controls>
+      </ControlContainer>
     </div>
   )
 }

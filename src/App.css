@@ -28,12 +28,16 @@
 }
 
 .container {
-	margin-right: auto;
+	/* margin-right: auto;
 	margin-lefT: auto;
 	position: relative;
 	margin-top: 50px;
-	height: 800px;
+	height: 800px; */
+
+	width: 100vw !important;
+	height: 100vh !important;
 }
+
 
 @media screen and (min-width: 1480px) {
 	.container {

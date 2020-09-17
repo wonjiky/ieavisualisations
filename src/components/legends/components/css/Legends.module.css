@@ -49,8 +49,8 @@
 }
 
 .Markers {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   border: .5px solid black;
   margin-right: 5px;
   display: flex;

@@ -30,9 +30,8 @@ const useCDDMap = ({ mapConfig, test }) => {
     map.on("load", () => {
       setPopUp(popUp);
       setMap(map);
-      
+      map.addControl(new mapboxgl.NavigationControl());
       map.setPaintProperty('water', 'fill-color', '#2c7fb8');
-
       for (let hdd_layers in ETP_LAYERS) {
         let tempLayers = ETP_LAYERS[hdd_layers].layers;
         let type = ETP_LAYERS[hdd_layers];
@@ -40,7 +39,6 @@ const useCDDMap = ({ mapConfig, test }) => {
           map.addSource(`${type.data}-${type.type}-${type.year}-${layer}`, { type: "vector", url: tempLayers[layer].url });  
         }
       }
-      
       map.addSource('shape', { type: "vector", url:  "mapbox://iea.6etmm149" });  
 
     });

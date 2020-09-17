@@ -1,9 +1,0 @@
-.Wrapper {
-  position: absolute;
-  padding: 20px;
-  display: flex;
-  z-index: 2;
-  /* box-shadow: 0 0 10px rgba(0,0,0,.2); */
-  box-sizing: border-box;  
-  /* background: white; */
-}

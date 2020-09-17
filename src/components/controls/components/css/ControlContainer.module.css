@@ -1,0 +1,70 @@
+.ControlContainer {
+  transition: transform .2s linear;
+}
+
+.Wrapper {
+  display: none;
+}
+
+@media screen and (max-width: 729px) {
+
+  .ControlContainer {
+    position: fixed;
+    width: 100vw;
+    height: 400px;
+    z-index: 10;
+    box-sizing: border-box;
+    transform: translate3d(0, -64px, 0);
+    background: linear-gradient(0deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.8) 75%,  rgba(255,255,255,1) 85%, rgba(255,255,255,0.9) 100%);
+  }
+
+  .Wrapper {
+    border-bottom: 1px solid #000;
+    display: block;
+  }
+  
+  .ControlContainerHeader {
+    height: 65px;
+    margin: auto;
+    width: calc(100vw - 48px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .BodyWrapper {
+    height: calc(100% - 65px);
+    padding: 25px 0;
+    box-sizing: border-box;
+    overflow-y: scroll;
+  }
+
+  .ControlContainerBody {
+    width: calc(65vw + 50px);
+    margin: auto;
+    box-sizing: border-box;
+  }
+
+  .ControlContainerHeader > button {
+    visibility: show;
+
+  }
+
+  .open {
+    transform: translate3d(0,-100%,0);
+    transition: transform .2s linear;
+  }
+
+  .ControlContainer.dark > .Wrapper {
+    border-bottom: 1px solid #fff !important;
+  }
+
+  .dark {
+    color: #fff !important;
+    background: linear-gradient(0deg, rgba(37,37,37,0.8) 0%, rgba(37,37,37,0.8) 75%,  rgba(37,37,37,1) 85%, rgba(37,37,37,0.9) 100%);
+  }
+}
+
+
+

@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
-import { Controls, Control } from '../../components/controls'
+import { Controls, Control, ControlContainer } from '../../components/controls'
 import { Legends } from '../../components/legends'
 import { Bars } from '../../components/bars'
 import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLayers'
@@ -11,9 +11,9 @@ function CDDWrapper(props) {
   
   const [hdd, setHdd] = React.useState('HDD');
   const [year, setYear] = React.useState(2019);
-  const [active, setActive] = React.useState({ open: false, target: null });
   const [indicators, setIndicators] = React.useState(null);
   const [type, setType] = React.useState('SDS');
+  const [active, setActive] = React.useState({ open: false, target: null });
   const [region, setRegion] = React.useState('World'); 
   const [needFor, setNeedFor] = React.useState(false);
   const [selectedPop, setPopulation] = React.useState(false);
@@ -194,43 +194,45 @@ function CDDWrapper(props) {
         type={type}
         hdd={hdd}
       />
-      <Controls
-        style={{
-          flexFlow: 'column',
-          top: '20px',
-          left: '20px',
-          padding: '0',
-          background: 'none'
-        }}
-      > 
-        {controls.map((control, idx) => 
-          <Control key={idx} {...control} /> )}
-      </Controls>
-      <Controls
-        dark
-        style={{
-          flexFlow: 'column',
-          bottom: '35px',
-          left: '20px',
-          width: '230px'
-        }}
-      >
-        {dropdown.map((drop, idx) => 
-          <Control key={idx} {...drop} /> )}
-        {Object.values(finalIndicators).map((finalIndicator, idx) => 
-          <Bars key={idx} dark {...finalIndicator} /> )}
-      </Controls>
-      <Controls
-        dark
-        style={{
-          flexFlow: 'column',
-          bottom: '35px',
-          right: '20px',
-        }}
-      >
-        {legends.map((legend, idx) => 
-          <Legends key={idx} {...legend} />)}
-      </Controls>
+      <ControlContainer dark>
+        <Controls
+          style={{
+            flexFlow: 'column',
+            top: '20px',
+            left: '20px',
+            padding: '0',
+            background: 'none'
+          }}
+        > 
+          {controls.map((control, idx) => 
+            <Control key={idx} {...control} /> )}
+        </Controls>
+        <Controls
+          dark
+          style={{
+            flexFlow: 'column',
+            bottom: '35px',
+            right: '20px',
+          }}
+        >
+          {legends.map((legend, idx) => 
+            <Legends key={idx} {...legend} />)}
+        </Controls>
+        <Controls
+          dark
+          style={{
+            flexFlow: 'column',
+            bottom: '35px',
+            left: '20px',
+            width: '230px'
+          }}
+        >
+          {dropdown.map((drop, idx) => 
+            <Control key={idx} {...drop} /> )}
+          {Object.values(finalIndicators).map((finalIndicator, idx) => 
+            <Bars key={idx} dark {...finalIndicator} /> )}
+        </Controls>
+      </ControlContainer>
     </div>
   )
 }

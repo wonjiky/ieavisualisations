@@ -12,3 +12,23 @@
   background: rgba(27,27,27,0.8) !important;
   color: white !important;
 }
+
+@media screen and (max-width: 729px) {
+	.ControlWrapper {
+    position: relative;
+    background: none;
+    box-shadow: none;
+    margin: auto;
+    margin-bottom: 16px;
+    padding: unset !important;
+    width: unset !important;
+    bottom: unset !important;
+    top: unset !important;
+    left: unset !important;
+    right: unset !important;
+  }
+  
+  .dark {
+    background: transparent !important;
+  }
+}

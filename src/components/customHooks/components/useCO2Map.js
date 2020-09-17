@@ -29,7 +29,7 @@ export default ({ mapConfig }) => {
 		map.on("load", () => {
 			setPopUp(popUp);
 			setMap(map);
-
+			map.addControl(new mapboxgl.NavigationControl());
 			// map
 			// 	.addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
 			// 	.addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' })
