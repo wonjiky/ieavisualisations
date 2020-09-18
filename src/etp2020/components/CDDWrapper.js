@@ -25,51 +25,43 @@ function CDDWrapper(props) {
 		{ 
 			type: 'radio',
 			options: ['HDD','CDD'],
-      style: 'horizontal',
       selected: hdd,
       dark: true,
-      click: value => {
-        setHdd(value)
-      },
+      flow: 'row',
+      click: value => setHdd(value),
     },
     {
       type: 'radio',
       options: [2019, 2030, 2070],
-      style: 'horizontal',
       selected: year,
       dark: true,
-			click: value => {
-        setYear(value)
-      },
+      flow: 'row',
+			click: value => setYear(value)
     },
     {
       type: 'radio',
       options: ['SDS', 'STEPS'],
-      style: 'horizontal',
       selected: type,
-      click: value => {
-        setType(value)
-      },
       dark: true,
+      flow: 'row',
+      click: value => setType(value),
     },
     {
       type: 'check',
+      flow: 'column',
+      selected: selectedPop,
+      dark: true,
       options: [
         {
-          title: 'Population',
+          option: 'Population',
           click: _ => setPopulation(!selectedPop),
-          style: 'vertical',
-          selected: selectedPop,
-          dark: true,
+          
         },
         {
-          title: hdd === 'HDD' ? 'Need of heating' : 'Need of cooling',
+          option: hdd === 'HDD' ? 'Need of heating' : 'Need of cooling',
           click: _ => setNeedFor(!needFor),
-          style: 'vertical',
           selected: needFor,
-          customStyle: { marginBottom: 'px'},
-          dark: true,
-        }
+        },
       ]
     }
   ];
@@ -91,7 +83,7 @@ function CDDWrapper(props) {
       ],
       top: true,
       click: value => setRegion(value),
-      style: 'vertical',
+      style: 'horizontal',
       open: e => open(e),
       hide: e => hide(e),
       active: active,
@@ -196,21 +188,19 @@ function CDDWrapper(props) {
       />
       <ControlContainer dark>
         <Controls
+          column
           style={{
-            flexFlow: 'column',
             top: '20px',
             left: '20px',
             padding: '0',
-            background: 'none'
           }}
         > 
           {controls.map((control, idx) => 
             <Control key={idx} {...control} /> )}
         </Controls>
         <Controls
-          dark
+          column dark bg
           style={{
-            flexFlow: 'column',
             bottom: '35px',
             right: '20px',
           }}
@@ -219,9 +209,8 @@ function CDDWrapper(props) {
             <Legends key={idx} {...legend} />)}
         </Controls>
         <Controls
-          dark
+          column dark bg
           style={{
-            flexFlow: 'column',
             bottom: '35px',
             left: '20px',
             width: '230px'

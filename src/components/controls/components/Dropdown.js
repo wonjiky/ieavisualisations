@@ -4,7 +4,6 @@ import global from './css/Global.module.css'
 
 export default ({ label, options, click, selected, top, active, open, dark }) => {
   let dropdownDir = top ? { top: 0 } : { bottom: 0 };
-  console.log(dark);
   return (
     <div className={dark ? [global.ControlContainer, classes.Dropdown, global.dark].join(' ') : [global.ControlContainer, classes.Dropdown].join(' ')}>
       <label className={global.ControlLabel}>

@@ -7,9 +7,9 @@ export default ({ data, regions, toggle }) => {
   
   React.useEffect(() => {
     if(!map) return;
-    const colors = ['#F2F2F2', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
+    const colors = ['#B187EF', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
     const { region, bounds } = regions;
-    const { types, minMax, reservoirs, hubs, ...rest } = data; //pipelines
+    const { types, minMax, 'Oil and gas reservoirs': reservoirs, hubs, ...rest } = data;
     
     map.setMaxBounds(bounds);
     // ADDING SOURCES
@@ -19,7 +19,6 @@ export default ({ data, regions, toggle }) => {
           type: "vector", url: reservoirs[reservoir].url
         })
     }
-
     for ( let source in rest ) {
       map
         .addSource(`${region}-${source}`, {
@@ -47,7 +46,7 @@ export default ({ data, regions, toggle }) => {
       .addLayer({
         id: 'aquifer-layer',
         type: 'fill',
-        source: `${region}-aquifer`,
+        source: `${region}-Saline aquifers`,
         layout: {
           visibility: 'visible'
         },
@@ -56,7 +55,7 @@ export default ({ data, regions, toggle }) => {
           'fill-opacity': {
             stops: [
               [4, 0.2],
-              [5, 0.6]
+              [5, 0.2]
             ]
           }
         }
@@ -66,6 +65,79 @@ export default ({ data, regions, toggle }) => {
       .addSource('EU-CO2-hubs', {
         'type': 'vector',
         'url': "mapbox://iea.a28h96yl"
+      })
+      .addSource('US-projects', {
+        'type': 'vector',
+        'url': "mapbox://iea.0fx0qk6g"
+      })
+      .addSource('US-pipelines', {
+        'type': 'vector',
+        'url': "mapbox://iea.2eoddisy"
+      })
+      .addLayer({
+        'id': 'US-pipeline-layer',
+        'source': 'US-pipelines',
+        'source-layer': "US_CO2_pipelines-ctl6c0",
+        'type': 'line',
+        'paint': {
+          'line-color': 'black',
+          'line-width': 1.5,
+          'line-opacity': {
+            stops: [
+              [3.6, 0],
+              [5, 1]
+            ]
+          },
+        },
+        layout: {
+          visibility: 'visible'
+        },
+      })
+      .addLayer({
+        'id': 'US-project-layer',
+        'source': 'US-projects',
+        'source-layer': "US_Projects-4rx3ng",
+        'type': 'circle',
+        'paint': {
+          'circle-radius': 8,
+          'circle-color': [
+            "match",
+            ["get", "status"],
+            ["Operating"],
+            "hsla(0,0, 26%, 1)",
+            "hsla(0,0, 26%, 0.5)",
+          ],
+          'circle-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, 1]
+            ]
+          },
+          'circle-stroke-color': 'black',
+          'circle-stroke-width': .5,
+          'circle-stroke-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, 1]
+            ]
+          }
+        }
+      })
+      .addLayer({
+        'id': 'US-project-layer2',
+        'source': 'US-projects',
+        'source-layer': "US_Projects-4rx3ng",
+        'type': 'circle',
+        'paint': {
+          'circle-radius': 4,
+          'circle-color': '#fff',
+          'circle-opacity': {
+            stops: [
+              [4.5, 0],
+              [5, 1]
+            ]
+          },
+        }
       })
       .addLayer({
         'id': 'EU-hubs2',
@@ -81,7 +153,6 @@ export default ({ data, regions, toggle }) => {
               [5, .6]
             ]
           },
-          
           'circle-stroke-opacity': {
             stops: [
               [4.5, 0],
@@ -164,13 +235,6 @@ export default ({ data, regions, toggle }) => {
             .9,'#78240a',
             1,'#522700'
           ],
-          // increase radius as zoom increases
-          // 'heatmap-radius': {
-          //   stops: [
-          //     [3, 15],
-          //     [5, 20]
-          //   ]
-          // },
           // decrease opacity to transition into the circle layer
           'heatmap-opacity': {
             default: 1,
@@ -186,7 +250,7 @@ export default ({ data, regions, toggle }) => {
         type: 'circle',
         source: `${region}-heatmap`,
         paint: {
-          'circle-radius': 4,
+          'circle-radius': 3,
           'circle-color': setColors(types, colors),
           'circle-opacity': {
             stops: [
@@ -227,35 +291,62 @@ export default ({ data, regions, toggle }) => {
         .removeLayer('aquifer-layer')
         .removeLayer('EU-hubs')
         .removeLayer('EU-hubs2')
+        .removeLayer('US-project-layer')
+        .removeLayer('US-project-layer2')
+        .removeLayer('US-pipeline-layer')
         .removeSource('EU-CO2-hubs')
-        .removeSource(`${region}-aquifer`)
+        .removeSource('US-pipelines')
+        .removeSource('US-projects')
+        .removeSource(`${region}-Saline aquifers`)
         .removeSource(`${region}-heatmap`);
     }
   }, [map, regions, data]);
 
   React.useEffect(() => {
     if (!map) return;
-    const { reservoir, aquifer, hubs, sources } = toggle;
+    const { 
+      "Oil and gas reservoirs": reservoir, 
+      "Saline aquifers":aquifer, 
+      pipelines, 
+      hubs, 
+      sources,
+      projects 
+    } = toggle;
+
+
+    let projLen = projects.length < 1;
+    let sourceLen = sources.length < 1;
+    if (projLen || sourceLen) {
+      map
+        .setLayoutProperty('US-project-layer', 'visibility', projLen ? 'none' : 'visible')
+        .setLayoutProperty('US-project-layer2', 'visibility', projLen ? 'none' : 'visible')
+        .setLayoutProperty('heatmap-circle', 'visibility', sourceLen ? 'none' : 'visible')
+        .setLayoutProperty('heatmap-layer', 'visibility', sourceLen ? 'none' : 'visible')
+    } else {
+      map
+        .setLayoutProperty('US-project-layer', 'visibility', 'visible')
+        .setLayoutProperty('US-project-layer2', 'visibility', 'visible')
+        .setLayoutProperty('heatmap-circle', 'visibility', 'visible')
+        .setLayoutProperty('heatmap-layer', 'visibility', 'visible')
+        .setFilter('US-project-layer',[ 'match', ['get', 'status'], projects, true, false ])
+        .setFilter('US-project-layer2',['match', ['get', 'status'], projects, true, false ])  
+        .setFilter('heatmap-circle', ['match',['get', 'type'], sources, true, false])
+        .setFilter('heatmap-layer', ['match', ['get', 'type'], sources, true, false])
+    }
+    // map
+    //   .setFilter('heatmap-circle', ['match',['get', 'type'], sources, true, false])
+    //   .setFilter('heatmap-layer', ['match', ['get', 'type'], sources, true, false])
+      // .setFilter('US-project-layer',[ 'match', ['get', 'status'], projects, true, false ])
+      // .setFilter('US-project-layer2',['match', ['get', 'status'], projects, true, false ])
+
     map
       .setLayoutProperty('aquifer-layer', 'visibility', aquifer ? 'visible' : 'none')
       .setLayoutProperty('EU-hubs', 'visibility', hubs ? 'visible' : 'none')
       .setLayoutProperty('EU-hubs2', 'visibility', hubs ? 'visible' : 'none')
-      .setFilter('heatmap-circle', [
-        'match',
-        ['get', 'type'],
-        sources,
-        true,
-        false
-      ])
-      .setFilter('heatmap-layer', [
-        'match',
-        ['get', 'type'],
-        sources,
-        true,
-        false
-      ]);
-
-    for ( let rsv in data.reservoirs ) {
+      .setLayoutProperty('US-pipeline-layer', 'visibility', pipelines ? 'visible' : 'none')
+      
+    
+    for ( let rsv in data['Oil and gas reservoirs'] ) {
       map.setLayoutProperty(`${regions.region}-Rsv-${rsv}`, 'visibility', reservoir ? 'visible' : 'none');
     }
   }, [map, toggle, data.reservoirs, regions.region]);

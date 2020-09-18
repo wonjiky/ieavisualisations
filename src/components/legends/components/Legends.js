@@ -10,7 +10,7 @@ export default ({
   round,
   selected,
   legendStyle,
-  subInHeader,
+  symbolColor,
   click,
   type
 }) => {
@@ -37,12 +37,15 @@ export default ({
             <div 
               className={markers} 
               style={{
-                background: `${colors[i] === 'stripe' ? 'repeating-linear-gradient(135deg, #4f7d82, #4f7d82 2px, transparent 3px, transparent 5px)' 
-                  : colors[i] === 'symbol' ? 'black' 
+                background: `${colors[i] === 'stripe' 
+                  ? 'repeating-linear-gradient(135deg, #4f7d82, #4f7d82 2px, transparent 3px, transparent 5px)' 
+                  : colors[i] === 'symbol' 
+                  ? symbolColor[i] 
                   : colors[i]}`,
               }}
             >
-              {colors[i] === 'symbol' && <div className={classes.SymbolRound}/>}
+              {colors[i] === 'symbol' && 
+                <div className={classes.SymbolRound}/>}
             </div>
             <p className={classes.Label_Category}>{d}</p>
           </div>
@@ -64,7 +67,7 @@ export default ({
     legend = null;
   }
   
-  const findSubpowerFromText = (text, sub = '2') => {
+  const findSubpowerFromText = (text, sub) => {
 		let tempLowestIndex = Number.MAX_SAFE_INTEGER;
 		let tempLowestWord;
 		let found = false;
@@ -76,27 +79,25 @@ export default ({
     }
 
 		if (found) {
-			return [
+      let t = [
 				text.substring(0, tempLowestIndex),
 				text.substring(
 					tempLowestIndex,
 					tempLowestIndex + tempLowestWord.length
 				),
-				text.substring(tempLowestIndex + tempLowestWord.length)
+        text.substring(tempLowestIndex + tempLowestWord.length)
 			];
+      return <h5 className={classes.Header}>{t[0]}<sub>{t[1]}</sub>{t[2]}</h5> 
 		} else {
 			return false;
 		}
   };
-  let t = findSubpowerFromText(header);
-
+  
   return (
     <div className={classes.LegendWrapper} style={legendStyle}>
-      {header && subInHeader 
-        ? <h5 className={classes.Header}>{t[0]}<sub>{t[1]}</sub>{t[2]}</h5> 
-        : header && !subInHeader
-        ? <h5 className={classes.Header}>{header}</h5> 
-        : null
+      {header.length > 1
+        ? findSubpowerFromText(header[0], header[1]) 
+        : <h5 className={classes.Header}>{header[0]}</h5> 
       }
       {legend}
     </div>
