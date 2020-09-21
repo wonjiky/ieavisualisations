@@ -15,7 +15,7 @@ export default props => {
   };
   const [data, setData] = React.useState(null);
   const [active, setActive] = React.useState({ open: false, target: null });
-  const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
+  const [regions, setRegions] = React.useState({region: 'Europe', bounds: regionBounds['Europe']});
   const [legendToggle, setLegendToggle] = React.useState({ 
     'Oil and gas reservoirs': true, 
     'Saline aquifers': true, 
@@ -61,7 +61,8 @@ export default props => {
 
     axios.all(URL)
       .then(responses => {
-        let tempData = Papa.parse(responses[1].data, { header: true }).data;
+        let temporaryData = Papa.parse(responses[1].data, { header: true }).data;
+        let tempData = hello(temporaryData);
         let data = {
           heatmap: {
             'type': 'FeatureCollection',
@@ -75,6 +76,17 @@ export default props => {
             Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region].scale
           ]
         };
+
+        function hello(data) {
+          let newData = [];
+          for (let i in data) {
+            if (isNaN(parseFloat(data[i].value))) {
+            } else {
+              newData.push(data[i])
+            }
+          } 
+          return newData;
+        }
 
         for ( let i in tempData ) {
           data.heatmap.features.push({
