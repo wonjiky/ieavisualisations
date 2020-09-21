@@ -68,7 +68,7 @@ export default ({ data, regions, toggle }) => {
       })
       .addSource('US-projects', {
         'type': 'vector',
-        'url': "mapbox://iea.0fx0qk6g"
+        'url': "mapbox://iea.8n47ko4s"
       })
       .addSource('US-pipelines', {
         'type': 'vector',
@@ -96,7 +96,7 @@ export default ({ data, regions, toggle }) => {
       .addLayer({
         'id': 'US-project-layer',
         'source': 'US-projects',
-        'source-layer': "US_Projects-4rx3ng",
+        'source-layer': "US_projects-4ru9cu",
         'type': 'circle',
         'paint': {
           'circle-radius': 8,
@@ -104,8 +104,7 @@ export default ({ data, regions, toggle }) => {
             "match",
             ["get", "status"],
             ["Operating"],
-            "hsla(0,0, 26%, 1)",
-            "hsla(0,0, 26%, 0.5)",
+            "#0052e0", "#85b1ff"
           ],
           'circle-opacity': {
             stops: [
@@ -126,7 +125,7 @@ export default ({ data, regions, toggle }) => {
       .addLayer({
         'id': 'US-project-layer2',
         'source': 'US-projects',
-        'source-layer': "US_Projects-4rx3ng",
+        'source-layer': "US_projects-4ru9cu",
         'type': 'circle',
         'paint': {
           'circle-radius': 4,
@@ -333,11 +332,6 @@ export default ({ data, regions, toggle }) => {
         .setFilter('heatmap-circle', ['match',['get', 'type'], sources, true, false])
         .setFilter('heatmap-layer', ['match', ['get', 'type'], sources, true, false])
     }
-    // map
-    //   .setFilter('heatmap-circle', ['match',['get', 'type'], sources, true, false])
-    //   .setFilter('heatmap-layer', ['match', ['get', 'type'], sources, true, false])
-      // .setFilter('US-project-layer',[ 'match', ['get', 'status'], projects, true, false ])
-      // .setFilter('US-project-layer2',['match', ['get', 'status'], projects, true, false ])
 
     map
       .setLayoutProperty('aquifer-layer', 'visibility', aquifer ? 'visible' : 'none')
@@ -345,11 +339,10 @@ export default ({ data, regions, toggle }) => {
       .setLayoutProperty('EU-hubs2', 'visibility', hubs ? 'visible' : 'none')
       .setLayoutProperty('US-pipeline-layer', 'visibility', pipelines ? 'visible' : 'none')
       
-    
     for ( let rsv in data['Oil and gas reservoirs'] ) {
       map.setLayoutProperty(`${regions.region}-Rsv-${rsv}`, 'visibility', reservoir ? 'visible' : 'none');
     }
-  }, [map, toggle, data.reservoirs, regions.region]);
+  }, [map, toggle, data, regions.region]);
   
   return <div ref={mapContainerRef} className='map' />
 }

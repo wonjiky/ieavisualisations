@@ -39,8 +39,10 @@ export default ({
               style={{
                 background: `${colors[i] === 'stripe' 
                   ? 'repeating-linear-gradient(135deg, #4f7d82, #4f7d82 2px, transparent 3px, transparent 5px)' 
-                  : colors[i] === 'symbol' 
-                  ? symbolColor[i] 
+                  : colors[i] === 'symbol'
+                  ? symbolColor[i]
+                  : colors[i] === 'line'
+                  ? 'linear-gradient(0deg, rgba(255,255,255,0) 43%, #000 43% 57%, rgba(255,255,255,0) 57%)' 
                   : colors[i]}`,
               }}
             >

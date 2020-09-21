@@ -15,7 +15,7 @@ export default props => {
   };
   const [data, setData] = React.useState(null);
   const [active, setActive] = React.useState({ open: false, target: null });
-  const [regions, setRegions] = React.useState({region: 'Europe', bounds: regionBounds['Europe']});
+  const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
   const [legendToggle, setLegendToggle] = React.useState({ 
     'Oil and gas reservoirs': true, 
     'Saline aquifers': true, 
@@ -48,7 +48,7 @@ export default props => {
         scale: 1
       },
       Europe: {
-        'Oil and gas reservoirs': [{ url: "mapbox://iea.93t29jsi", sourceLayer: "Europe_Reservoir-2x3vs4" },],
+        'Oil and gas reservoirs': [{ url: "mapbox://iea.d4w60p1l", sourceLayer: "Europe_reservoir-5lg77n" },],
         types: types,
         scale: 1
       },
@@ -240,7 +240,7 @@ export default props => {
               header={['US projects']}
               labels={['Operating', 'Under development']}
               colors={['symbol', 'symbol']}
-              symbolColor={["rgba(69, 69, 69, 1)", "rgba(69, 69, 69, 0.5)"]}
+              symbolColor={["#0052e0", "#85b1ff"]}
               selected={legendToggle.projects}
               click={val => {
                 setLegendToggle(
@@ -258,9 +258,8 @@ export default props => {
               header={['CO2 pipelines', '2']}
               labels={['Pipelines']}
               symbolColor={['#000']}
-              colors={['symbol']}
+              colors={['line']}
               selected={legendToggle.pipelines ? ['Pipelines']:[]}
-              round
               click={_ => {
                 setLegendToggle(prev => ({
                   ...prev,
