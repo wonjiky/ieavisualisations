@@ -104,7 +104,7 @@ export default ({ data, regions, toggle }) => {
             "match",
             ["get", "status"],
             ["Operating"],
-            "#0052e0", "#85b1ff"
+            "#0052e0", "#a7c7ff"
           ],
           'circle-opacity': {
             stops: [

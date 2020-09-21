@@ -6,6 +6,10 @@
   display: none;
 }
 
+.ToggleWrapper {
+  display: none;
+}
+
 @media screen and (max-width: 729px) {
 
   .ControlContainer {
@@ -14,7 +18,7 @@
     height: 400px;
     z-index: 10;
     box-sizing: border-box;
-    transform: translate3d(0, -64px, 0);
+    transform: translate3d(0, 0, 0);
     background: linear-gradient(0deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.8) 75%,  rgba(255,255,255,1) 85%, rgba(255,255,255,0.9) 100%);
   }
 
@@ -22,19 +26,21 @@
     border-bottom: 1px solid #000;
     display: block;
   }
-  
-  .ControlContainerHeader {
-    height: 65px;
-    margin: auto;
-    width: calc(100vw - 48px);
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+
+  .ToggleWrapper {
+    display: block;
+    position: absolute;
+    top: -55px;
   }
 
+  .ToggleContainer {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+  }
+  
   .BodyWrapper {
-    height: calc(100% - 65px);
+    height: 100%;
     padding: 25px 0;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -44,11 +50,6 @@
     width: calc(65vw + 50px);
     margin: auto;
     box-sizing: border-box;
-  }
-
-  .ControlContainerHeader > button {
-    visibility: show;
-
   }
 
   .open {

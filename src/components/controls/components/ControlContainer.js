@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon } from '../../icons'
 import classes from './css/ControlContainer.module.css'
 
-export default ({ children, label, dark }) => {
+export default ({ children, label, dark, help }) => {
   const [open, setOpen] = React.useState(true);
   return (
     <section className={
@@ -15,8 +15,10 @@ export default ({ children, label, dark }) => {
       : [classes.ControlContainer, classes.open, classes.dark].join(' ')
       }
     >
-      <div className={classes.Wrapper}>
-        <div className={classes.ControlContainerHeader}>
+      <div className={classes.ToggleWrapper}>
+        <div className={classes.ToggleContainer}>
+          {help ? 
+            <Icon.Help dark={dark} click={_ => setOpen(!open)}/> : null}
           {open
             ? <Icon.Close dark={dark} click={_ => setOpen(!open)}/>  
             : <Icon.Hamburger dark={dark} click={_ => setOpen(!open)}/> } 

@@ -14,8 +14,17 @@ export const Hamburger = ({ click, dark }) => (
 export const Close = ({ click, dark }) => (
   <button onClick={click} className={dark ? [classes.Button, classes.dark].join(' ') : classes.Button}>
     <svg viewBox="0 0 17 17">
-      <title> Search </title>
+      <title> Close </title>
       <path strokeWidth="1.5" stroke={dark ? '#fff' : '#000'} d="M1 1l7.5 7.5M16 16L8.5 8.5m0 0L16 1M8.5 8.5L1 16"/>
+    </svg>
+  </button>
+)
+
+export const Help = ({ click, dark }) => (
+  <button onClick={click} className={dark ? [classes.Button, classes.dark].join(' ') : classes.Button}>
+    <svg viewBox="5 5 10 10">
+      <title> Help </title>
+      <path stroke={dark ? '#fff' : '#000'} strokeWidth="0.1" d="M9.292 11.89h.888v-.516c0-.732.516-1.236 1.056-1.752.576-.552 1.176-1.116 1.176-2.004 0-1.008-.648-1.992-2.28-1.992-1.464 0-2.46.984-2.544 2.388h.936c.084-.948.696-1.56 1.596-1.56.888 0 1.284.492 1.284 1.2 0 .576-.408 1.008-.876 1.476-.6.588-1.236 1.188-1.236 2.16v.6zm.42 2.484c.42 0 .768-.336.768-.768a.766.766 0 00-.768-.768.766.766 0 00-.768.768c0 .432.348.768.768.768z"/>
     </svg>
   </button>
 )

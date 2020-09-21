@@ -3,7 +3,7 @@ import { Weather } from './weather';
 import { GTF_Flow, GTF_Vector } from './gtf';
 import { WeatherByGrid_Vector } from './weatherbygrid';
 import { CO2Map, CDDMap } from './etp2020';
-// import { Auth } from './components/fakeAuth';
+import { Auth } from './components/fakeAuth';
 import { Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 
@@ -46,9 +46,9 @@ function App() {
 							path={`${url}`}
 							exact={exact}
 							render={ props => 
-								// <Auth pw={pw} title={title}>	
+								<Auth pw={pw} title={title}>	
 									<C {...props} baseURL={baseURL} /> 
-							  // </Auth>
+							  </Auth>
 							}
 						/>
 				))}

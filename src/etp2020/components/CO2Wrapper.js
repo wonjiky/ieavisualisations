@@ -240,7 +240,7 @@ export default props => {
               header={['US projects']}
               labels={['Operating', 'Under development']}
               colors={['symbol', 'symbol']}
-              symbolColor={["#0052e0", "#85b1ff"]}
+              symbolColor={["#0052e0", "#a7c7ff"]}
               selected={legendToggle.projects}
               click={val => {
                 setLegendToggle(
