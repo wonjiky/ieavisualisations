@@ -2,6 +2,7 @@ import React from 'react';
 import MapGL from 'react-map-gl';
 import { DeckGL } from '@deck.gl/react';
 import FlowMapLayer, { PickingType } from '@flowmap.gl/core';
+import { NODE_STREAM_INPUT } from 'papaparse';
 
 export default function Map({ width, height, viewState, colors, onViewStateChange, data }) {
 	

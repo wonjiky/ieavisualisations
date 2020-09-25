@@ -1,0 +1,30 @@
+.Legend {
+  margin-top: 20px;
+  min-width: 200px;
+  width: 100%;
+}
+
+.LegendItem {
+  margin: 10px 0;
+  display: flex;
+}
+
+.LegendItem > div {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  border-radius: 25px; 
+}
+
+.Introduction > p {
+  font-size: .65rem;
+  margin-top: 10px;
+  line-height: .9rem;
+}
+
+.Introduction::before {
+  display: block;
+  content: '';
+  background: black;
+  height: 1px;
+}

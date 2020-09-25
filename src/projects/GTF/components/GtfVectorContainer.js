@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
-import { useMap } from '../../components/customHooks';
+import { useMap } from '../../../components/customHooks';
 import axios from 'axios';
 import { 
     borderPoints, 
@@ -26,7 +26,7 @@ export default () => {
 	let baseURL = process.env.REACT_APP_DEV;
 	if (process.env.NODE_ENV === 'production') baseURL = process.env.REACT_APP_PROD;
 	useEffect(() => {
-		axios.get(`${baseURL}flowdata.csv`)
+		axios.get(`${baseURL}gtf/flowdata.csv`)
 		.then(response => {
 			const results = Papa.parse(response.data, { header: true }),
 			data = [...results.data];
@@ -172,5 +172,5 @@ export default () => {
 			});
 	})
     
-    return <div ref={mapContainerRef} className='map' />;
+	return <div className='container'><div ref={mapContainerRef} className='map' /></div>;	
 };

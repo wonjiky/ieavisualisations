@@ -88,7 +88,7 @@ class Auth extends Component {
 		)
 
 		if ( this.state.authenticated ) content =this.props.children;
-		return content;
+		return this.props.children;
 	}
 }
 

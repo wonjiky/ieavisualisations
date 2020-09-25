@@ -14,7 +14,7 @@ export default ({ mapConfig }) => {
 	useEffect (() => {
 			const map = new mapboxgl.Map({
 				container: mapContainerRef.current,
-				style: "mapbox://styles/iea/ck9jt8mxx028m1ip9gih9yod6",
+				style: "mapbox://styles/iea/ckfe5h7xv01d61aphnvcch6rw",
 				center: mapConfig.center ? mapConfig.center : [0, 0],
 				minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
 				maxZoom: mapConfig.maxZoom ? mapConfig.maxZoom : 22,

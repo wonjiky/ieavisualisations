@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { colorsByVariables, getCountryPopupInfo } from './util';
-import { useMap } from '../../components/customHooks';
+import React, { useEffect } from 'react'
+import { colorsByVariables, getCountryPopupInfo } from './util'
+import { useMap } from '../../../components/customHooks'
 
 export default function({data, time, interval }) {
 	

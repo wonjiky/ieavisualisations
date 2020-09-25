@@ -137,7 +137,7 @@ function CDDWrapper(props) {
   },[])
 
   React.useEffect(() => { 
-    axios.get(`${props.baseURL}ETP2020/CDD/indicators.csv`)
+    axios.get(`${props.baseURL}etp/CDD/indicators.csv`)
       .then(response => {
         const temp = Papa.parse(response.data, { header: true }).data;
         setIndicators(temp);

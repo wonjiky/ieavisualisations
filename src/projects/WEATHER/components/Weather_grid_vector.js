@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGridMap } from '../../components/customHooks';
+import { useGridMap } from '../../../components/customHooks';
 
 
 function WeatherByGrid_Vector() {

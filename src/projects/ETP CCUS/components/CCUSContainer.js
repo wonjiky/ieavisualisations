@@ -1,18 +1,16 @@
 import React from 'react'
-import { useCCUSMap } from '../../components/customHooks'
+import { useCCUSMap } from '../../../components/customHooks'
 
 export default ({ data, regions, toggle }) => {
   
-  const { map, popUp, mapContainerRef } = useCCUSMap({ mapConfig: { maxBounds: regions.bounds } });
-  
+  const { map, mapContainerRef } = useCCUSMap({ mapConfig: { maxBounds: regions.bounds } });
+
   React.useEffect(() => {
     if(!map) return;
     const colors = ['#B187EF', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
-    const { region, bounds } = regions;
+    const { region } = regions;
     const { types, minMax, 'Oil and gas reservoirs': reservoirs, hubs, ...rest } = data;
     
-    map.setMaxBounds(bounds);
-    // ADDING SOURCES
     for ( let reservoir in reservoirs ) {
       map
         .addSource(`${region}-Reservoir-${reservoir}`, {
@@ -60,127 +58,130 @@ export default ({ data, regions, toggle }) => {
           }
         }
       });
-    map
-      .addSource('EU-CO2-hubs', {
-        'type': 'vector',
-        'url': "mapbox://iea.a28h96yl"
-      })
-      .addSource('US-projects', {
-        'type': 'vector',
-        'url': "mapbox://iea.8n47ko4s"
-      })
-      .addSource('US-pipelines', {
-        'type': 'vector',
-        'url': "mapbox://iea.2eoddisy"
-      })
-      .addLayer({
-        'id': 'US-pipeline-layer',
-        'source': 'US-pipelines',
-        'source-layer': "US_CO2_pipelines-ctl6c0",
-        'type': 'line',
-        'paint': {
-          'line-color': 'black',
-          'line-width': 1.5,
-          'line-opacity': {
-            stops: [
-              [3.6, 0],
-              [5, 1]
-            ]
+
+      map
+        .addSource('EU-CO2-hubs', {
+          'type': 'vector',
+          'url': "mapbox://iea.a28h96yl"
+        })
+        .addLayer({
+          'id': 'EU-hubs2',
+          'source': 'EU-CO2-hubs',
+          'source-layer': "Europe_hubs-7liayx",
+          'type': 'circle',
+          'paint': {
+            'circle-radius': 10,
+            'circle-color': 'black',
+            'circle-opacity': {
+              stops: [
+                [4.5, 0],
+                [5, .6]
+              ]
+            },
+            'circle-stroke-opacity': {
+              stops: [
+                [4.5, 0],
+                [5, 1]
+              ]
+            },
           },
-        },
-        layout: {
-          visibility: 'visible'
-        },
-      })
-      .addLayer({
-        'id': 'US-project-layer',
-        'source': 'US-projects',
-        'source-layer': "US_projects-4ru9cu",
-        'type': 'circle',
-        'paint': {
-          'circle-radius': 8,
-          'circle-color': [
-            "match",
-            ["get", "status"],
-            ["Operating"],
-            "#0052e0", "#a7c7ff"
-          ],
-          'circle-opacity': {
-            stops: [
-              [4.5, 0],
-              [5, 1]
-            ]
+          layout: {
+            visibility: 'visible'
           },
-          'circle-stroke-color': 'black',
-          'circle-stroke-width': .5,
-          'circle-stroke-opacity': {
-            stops: [
-              [4.5, 0],
-              [5, 1]
-            ]
+        })
+        .addLayer({
+          'id': 'EU-hubs',
+          'source': 'EU-CO2-hubs',
+          'source-layer': "Europe_hubs-7liayx",
+          'type': 'circle',
+          'paint': {
+            'circle-color': 'white',
+            'circle-radius': 5,
+            'circle-opacity': {
+              stops: [
+                [4.5, 0],
+                [5, 1]
+              ]
+            },
+          },
+          layout: {
+            visibility: 'visible'
+          },
+        });
+      
+      map
+        .addSource('US-projects', {
+          'type': 'vector',
+          'url': "mapbox://iea.8n47ko4s"
+        })
+        .addSource('US-pipelines', {
+          'type': 'vector',
+          'url': "mapbox://iea.2eoddisy"
+        })
+        .addLayer({
+          'id': 'US-pipeline-layer',
+          'source': 'US-pipelines',
+          'source-layer': "US_CO2_pipelines-ctl6c0",
+          'type': 'line',
+          'paint': {
+            'line-color': 'black',
+            'line-width': 1.5,
+            'line-opacity': {
+              stops: [
+                [3.6, 0],
+                [5, 1]
+              ]
+            },
+          },
+          layout: {
+            visibility: 'visible'
+          },
+        })
+        .addLayer({
+          'id': 'US-project-layer',
+          'source': 'US-projects',
+          'source-layer': "US_projects-4ru9cu",
+          'type': 'circle',
+          'paint': {
+            'circle-radius': 8,
+            'circle-color': [
+              "match",
+              ["get", "status"],
+              ["Operating"],
+              "#0044ff", "#49d3ff"
+            ],
+            'circle-opacity': {
+              stops: [
+                [4.5, 0],
+                [5, 1]
+              ]
+            },
+            'circle-stroke-color': 'black',
+            'circle-stroke-width': .5,
+            'circle-stroke-opacity': {
+              stops: [
+                [4.5, 0],
+                [5, 1]
+              ]
+            }
           }
-        }
-      })
-      .addLayer({
-        'id': 'US-project-layer2',
-        'source': 'US-projects',
-        'source-layer': "US_projects-4ru9cu",
-        'type': 'circle',
-        'paint': {
-          'circle-radius': 4,
-          'circle-color': '#fff',
-          'circle-opacity': {
-            stops: [
-              [4.5, 0],
-              [5, 1]
-            ]
-          },
-        }
-      })
-      .addLayer({
-        'id': 'EU-hubs2',
-        'source': 'EU-CO2-hubs',
-        'source-layer': "Europe_hubs-7liayx",
-        'type': 'circle',
-        'paint': {
-          'circle-radius': 10,
-          'circle-color': 'black',
-          'circle-opacity': {
-            stops: [
-              [4.5, 0],
-              [5, .6]
-            ]
-          },
-          'circle-stroke-opacity': {
-            stops: [
-              [4.5, 0],
-              [5, 1]
-            ]
-          },
-        },
-        layout: {
-          visibility: 'visible'
-        },
-      })
-      .addLayer({
-        'id': 'EU-hubs',
-        'source': 'EU-CO2-hubs',
-        'source-layer': "Europe_hubs-7liayx",
-        'type': 'circle',
-        'paint': {
-          'circle-color': 'white',
-          'circle-radius': 5,
-          'circle-opacity': {
-            stops: [
-              [4.5, 0],
-              [5, 1]
-            ]
-          },
-        },
-        layout: {
-          visibility: 'visible'
-        },
-      })
+        })
+        .addLayer({
+          'id': 'US-project-layer2',
+          'source': 'US-projects',
+          'source-layer': "US_projects-4ru9cu",
+          'type': 'circle',
+          'paint': {
+            'circle-radius': 4,
+            'circle-color': '#fff',
+            'circle-opacity': {
+              stops: [
+                [4.5, 0],
+                [5, 1]
+              ]
+            },
+          }
+        });
 
     // ADD HEATMAP LAYER
     map
@@ -203,9 +204,8 @@ export default ({ data, regions, toggle }) => {
             property: 'value',
             type: 'exponential',
             stops: [
-              [minMax[0], 0],
+              [0, 0],
               [225, 1]
-              // [minMax[1], 1]
             ]
           },
           'heatmap-radius': [
@@ -276,7 +276,8 @@ export default ({ data, regions, toggle }) => {
       colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');
       return colors;
     }
-    
+
+    console.log(map, regions, data)
     return () => {
       
       for ( let reservoir in reservoirs ) {
@@ -299,10 +300,12 @@ export default ({ data, regions, toggle }) => {
         .removeSource(`${region}-Saline aquifers`)
         .removeSource(`${region}-heatmap`);
     }
-  }, [map, regions, data]);
+    
+  }, [map, regions.region, data]);
 
   React.useEffect(() => {
     if (!map) return;
+    
     const { 
       "Oil and gas reservoirs": reservoir, 
       "Saline aquifers":aquifer, 
