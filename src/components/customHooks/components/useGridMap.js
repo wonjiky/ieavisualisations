@@ -82,61 +82,74 @@ export default ({ mapConfig, layers }) => {
 
         map
           .addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
-          .addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' });
-        map
+          .addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' })
+          .addSource('newborders', { 'type': 'vector', 'url': 'mapbox://iea.cdotjyd2' })
           .addLayer({
             'id': 'solid-border',
-            'source':'borders',
+            'source':'newborders',
             'type': 'line',
-            'source-layer': 'admin',
+            'source-layer': 'countries_border-08nej0',
             'paint': {
                 'line-width': lineWidth,
                 'line-color': lineColor,
             },
-            'filter': solidBorder.filter
+            // 'filter': solidBorder.filter    
           })
-          .addLayer({
-            'id': 'dotted-border-A',
-            'source':'borders',
-            'type': 'line',
-            'source-layer': 'admin',
-            'paint': {
-                'line-width': lineWidth,
-                'line-color': invertLineColor,
-                'line-dasharray': dottedBorderA.lineDashArray
-            },
-            'filter': dottedBorderA.filter
-          })
-          .addLayer({
-            'id': 'dotted-border-B',
-            'source':'borders',
-            'type': 'line',
-            'source-layer': 'admin',
-            'paint': {
-                'line-width': lineWidth,
-                'line-color': lineColor,
-                'line-dasharray': dottedBorderA.lineDashArray
-            },
-            'filter': dottedBorderB.filter
-          })
-          .addLayer({
-            'id': 'dotted-border-oecd',
-            'source':'dottedborder',
-            'type': 'line',
-            'source-layer': 'dottedborder_1-a7o3op',
-            'paint': {
-                'line-width': lineWidth,
-                'line-color': invertLineColor,
-                'line-dasharray': dottedBorderA.lineDashArray
-            },
-            'filter':[
-              "match",
-              ["get", "OBJECTID"],
-              [127],
-              true,
-              false
-            ]
-          });
+
+        // map
+        //   .addLayer({
+        //     'id': 'solid-border',
+        //     'source':'borders',
+        //     'type': 'line',
+        //     'source-layer': 'admin',
+        //     'paint': {
+        //         'line-width': lineWidth,
+        //         'line-color': lineColor,
+        //     },
+        //     'filter': solidBorder.filter
+        //   })
+        //   .addLayer({
+        //     'id': 'dotted-border-A',
+        //     'source':'borders',
+        //     'type': 'line',
+        //     'source-layer': 'admin',
+        //     'paint': {
+        //         'line-width': lineWidth,
+        //         'line-color': invertLineColor,
+        //         'line-dasharray': dottedBorderA.lineDashArray
+        //     },
+        //     'filter': dottedBorderA.filter
+        //   })
+        //   .addLayer({
+        //     'id': 'dotted-border-B',
+        //     'source':'borders',
+        //     'type': 'line',
+        //     'source-layer': 'admin',
+        //     'paint': {
+        //         'line-width': lineWidth,
+        //         'line-color': lineColor,
+        //         'line-dasharray': dottedBorderA.lineDashArray
+        //     },
+        //     'filter': dottedBorderB.filter
+        //   })
+        //   .addLayer({
+        //     'id': 'dotted-border-oecd',
+        //     'source':'dottedborder',
+        //     'type': 'line',
+        //     'source-layer': 'dottedborder_1-a7o3op',
+        //     'paint': {
+        //         'line-width': lineWidth,
+        //         'line-color': invertLineColor,
+        //         'line-dasharray': dottedBorderA.lineDashArray
+        //     },
+        //     'filter':[
+        //       "match",
+        //       ["get", "OBJECTID"],
+        //       [127],
+        //       true,
+        //       false
+        //     ]
+        //   });
       });
 	}, [])
 	return {
