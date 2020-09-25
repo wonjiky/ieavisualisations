@@ -117,6 +117,8 @@ export default ({ baseURL, match }) => {
         })
         setData(data)
       })
+
+      
       
   }, [ baseURL, currRegion ]);
 

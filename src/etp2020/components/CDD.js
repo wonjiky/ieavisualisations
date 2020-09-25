@@ -34,7 +34,7 @@ function CDD({
           'circle-radius': {
             stops: [
               [2, 1.2],
-              [4, 3]
+              [4, 4.2]
             ]
           },
           'circle-color': 'black'

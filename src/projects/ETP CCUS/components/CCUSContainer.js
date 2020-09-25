@@ -3,23 +3,23 @@ import { useCCUSMap } from '../../../components/customHooks'
 
 export default ({ data, regions, toggle }) => {
   
-  const { map, mapContainerRef } = useCCUSMap({ mapConfig: { maxBounds: regions.bounds } });
+  const { map, mapContainerRef } = useCCUSMap(regions.bounds);
 
   React.useEffect(() => {
     if(!map) return;
+    
     const colors = ['#B187EF', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
-    const { region } = regions;
     const { types, minMax, 'Oil and gas reservoirs': reservoirs, hubs, ...rest } = data;
     
     for ( let reservoir in reservoirs ) {
       map
-        .addSource(`${region}-Reservoir-${reservoir}`, {
+        .addSource(`${regions.region}-Reservoir-${reservoir}`, {
           type: "vector", url: reservoirs[reservoir].url
         })
     }
     for ( let source in rest ) {
       map
-        .addSource(`${region}-${source}`, {
+        .addSource(`${regions.region}-${source}`, {
           'type': 'geojson',
           'data': rest[source]
         })
@@ -29,8 +29,8 @@ export default ({ data, regions, toggle }) => {
     for ( let reservoir in reservoirs ) {
       map
         .addLayer({
-          'id': `${region}-Rsv-${reservoir}`,
-          'source': `${region}-Reservoir-${reservoir}`,
+          'id': `${regions.region}-Rsv-${reservoir}`,
+          'source': `${regions.region}-Reservoir-${reservoir}`,
           'source-layer': reservoirs[reservoir].sourceLayer,
           'type': 'fill',
           'paint': {
@@ -44,7 +44,7 @@ export default ({ data, regions, toggle }) => {
       .addLayer({
         id: 'aquifer-layer',
         type: 'fill',
-        source: `${region}-Saline aquifers`,
+        source: `${regions.region}-Saline aquifers`,
         layout: {
           visibility: 'visible'
         },
@@ -188,7 +188,7 @@ export default ({ data, regions, toggle }) => {
       .addLayer({
         id: 'heatmap-layer',
         type: 'heatmap',
-        source: `${region}-heatmap`,
+        source: `${regions.region}-heatmap`,
         maxzoom: 5,
         paint: {
           'heatmap-intensity': [
@@ -246,7 +246,7 @@ export default ({ data, regions, toggle }) => {
       .addLayer({
         id: 'heatmap-circle',
         type: 'circle',
-        source: `${region}-heatmap`,
+        source: `${regions.region}-heatmap`,
         paint: {
           'circle-radius': 3,
           'circle-color': setColors(types, colors),
@@ -277,13 +277,12 @@ export default ({ data, regions, toggle }) => {
       return colors;
     }
 
-    console.log(map, regions, data)
     return () => {
       
       for ( let reservoir in reservoirs ) {
         map
-          .removeLayer(`${region}-Rsv-${reservoir}`)
-          .removeSource(`${region}-Reservoir-${reservoir}`);
+          .removeLayer(`${regions.region}-Rsv-${reservoir}`)
+          .removeSource(`${regions.region}-Reservoir-${reservoir}`);
       }
       map
         .removeLayer('heatmap-circle')
@@ -297,8 +296,8 @@ export default ({ data, regions, toggle }) => {
         .removeSource('EU-CO2-hubs')
         .removeSource('US-pipelines')
         .removeSource('US-projects')
-        .removeSource(`${region}-Saline aquifers`)
-        .removeSource(`${region}-heatmap`);
+        .removeSource(`${regions.region}-Saline aquifers`)
+        .removeSource(`${regions.region}-heatmap`);
     }
     
   }, [map, regions.region, data]);

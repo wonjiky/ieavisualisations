@@ -49,12 +49,10 @@ export default ({ mapConfig, layers }) => {
                 'interpolate',
                 ['exponential', 0.5],
                 ['zoom'],
-                3,
-                2,
-                6,
-                5
+                3,2,
+                6,6
               ],
-              'circle-opacity': .3,
+              // 'circle-opacity': .3,
               'circle-color': [
                 "step",
                 ["get", "val"],
