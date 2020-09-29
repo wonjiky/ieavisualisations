@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import Papa from 'papaparse';
-import { useMap } from '../../../components/customHooks';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import Papa from 'papaparse'
+import { useMap } from '../../../components/customHooks'
+import { MapContainer } from '../../../components/container'
+import axios from 'axios'
 import { 
     borderPoints, 
     getCountryColor, 
@@ -9,17 +10,19 @@ import {
     getCountryInfo, 
     getBorderPointInfo,
     getBorderPointCountriesColor 
-} from './util';
+} from './util'
 
 export default () => {
     
-	const mapConfig = {
+	const config = {
+			map:'oecd',
+			style: "mapbox://styles/iea/ck9jt8mxx028m1ip9gih9yod6",
 			center: [0, 0],
 			minZoom: 4.1,
 			maxZoom: 7,
 			maxBounds: [[-15, 23],[50, 65]]
 	}
-	const { map, popUp, mapContainerRef } = useMap({ mapConfig });
+	const { map, mapContainerRef, popUp } = useMap(config);
 	const colors = [ 'case', '#00CDB0', '#00B3C5', '#0076C0', '#0095CB', '#1355A3', 'red' ];
 	const [data, setData] = useState({ borderPoints: null, countryShape: null });
 
@@ -33,6 +36,23 @@ export default () => {
 			setData({ borderPoints: borderPoints(data), countryShape: countryShape(data) })
 		})
 	}, [baseURL])
+
+	useEffect(() => {
+		if (!map) return;
+		let borders = ['solid', 'dotted']
+		for ( let i in borders){
+			let idx = parseInt(i) + 1;
+			map
+				.setPaintProperty( `${borders[i]}-${idx}`, "line-color", '#404040')
+				.setPaintProperty( `${borders[i]}-${idx}`, "line-width", [
+					'interpolate',
+					['exponential', 0.5],
+					['zoom'],
+					config.minZoom, 0.5,
+					config.maxZoom, 0.7
+				]);
+		}
+	}, [map])
 		
 	useEffect (() => {
 		if(!map || !data) return;
@@ -126,19 +146,20 @@ export default () => {
 
 		let countries = [];
 		countryShape.forEach(d => countries.push(d.ISO3))
+		console.log(getCountryColor(countryShape, colors))
 		map
-			.setFilter('country',[ "all", [ "match", ["get", "ISO3_CODE"], countries, true, false ]])
-			.setPaintProperty('country', 'fill-color', getCountryColor(countryShape, colors));
+			.setFilter('shapes-0',[ "all", [ "match", ["get", "ISO3"], countries, true, false ]])
+			.setPaintProperty('shapes-0', 'fill-color', getCountryColor(countryShape, colors));
 	});
 
 
 	useEffect (() => {
 		if(!map) return;
 		map
-			.on('mousemove', 'country', function(e) {
+			.on('mousemove', 'shapes-0', function(e) {
 				map.getCanvas().style.cursor = 'pointer';
 				let mousePos = [e.lngLat.lng, e.lngLat.lat];
-				let selected = e.features[0].properties.ISO3_CODE;
+				let selected = e.features[0].properties.ISO3;
 				while (Math.abs(e.lngLat.lng - mousePos[0]) > 180) {
 					mousePos[0] += e.lngLat.lng > mousePos[0] ? 360 : -360;
 				}
@@ -147,7 +168,7 @@ export default () => {
 					.setHTML(getCountryInfo(data.countryShape, selected))
 					.addTo(map);
 			})
-			.on('mouseleave', 'country', function() {
+			.on('mouseleave', 'shapes-0', function() {
 				map.getCanvas().style.cursor = '';
 				popUp.remove();
 			})
@@ -161,16 +182,21 @@ export default () => {
 						.setHTML(getBorderPointInfo(selected))
 						.addTo(map);
 				if (e.features.length > 0) {
-						map.setPaintProperty( "country", "fill-color", getBorderPointCountriesColor(e.features[0].properties.tx) );
+						map.setPaintProperty( 'shapes-0', "fill-color", getBorderPointCountriesColor(e.features[0].properties.tx) );
 				}
 			})
 			.on('mouseleave', 'border-point', function() {
 				map.getCanvas().style.cursor = '';
 				popUp.remove();
-				map.setPaintProperty("country", "fill-color", getCountryColor(data.countryShape, colors)
+				map.setPaintProperty('shapes-0', "fill-color", getCountryColor(data.countryShape, colors)
 				);
 			});
 	})
     
-	return <div className='container'><div ref={mapContainerRef} className='map' /></div>;	
+	return (
+		<MapContainer> 
+			<div ref={mapContainerRef} className='map' />
+		</MapContainer>
+	)
+		
 };

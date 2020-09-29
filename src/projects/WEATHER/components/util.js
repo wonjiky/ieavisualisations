@@ -47,11 +47,10 @@ export function colorsByVariables(countries, type, viewUnit) {
 
 	countriesByValueRange.forEach((value, idx) => {
 		let countryPos = (idx * 2);
-		colors.splice(countryPos, 0, ["match", ["get", "ISO3_CODE"], value, true, false ])
+		colors.splice(countryPos, 0, ["match", ["get", "ISO3"], value, true, false ])
 	})
 	colors.splice(0,0, 'case');
 	colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');
-
 	return colors;
 }
 

@@ -1,21 +1,26 @@
 import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
-import CO2 from './CO2'
-import { Controls, Control, ControlContainer } from '../../components/controls'
-import { Legends } from '../../components/legends'
-import classes from './css/ETP.module.css'
+import CCUSContainer from './CCUSContainer'
+import { MapContainer } from '../../../components/container'
+import { Controls, ControlContainer } from '../../../components/controls'
+import { Legends } from '../../../components/legends'
+import classes from './css/Index.module.css'
 
-export default props => {
+export default ({ baseURL, match }) => {
   
-  const regionBounds ={
+  let currRegion = match.path.substring(10) === 'us' 
+    ? match.path.substring(10).toUpperCase()
+    : match.path.substring(10).charAt(0).toUpperCase() + match.path.substring(10).slice(1);
+
+  const bounds ={
     US: [[-180, 10],[-45, 74]],
-    China: [[50, 9],[155, 55]],
+    China: [[60,9],[155,55]],
     Europe : [[-33, 26],[64, 66]]
   };
+  const colors = ['#B187EF', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
+
   const [data, setData] = React.useState(null);
-  const [active, setActive] = React.useState({ open: false, target: null });
-  const [regions, setRegions] = React.useState({region: 'US', bounds: regionBounds['US']});
   const [legendToggle, setLegendToggle] = React.useState({ 
     'Oil and gas reservoirs': true, 
     'Saline aquifers': true, 
@@ -24,15 +29,12 @@ export default props => {
     sources: [], 
     projects: [],
   });
-  const regionArr = [ 'US', 'Europe', 'China' ];
-  const colors = ['#B187EF', '#6f6f6f', '#3E7AD3', '#1DBE62', '#FF684D'];
 
   React.useEffect(() => {
-    const{ region }= regions;
-
+    
     const URL = [
-      axios.get(`${props.baseURL}etp/ccus/${region}_Saline.json`),
-      axios.get(`${props.baseURL}etp/ccus/${region}_emissions.csv`),
+      axios.get(`${baseURL}etp/ccus/${currRegion}_Saline.json`),
+      axios.get(`${baseURL}etp/ccus/${currRegion}_emissions.csv`),
     ];
 
     const types =  ['Iron and steel', 'Cement', 'Fuel refining', 'Chemicals', 'Power'];
@@ -45,39 +47,36 @@ export default props => {
           { url: "mapbox://iea.47kfi170", sourceLayer: "US_Reservoir_9101112-1x96uc" }
         ],
         types: types,
-        scale: 1
       },
       Europe: {
         'Oil and gas reservoirs': [{ url: "mapbox://iea.d4w60p1l", sourceLayer: "Europe_reservoir-5lg77n" },],
         types: types,
-        scale: 1
       },
       China: {
         'Oil and gas reservoirs': [{ url: "mapbox://iea.0nkpwvw6", sourceLayer: "China_Reservoir-4sfg1q" },],
         types: types,
-        scale: 0.5
       }
     }
 
     axios.all(URL)
       .then(responses => {
         let temporaryData = Papa.parse(responses[1].data, { header: true }).data;
-        let tempData = hello(temporaryData);
+        let tempData = setTempData(temporaryData);
         let data = {
           heatmap: {
             'type': 'FeatureCollection',
-            'features': []
+            'features': populateData(tempData)
           },
-          'Oil and gas reservoirs': regionParam[regions.region]['Oil and gas reservoirs'],
+          'Oil and gas reservoirs': regionParam[currRegion]['Oil and gas reservoirs'],
           'Saline aquifers': responses[0].data,
-          types: regionParam[regions.region].types,
+          types: regionParam[currRegion].types,
           minMax: [
             Math.min(...tempData.map(d=> parseFloat(d.value))),
-            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[region].scale
+            Math.max(...tempData.map(d=> parseFloat(d.value))) * regionParam[currRegion].scale
           ]
         };
 
-        function hello(data) {
+        function setTempData(data) {
           let newData = [];
           for (let i in data) {
             if (isNaN(parseFloat(data[i].value))) {
@@ -88,56 +87,41 @@ export default props => {
           return newData;
         }
 
-        for ( let i in tempData ) {
-          data.heatmap.features.push({
-            'type': 'Feature',
-            'geometry': {
-              'type': 'Point', 
-              'coordinates': [
-                parseFloat(tempData[i].LONGITUDE),
-                parseFloat(tempData[i].LATITUDE)
-              ]
-            },
-            'properties': {
-              value: parseFloat(tempData[i].value) || 0,
-              type: tempData[i].SECTOR,
-            }
-          })
-        };
+        function populateData(data) {
+          let result = [];
+          for ( let i in data ) {
+            result.push({
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Point', 
+                'coordinates': [
+                  parseFloat(data[i].LONGITUDE),
+                  parseFloat(data[i].LATITUDE)
+                ]
+              },
+              'properties': {
+                value: parseFloat(data[i].value) || 0,
+                type: data[i].SECTOR,
+              }
+            })
+          };
+          return result;
+        }
 
-        setLegendToggle({ 'Oil and gas reservoirs': true, 'Saline aquifers': true, pipelines: true,  projects:['Under development', 'Operating'], hubs: true, sources: regionParam[region].types })
+        setLegendToggle({ 
+          'Oil and gas reservoirs': true, 
+          'Saline aquifers': true, 
+          pipelines: true,  
+          projects:['Under development', 'Operating'], 
+          hubs: true, 
+          sources: regionParam[currRegion].types 
+        })
         setData(data)
       })
-  
-  }, [ props.baseURL, regions ]);
 
-  function open(e) {
-		setActive({ open: true, target: e.target.value })
-	}
-
-  const hide = React.useCallback(() => {
-    setActive({ open: false, target: null })
-    document.removeEventListener('click', hide)
-  },[])
-
-  React.useEffect(() => {
-    if (!active.open) return;
-    document.addEventListener('click', hide)
-  },[ active.open, hide ])
-
-  let controls = [
-		{ 
-			id: 1,
-			type: 'radio',
-      flow: 'row',
-      options: regionArr,
-			click: value => setRegions({region: value, bounds: regionBounds[value]}),
-			open: e => open(e),
-			hide: e => hide(e),
-			active: active,
-			selected: regions.region
-    }
-  ];
+      
+      
+  }, [ baseURL, currRegion ]);
 
   function arrayGetValue(arr) {
     let activeStorage = [];
@@ -150,25 +134,14 @@ export default props => {
   }
 
   if ( !data ) return <div>Loading...</div>
-
   return (
-    <div className='container'>
-      <CO2 
+    <MapContainer>
+      <CCUSContainer
         data={data}
         toggle={legendToggle}
-        regions={regions}
+        regions={{ region: currRegion, bounds: bounds[currRegion]}}
       />
       <ControlContainer>
-        <Controls
-          style={{
-            top: '20px',
-            left: '20px',
-            padding: '0',
-            width: '230px'
-          }}
-        >
-          {controls.map((control, idx) => <Control key={idx} {...control} /> )}
-        </Controls>
         <Controls
           column
           bg
@@ -215,7 +188,7 @@ export default props => {
               )
             }}
           />
-          {regions.region === 'Europe' 
+          {currRegion === 'Europe' 
             ? <Legends 
               type={'category'}
               header={[`CO2 storage hubs`, '2']}
@@ -233,14 +206,14 @@ export default props => {
             />
             : null
           }
-          {regions.region === 'US' 
+          {currRegion === 'US' 
             ? <Legends 
               round
               type={'category'}
-              header={['US projects']}
+              header={['CCUS projects']}
               labels={['Operating', 'Under development']}
               colors={['symbol', 'symbol']}
-              symbolColor={["#0052e0", "#a7c7ff"]}
+              symbolColor={["#0044ff", "#49d3ff"]}
               selected={legendToggle.projects}
               click={val => {
                 setLegendToggle(
@@ -252,7 +225,7 @@ export default props => {
             />
             : null
           }
-          {regions.region === 'US' 
+          {currRegion === 'US' 
             ? <Legends 
               type={'category'}
               header={['CO2 pipelines', '2']}
@@ -273,11 +246,11 @@ export default props => {
             <p>
               * Click on legend to switch on/off layers<br/>
               * Zoom in to view CO<sub>2</sub> storage and plants<br/>
-              {regions.region === 'US' ? '* Includes 50 US States and Puerto Rico': null}
+              {currRegion === 'US' ? '* Includes 50 US States and Puerto Rico': null}
             </p>
           </div>
         </Controls>
       </ControlContainer>
-    </div>
+    </MapContainer>
   )
 }

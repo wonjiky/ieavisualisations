@@ -1,0 +1,1 @@
+export { default as CDDMap } from './components/CDDWrapper';

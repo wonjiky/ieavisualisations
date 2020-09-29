@@ -2,7 +2,6 @@ import React from 'react';
 import MapGL from 'react-map-gl';
 import { DeckGL } from '@deck.gl/react';
 import FlowMapLayer, { PickingType } from '@flowmap.gl/core';
-import { NODE_STREAM_INPUT } from 'papaparse';
 
 export default function Map({ width, height, viewState, colors, onViewStateChange, data }) {
 	
@@ -60,7 +59,6 @@ export default function Map({ width, height, viewState, colors, onViewStateChang
 
 	function handleFlowMapHover(info){
 		const {object, type, x , y} = info;
-		let test = null;
 		switch(type) {
 			case PickingType.FLOW: {
 				if ( !object ) {
@@ -89,7 +87,7 @@ export default function Map({ width, height, viewState, colors, onViewStateChang
         break;
       }
 			default: 
-				test = null;
+				return null;
 		}
 	}
 

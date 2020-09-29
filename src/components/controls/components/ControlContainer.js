@@ -4,6 +4,7 @@ import classes from './css/ControlContainer.module.css'
 
 export default ({ children, label, dark, help }) => {
   const [open, setOpen] = React.useState(true);
+
   return (
     <section className={
       !open && !dark
@@ -16,7 +17,7 @@ export default ({ children, label, dark, help }) => {
       }
     >
       <div className={classes.ToggleWrapper}>
-        <div className={classes.ToggleContainer}>
+        <div className={classes.ToggleContainer}> 
           {help ? 
             <Icon.Help dark={dark} click={_ => setOpen(!open)}/> : null}
           {open

@@ -16,13 +16,6 @@ export default function GTFContainer(props) {
     maxBounds: [[-15, 23],[50, 65]]
   });
   
-  const colors = {
-    // locationAreas:{
-    //   normal: 'rgba(48,48,48,0.5)',
-    //   highlighted: 'rgba(48,48,48,0.7)',
-    // },
-  }
-	
   React.useEffect(() => {
     let calls = [
       axios.get(`${props.baseURL}gtf/flow.json`),
@@ -64,14 +57,13 @@ export default function GTFContainer(props) {
 	}, [props.baseURL])
 
   if(loaded){
-    console.log(data);
     return (
       <Flowmap 
         width='100vw' 
         height='100vh' 
         data={data}
         viewState={viewState} 
-        colors={colors}
+        colors={{}}
         onViewStateChange={({ viewState }) => setViewState(viewState)}/>
     )
   } else {

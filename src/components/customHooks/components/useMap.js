@@ -1,113 +1,122 @@
-import { useEffect, useRef, useState } from 'react'
-import mapboxgl from 'mapbox-gl';
-import { dottedBorderA, dottedBorderB, solidBorder } from './util/useMapStyle';
-import "mapbox-gl/dist/mapbox-gl.css";
+import React from 'react'
+import mapboxgl from 'mapbox-gl'
+import { oecd, mapBox, lineDashArray  } from './util/util'
+import "mapbox-gl/dist/mapbox-gl.css"
 
+export default config => {
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
-export default ({ mapConfig }) => {
+	mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
-	const [map, setMap] = useState(null);
-	const [popUp, setPopUp] = useState(null);
-	const mapContainerRef = useRef(null);
-
-	useEffect (() => {
-			const map = new mapboxgl.Map({
-				container: mapContainerRef.current,
-				style: "mapbox://styles/iea/ckfe5h7xv01d61aphnvcch6rw",
-				center: mapConfig.center ? mapConfig.center : [0, 0],
-				minZoom: mapConfig.minZoom ? mapConfig.minZoom : 0,
-				maxZoom: mapConfig.maxZoom ? mapConfig.maxZoom : 22,
-				maxBounds: mapConfig.maxBounds ? mapConfig.maxBounds : null,
-			})
-
-			let popUp = new mapboxgl.Popup({
-				closeButton: false,
-				closeOnClick: false
-			});
-			
-			map.on("load", () => {
-					const lineWidth = .3;
-					const lineColor = 'black';
-					const invertLineColor = 'white';
-					setPopUp(popUp);
-					setMap(map);
-
-					map
-						.addSource('countries-shape', { 'type': 'vector', 'url': 'mapbox://iea.ajias2w4' })
-						.addSource('borders', { 'type': 'vector', 'url': 'mapbox://mapbox.mapbox-streets-v8' })
-						.addSource('dottedborder', { 'type': 'vector', 'url': 'mapbox://iea.a4n5445m' })
-						.addLayer({
-							'id': 'country',
-							'source':'countries-shape',
-							'type': 'fill',
-							'source-layer':'basemapoecd-5wmxam',
-							'paint': {
-									'fill-opacity': 1,
-							}
-						})
-						.addLayer({
-							'id': 'solid-border',
-							'source':'borders',
-							'type': 'line',
-							'source-layer': 'admin',
-							'paint': {
-									'line-width': lineWidth,
-									'line-color': lineColor,
-							},
-							'filter': solidBorder.filter
-						})
-						.addLayer({
-							'id': 'dotted-border-A',
-							'source':'borders',
-							'type': 'line',
-							'source-layer': 'admin',
-							'paint': {
-									'line-width': lineWidth,
-									'line-color': invertLineColor,
-									'line-dasharray': dottedBorderA.lineDashArray
-							},
-							'filter': dottedBorderA.filter
-						})
-						.addLayer({
-							'id': 'dotted-border-B',
-							'source':'borders',
-							'type': 'line',
-							'source-layer': 'admin',
-							'paint': {
-									'line-width': lineWidth,
-									'line-color': lineColor,
-									'line-dasharray': dottedBorderA.lineDashArray
-							},
-							'filter': dottedBorderB.filter
-						})
-						.addLayer({
-							'id': 'dotted-border-oecd',
-							'source':'dottedborder',
-							'type': 'line',
-							'source-layer': 'dottedborder_1-a7o3op',
-							'paint': {
-									'line-width': lineWidth,
-									'line-color': invertLineColor,
-									'line-dasharray': dottedBorderA.lineDashArray
-							},
-							'filter':[
-								"match",
-								["get", "OBJECTID"],
-								[127],
-								true,
-								false
-							]
-						});
-			});
-	}, [])
-
-	return {
-			map,
-			popUp,
-			mapContainerRef
+	const [map, setMap] = React.useState(null);
+	const [popUp, setPopUp] = React.useState(null);
+	const mapContainerRef = React.useRef(null);
+	const mapType = config.map === 'oecd' 
+		? fetchOecdMap 
+		: config.map === 'custom'
+		? fetchCustomMap
+		: fetchMapboxMap;
+	const tooltip = new mapboxgl.Popup({
+		closeButton: false,
+		closeOnClick: false
+	});
+	const mapConfig = {
+		container: mapContainerRef.current,
+		style: config.style,
+		center: config.center ? config.center : [0, 0],
+		minZoom: config.minZoom ? config.minZoom : 0,
+		maxZoom: config.maxZoom ? config.maxZoom : 22,
+		maxBounds: config.maxBounds ? config.maxBounds : null,
 	}
-            
+
+	React.useEffect(mapType, []);
+
+	function fetchOecdMap () {
+		
+		const map = new mapboxgl.Map({...mapConfig, container: mapContainerRef.current});
+		
+		map.on("load", () => {
+			setPopUp(tooltip);
+			setMap(map);
+			map.addControl(new mapboxgl.NavigationControl());
+
+			for ( let i in oecd.sources ) {
+				let source = oecd.sources[i];
+				map.addSource(source.id, { type: 'vector', url: source.url })
+			}
+
+			for ( let i in oecd.layers ) {
+				
+				let layer = oecd.layers[i];
+				let shapes = layer.id === 'shapes';
+				let meta = !shapes ? { filter: layer.filter } : ''
+				
+				map.addLayer({ 
+					'id': `${layer.id}-${i}`,
+					'source': layer.source,
+					'source-layer': layer.sourceLayer,
+					'layout': layer.layout,
+					'type': shapes ? 'fill' : 'line',
+					'paint': layer.paint,
+					...meta
+				});
+			}
+
+		});
+	}
+	
+	function fetchMapboxMap() {
+
+		const map = new mapboxgl.Map({...mapConfig, container: mapContainerRef.current});
+
+		map.on("load", () => {
+			setPopUp(tooltip);
+			setMap(map);
+			map.addControl(new mapboxgl.NavigationControl());
+			
+			for (let i  in mapBox.sources) {
+				let source = mapBox.sources[i];
+				map.addSource(`${source.id}-borders`, { type: 'vector', url: source.url});
+			}
+			
+			for (let i in mapBox.layers) {
+				
+				let { paint } = config;
+				let layer = mapBox.layers[i];
+				let solid = layer.id === 'solid';
+				let dashed = !solid ? { 'line-dasharray': lineDashArray } : '';
+				let lineStyle = paint 
+					? { 'line-width': paint.lineWidth, 'line-color': solid ? paint.lineColor : paint.dottedLineColor}
+					: { 'line-width': 1, 'line-color': solid ? 'black' : 'white'};
+
+				map.addLayer({
+					'id': `dotted-${i}`,
+					'source': layer.source,
+					'source-layer': layer.sourceLayer,
+					'type': 'line',
+					'paint': {
+						...dashed,
+						...lineStyle
+					},
+					'filter': layer.filter,
+					'layout': layer.layout,
+				})
+			}
+
+		})
+	}
+
+	function fetchCustomMap() {
+
+		const map = new mapboxgl.Map({...mapConfig, container: mapContainerRef.current});
+
+		map.on("load", () => {
+      setPopUp(popUp);
+      setMap(map);
+      map.addControl(new mapboxgl.NavigationControl());
+    });
+	}
+
+	return { map, mapContainerRef, popUp }
 }
 
 

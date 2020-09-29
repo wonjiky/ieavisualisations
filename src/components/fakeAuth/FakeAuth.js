@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Input } from '../input';
-import  Button from './Button';
-import classes from './css/FakeAuth.module.css';
+import React from 'react';
+// import { Input } from '../input';
+// import  Button from './Button';
+// import classes from './css/FakeAuth.module.css';
 
-class Auth extends Component {
+class Auth extends React.Component {
 	state = {
 		authenticated: false,
 		controls: {
@@ -61,33 +61,33 @@ class Auth extends Component {
 			});
 		}
 
-		const form = formElementsArray.map(formElement => (
-			<Input 
-				key={formElement.id}
-				elementType={formElement.config.elementType}
-				elementConfig={formElement.config.elementConfig}
-				invalid={!formElement.config.valid}
-				value={formElement.config.value}
-				touched={formElement.config.touched}
-				shouldValidate={formElement.config.validation}
-				changed={(e) => this.inputChangedHandler(e, formElement.id)} 
-			/>
-		))
+		// const form = formElementsArray.map(formElement => (
+		// 	<Input 
+		// 		key={formElement.id}
+		// 		elementType={formElement.config.elementType}
+		// 		elementConfig={formElement.config.elementConfig}
+		// 		invalid={!formElement.config.valid}
+		// 		value={formElement.config.value}
+		// 		touched={formElement.config.touched}
+		// 		shouldValidate={formElement.config.validation}
+		// 		changed={(e) => this.inputChangedHandler(e, formElement.id)} 
+		// 	/>
+		// ))
 			
-		let content = (
-			<div className={classes.Auth}>
-				<div onClick={this.submitHandler}>
-					<h1>{this.props.title}</h1>
-					<form onSubmit={this.submitHandler}>
-						{form}
-						<button>SUBMIT</button>
-						{/* <Button btnType="Success"> SUBMIT </Button> */}
-					</form>
-				</div>
-			</div>
-		)
+		// let content = (
+		// 	<div className={classes.Auth}>
+		// 		<div onClick={this.submitHandler}>
+		// 			<h1>{this.props.title}</h1>
+		// 			<form onSubmit={this.submitHandler}>
+		// 				{form}
+		// 				<button>SUBMIT</button>
+		// 				{/* <Button btnType="Success"> SUBMIT </Button> */}
+		// 			</form>
+		// 		</div>
+		// 	</div>
+		// )
 
-		if ( this.state.authenticated ) content =this.props.children;
+		// if ( this.state.authenticated ) content =this.props.children;
 		return this.props.children;
 	}
 }

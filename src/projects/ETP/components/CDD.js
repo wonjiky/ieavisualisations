@@ -1,6 +1,5 @@
 import React from 'react'
-import { useCDDMap } from '../../components/customHooks'
-import PropTypes from 'prop-types'
+import { useMap } from '../../../components/customHooks'
 
 function CDD({ 
   years,
@@ -8,27 +7,40 @@ function CDD({
   hdd,
   layers,
   selectedRegion,
-  selectedPop,
-  needFor
+  needFor,
+  // selectedPop,
 }) {
 
-  const mapConfig = {
+  const config = {
+    map: 'custom',
+    style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
     center: [0.729,15.359],
     minZoom: 1.01,
     maxZoom: 4,
-    style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
+    custom: {
+      sources: layers,
+    }
   } 
-
-  const { map, popUp, mapContainerRef } = useCDDMap({ mapConfig });
+  const { map, mapContainerRef  } = useMap(config);
   
-  React.useEffect(() => {
+  React.useEffect(addSourceLayers, [map]);
+  
+  function addSourceLayers() {
     if(!map) return;
-    for ( let i in layers.layers ) {
+    for (let i in layers) {
+      let tempSources = layers[i].layers;
+      let type = layers[i];
+      for ( let t in tempSources ) {
+        map.addSource(`${type.data}-${t}`, { type: "vector", url: tempSources[t].url });  
+      }
+    }
+
+    for ( let i in layers[0].layers ) {
       map.addLayer({
-        id: `${layers.data}-${i}`,
-        source: `${layers.data}-${layers.type}-${layers.year}-${i}`,
-        'source-layer': layers.layers[i].sourceLayer,
-        type: 'circle',
+        id: `${layers[0].data}-${i}`,
+        source: `${layers[0].data}-${i}`,
+        'source-layer': layers[0].layers[i].sourceLayer,
+        type: layers[0].type,
         paint: {
           'circle-opacity': 1,
           'circle-radius': {
@@ -37,44 +49,33 @@ function CDD({
               [4, 4.2]
             ]
           },
-          'circle-color': 'black'
         },
       })
     }
 
-    map
+    for ( let i in layers[1].layers) {
+      map
       .addLayer({
-        id: 'world-shape',
-        source: 'shape',
-        'source-layer': "World_map_by_Region-6plcrh",
-        type: 'line',
+        id: `etp-region-${i}`,
+        source: `${layers[1].data}-${i}`,
+        'source-layer': layers[1].layers[i].sourceLayer,
+        type: layers[1].type,
         paint: {
           'line-color': 'black',
-          // 'line-opacity': 1,
           'line-width': 0.7,
         }
       })
-
-    return () => {
-
-      map.removeLayer('world-shape')
-
-      for (let i in layers.layers) {
-        map.removeLayer(`${layers.data}-${i}`)
-      }
-
     }
-  
-  }, [map, layers]);
+  }
 
   React.useEffect(() => {
     if (!map) return;
 
     for ( let i = 0; i <= 5; i ++ ) {
       
-      let layer = `LAYERS-${i}`, popLayer = `POP-${i}`;
+      let layer = `LAYERS-${i}`; //popLayer = `POP-${i}`;
       let year = years.toString().substring(2,4);
-      let mainColor = years === 2019 ? `${hdd}_${year}` : `${hdd}_${type}_${year}`,  popColor = `POP_${years}`;
+      let mainColor = years === 2019 ? `${hdd}_${year}` : `${hdd}_${type}_${year}`; //popColor = `POP_${years}`;
       let nf = hdd === 'HDD' ? 'NFH' : 'NFC', nfColor = years === 2019 ? `${nf}_${year}` : `${nf}_${type}_${year}`;
 
       if (needFor) {
@@ -83,11 +84,12 @@ function CDD({
           .setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
           // .setLayoutProperty(popLayer, 'visibility', 'none');
       } 
-      else if (selectedPop) {
-        map
-          .setLayoutProperty(popLayer, 'visibility', 'visible')
-          .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
-      } else {
+      // else if (selectedPop) {
+      //   map
+      //     .setLayoutProperty(popLayer, 'visibility', 'visible')
+      //     .setPaintProperty(popLayer, 'circle-color', popColors(popColor))
+      // } 
+      else {
         map
           .setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
           .setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
@@ -115,25 +117,25 @@ function CDD({
       return result;
     }
 
-    function popColors(valueType) {
-      const colorScheme = {
-          colors: ["#363636", '#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
-          range: [1, 10, 1000, 5000, 35000, 70000, 130000, 300000, 650000, 1000000, 1500000, 2000000, 2500000, 3000000, 4000000, 5000000, 7000000, 8000000]
-      }
-      let result = ["step", ["get", valueType], "#363636"];
-      for ( let i in colorScheme.colors ) {
-        let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
-        result.splice(colorIdx, 0, colorScheme.colors[i])
-        result.splice(rangeIdx, 0, colorScheme.range[i])
-      }
-      return result;
-    }
+    // function popColors(valueType) {
+    //   const colorScheme = {
+    //       colors: ["#363636", '#ffffe0', '#ededd3', '#dcdbc6', '#cacab9', '#b9b9ac', '#a9a8a0', '#989794', '#888787', '#78777b', '#686770', '#595864', '#4a4958', '#3b3b4d', '#2d2e42', '#1e2137', '#10142d', '#000023'],
+    //       range: [1, 10, 1000, 5000, 35000, 70000, 130000, 300000, 650000, 1000000, 1500000, 2000000, 2500000, 3000000, 4000000, 5000000, 7000000, 8000000]
+    //   }
+    //   let result = ["step", ["get", valueType], "#363636"];
+    //   for ( let i in colorScheme.colors ) {
+    //     let colorIdx = (Number(i) * 2) + 4, rangeIdx = (Number(i) * 2) + 3;
+    //     result.splice(colorIdx, 0, colorScheme.colors[i])
+    //     result.splice(rangeIdx, 0, colorScheme.range[i])
+    //   }
+    //   return result;
+    // }
+
   },[map, type, hdd, years, needFor])
 
   React.useEffect(() => {
     if (!map) return;
     let all = ['Africa', 'Asia Pacific', 'Central & South America', 'Eurasia', 'Europe', 'Middle East', 'North America'];
-
     let coords = {
       'North America': {zoom: 2.7, center: [-120.133,55.728]},
       'Central & South America': {zoom: 2.6, center: [-64.401,-26.183]},
@@ -146,7 +148,7 @@ function CDD({
     
     if (selectedRegion !== 'World') {
       map
-        .setPaintProperty('world-shape', 'line-opacity', ['case',['match', ['get', 'Aggregated'], [selectedRegion], true, false], 1, 0.1])
+        .setPaintProperty('etp-region-0', 'line-opacity', ['case',['match', ['get', 'Aggregated'], [selectedRegion], true, false], 1, 0.1])
         .flyTo({
           center: coords[selectedRegion].center,
           zoom: coords[selectedRegion].zoom,
@@ -155,7 +157,7 @@ function CDD({
 
     } else {
       map
-        .setPaintProperty('world-shape', 'line-opacity', ['case',['match', ['get', 'Aggregated'], all, true, false], 1, 0.1])
+        .setPaintProperty('etp-region-0', 'line-opacity', ['case',['match', ['get', 'Aggregated'], all, true, false], 1, 0.1])
         .flyTo({
           center: [-35,42],
           zoom: 1.1,

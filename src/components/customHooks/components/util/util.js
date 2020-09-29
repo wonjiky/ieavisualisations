@@ -1,51 +1,88 @@
-export const dottedBorderA = {
-    filter: [
+export const lineDashArray = [
+  "step", ["zoom"],
+  ["literal", [3.25, 3.25]], 6, ["literal", [2.5, 2.5]], 7, ["literal", [2, 2.25]], 8, ["literal", [1.75, 2]]
+]; 
+
+
+export const oecd = {
+  sources: [
+    {
+      id: 'shapes',
+      url: 'mapbox://iea.afhjx0lg'
+    },
+    {
+      id: 'solid',
+      url: 'mapbox://iea.5n5i3sum'
+    }
+  ],
+  layers: [
+    {
+      id: 'shapes',
+      source: 'shapes',
+      sourceLayer: 'countres_shape-899owk' ,
+      layout: { visibility: 'visible' },
+      paint: {}
+    },
+    {
+      id: 'solid',
+      source: 'solid',
+      sourceLayer: 'countries_border-blqedw',
+      layout: { visibility: 'visible' },
+      filter: [
         "all",
         [
-          "==",
-          ["get", "disputed"],
-          "true"
-        ],
-        [
-          "==",
-          ["get", "admin_level"],
-          0
-        ],
-        [
-          "==",
-          ["get", "maritime"],
-          "false"
-        ],
-        [
           "match",
-          ["get", "worldview"],
-          ["all", "US"],
-          true,
-          false
-        ],
-        [
-          "match",
-          ["get", "iso_3166_1"],
-          ["D0CNIN0-dispute"],
+          ["get", "line_type"],
+          ["", "Solid"],
           true,
           false
         ]
-    ],
-    lineDashArray: [
-        "step",
-        ["zoom"],
-        ["literal", [3.25, 3.25]],
-        6,
-        ["literal", [2.5, 2.5]],
-        7,
-        ["literal", [2, 2.25]],
-        8,
-        ["literal", [1.75, 2]]
-    ]   
+      ],
+      paint: {}
+    },
+    {
+      id: 'dotted',
+      source: 'solid',
+      sourceLayer: 'countries_border-blqedw',
+      layout: { visibility: 'visible' },
+      filter: [
+        "all",
+        [
+          "match",
+          ["get", "line_type"],
+          ["", "dotted"],
+          true,
+          false
+        ]
+      ],
+      paint: {
+        'line-dasharray': [
+          "step", ["zoom"],
+          ["literal", [3.25, 3.25]], 6, ["literal", [2.5, 2.5]], 7, ["literal", [2, 2.25]], 8, ["literal", [1.75, 2]]
+        ]
+      }
+    }
+  ]
 };
 
-export const solidBorder = {
-    filter: [
+export const mapBox = {
+  sources: [
+    {
+      id: 'solid',
+      url: 'mapbox://mapbox.mapbox-streets-v8',
+    },
+    {
+      id: 'dotted',
+      url: 'mapbox://iea.a4n5445m'
+    }
+  ],
+  layers: [
+    {
+      id: 'solid',
+      source: 'solid-borders',
+      sourceLayer: 'admin',
+      layout: { visibility: 'visible' },
+      filter: [
         "any",
         [
           "all",
@@ -151,10 +188,51 @@ export const solidBorder = {
           ]
         ]
       ]
-};
-
-export const dottedBorderB = {
-    filter: [
+    },
+    {
+      id: 'dotted',
+      source:'solid-borders',
+      sourceLayer: 'admin',
+      layout: { visibility: 'visible' },
+      filter: [
+        "all",
+        [
+          "==",
+          ["get", "disputed"],
+          "true"
+        ],
+        [
+          "==",
+          ["get", "admin_level"],
+          0
+        ],
+        [
+          "==",
+          ["get", "maritime"],
+          "false"
+        ],
+        [
+          "match",
+          ["get", "worldview"],
+          ["all", "US"],
+          true,
+          false
+        ],
+        [
+          "match",
+          ["get", "iso_3166_1"],
+          ["D0CNIN0-dispute"],
+          true,
+          false
+        ],
+      ],
+    },
+    {
+      id: 'dotted',
+      source:'solid-borders',
+      sourceLayer: 'admin',
+      layout: { visibility: 'visible' },
+      filter: [
         "any",
         [
           "all",
@@ -300,5 +378,20 @@ export const dottedBorderB = {
             false
           ]
         ]
+      ],
+    },
+    {
+      id: 'dotted',
+      source: 'dotted-borders',
+      sourceLayer: 'dottedborder_1-a7o3op',
+      layout: { visibility: 'visible' },
+      filter: [
+        "match",
+        ["get", "OBJECTID"],
+        [127],
+        true,
+        false
       ]
+    }
+  ]
 }

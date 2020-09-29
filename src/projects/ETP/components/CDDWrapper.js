@@ -2,10 +2,11 @@ import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
-import { Controls, Control, ControlContainer } from '../../components/controls'
-import { Legends } from '../../components/legends'
-import { Bars } from '../../components/bars'
-import { ETP_LAYERS } from '../../components/customHooks/components/util/EtpLayers'
+import { MapContainer } from '../../../components/container'
+import { Bars } from '../../../components/bars'
+import { Legends } from '../../../components/legends'
+import { Controls, Control, ControlContainer } from '../../../components/controls'
+import { ETP_LAYERS } from './util/EtpLayers'
 
 function CDDWrapper(props) {
   
@@ -19,7 +20,6 @@ function CDDWrapper(props) {
   const [selectedPop, setPopulation] = React.useState(false);
   
   let data = [ ...ETP_LAYERS ];
-  let layers = data.filter(d => d.data === 'LAYERS')[0];
 
   let controls = [
 		{ 
@@ -54,7 +54,8 @@ function CDDWrapper(props) {
       options: [
         {
           option: 'Population',
-          click: _ => setPopulation(!selectedPop),
+          click: _ => console.log('No population'),
+          // click: _ => setPopulation(!selectedPop),
           
         },
         {
@@ -176,11 +177,11 @@ function CDDWrapper(props) {
     }
   }
   return (
-    <div className='container'>
+    <MapContainer>
       <CDD
         years={year}
         selectedRegion={region}
-        layers={layers}
+        layers={data}
         needFor={needFor}
         selectedPop={selectedPop}
         type={type}
@@ -222,7 +223,7 @@ function CDDWrapper(props) {
             <Bars key={idx} dark {...finalIndicator} /> )}
         </Controls>
       </ControlContainer>
-    </div>
+    </MapContainer>
   )
 }
 

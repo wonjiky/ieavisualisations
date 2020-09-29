@@ -1,7 +1,5 @@
 import React from 'react'
 import classes from './css/Legends.module.css'
-import { find } from 'lodash';
-import { solidBorder } from '../../customHooks/components/util/useMapStyle';
 
 export default ({
   colors,

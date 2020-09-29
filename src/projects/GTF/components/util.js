@@ -116,7 +116,7 @@ export const getCountryColor = (countries, colors) => {
     
     scaledValue.forEach((value, idx) => {
         let countryPos = (idx * 2) + 1;
-        outputWithColors.splice(countryPos, 0, ["match", ["get", "ISO3_CODE"], value, true, false ])
+        outputWithColors.splice(countryPos, 0, ["match", ["get", "ISO3"], value, true, false ])
     })
     return outputWithColors
 }
@@ -187,7 +187,7 @@ export const getBorderPointCountriesColor = tx => {
     if ( result.length === 2 ) resultsWithColor.splice(2,1)
     result.forEach((value, idx) => {
         let countryPos = (idx * 2) + 1;
-        resultsWithColor.splice(countryPos, 0, ["match", ["get", "ISO3_CODE"], value, true, false ])
+        resultsWithColor.splice(countryPos, 0, ["match", ["get", "ISO3"], value, true, false ])
     })
     return resultsWithColor
 }
@@ -195,7 +195,7 @@ export const getBorderPointCountriesColor = tx => {
 const formatNum = x =>  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
 export function getCountryInfo(countries, selected) {
-	const selectedCountry = countries.filter(country => country.ISO3 === selected)[0];
+    const selectedCountry = countries.filter(country => country.ISO3 === selected)[0];
 	return `
 		<strong>${selectedCountry.country}</strong>
 		<p>Total Exited: ${formatNum(selectedCountry.exit)} MM3</p>

@@ -18,7 +18,7 @@
 }
 
 .Button > svg {
-  height: 17px;
+  height: 16px;
   margin-top: 3px;
 }
 
@@ -30,4 +30,30 @@
 
 .dark:hover {
   background: hsla(0,0%,100%,.15);
+}
+
+.ExpandContainer {
+  position: absolute;
+  z-index: 2;
+  top: 110px;
+  right: 0;
+}
+
+.Expand {  
+  background: #fff;
+  border-radius: 18%;
+  margin-right: 10px;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.1);
+}
+
+.Expand > .Button {
+  height: 29px;
+  width: 29px;
+  background-color: #fff;
+  transition: none;
+}
+
+.Expand:hover .Button {
+  background-color: rgba(0,0,0,.05);
+  transition: none;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Weather, WeatherByGrid_Vector } from './projects/WEATHER';
 import { GTF_Flow, GTF_Vector } from './projects/GTF';
-import { CDDMap } from './etp2020';
-import { CCUS } from './projects/ETP CCUS';
+import { CCUS } from './projects/CCUS';
+import { CDDMap } from './projects/ETP';
 import { Auth } from './components/fakeAuth';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import './App.css';
