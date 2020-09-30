@@ -34,7 +34,7 @@ export const Expand = ({ click }) => (
     <div className={classes.Expand}>
       <button onClick={click} className={classes.Button}>
         <svg viewBox="4 4 12 12">
-          <title> Help </title>
+          <title> Expand </title>
           <path stroke={'rgba(60,60,60)'} strokeWidth="1" d="M6 14V9.556M6 14h4.444M6 14l8-8m0 0H9.556M14 6v4.444"/>
         </svg>
       </button>

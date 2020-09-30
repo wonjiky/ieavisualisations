@@ -3,8 +3,9 @@ import axios from 'axios'
 import Papa from 'papaparse'
 import { MapContainer } from '../../../components/container'
 import { countryToIso3 as ISO } from '../../../global'
-import { ControlContainer, Controls, Slider, Dropdown } from '../../../components/controls'
+import { ControlContainer, Controls, Control } from '../../../components/controls'
 import Weather from './Weather'
+import { string } from 'prop-types'
 
 export default function(props) {
 
@@ -14,7 +15,9 @@ export default function(props) {
 	const [viewType, setViewType] = useState('country');
 	const [time, setTime] = useState('Jun-20');
 	const [active, setActive] = useState({ open: false, target: null });
+	
 	let month='Apr';
+	
 	const INDICATOR_LIST = [ 'hdd', 'cdd', 'solar radiation']; 
 	let URL = `${props.baseURL}weather/country/${interval}/${indicator}.csv`;
 	if ( interval === 'day') URL = `${props.baseURL}weather/country/day/solar radiation/${month}.csv`;
@@ -23,7 +26,6 @@ export default function(props) {
 		if ( viewType !== 'country') return;
 		axios.get(URL)
 			.then(response => {
-				
 				const fetchResult = Papa.parse(response.data, { header: false }).data;
 				function getData(data){
 					return data.reduce((result, country) => {
@@ -58,8 +60,6 @@ export default function(props) {
 
   if (!data) return <div>Loading...</div>
 
-	let currTime = `${time.substring(0,3)} 20${time.substring(4)}`;
-
 	function open(e) {
 		setActive({ open: true, target: e.target.value })
 	}
@@ -69,13 +69,24 @@ export default function(props) {
 		setActive({ open: false, target: null })
 	}
 
- 
+	let controls = [
+		{ 
+			type: 'radio',
+			options: ['Country','Grid'],
+      selected: viewType.charAt(0).toUpperCase() + viewType.slice(1),
+      dark: true,
+      flow: 'row',
+      click: value => setViewType(value.toLowerCase()),
+    },
+	]
+
 	return (
-		<MapContainer>
+		<MapContainer selector={'Weather_Map'}>
 			<Weather
 				data={data}
 				time={time}
 				interval={interval}
+				viewType={viewType}
 				changeViewUnit={value => setInterval(value)}
 			/>
 			<ControlContainer>
@@ -87,7 +98,9 @@ export default function(props) {
 							padding: '0',
 						}}
 					> 
-					<Dropdown 
+					{controls.map((control, idx) => 
+            <Control key={idx} {...control} /> )}
+					{/* <Dropdown 
 						label={'View by'}
 						options={['country', 'grid']}
 						click={e => setViewType(e)}
@@ -95,7 +108,7 @@ export default function(props) {
 						active={active}
 						open={e => open(e)}
 						hide={e => hide(e)}
-					/>
+					/> */}
 					{/* <Dropdown 
 						label={'Indicators'}
 						options={INDICATOR_LIST}

@@ -65,4 +65,46 @@ export function getCountryPopupInfo(countries, selected, timeIdx) {
 	return `<b>Value doe not exist for this country</b>`
 }
 
+export const GRID_LAYERS = [
+	{
+		url: "mapbox://iea.cq9ld9rb", sourceLayer: "hdd_5_1-3cbp61"
+	},
+	{
+		url: "mapbox://iea.598u8h3j", sourceLayer: "hdd_5_2-9oom4t"
+	},
+	{
+		url: "mapbox://iea.9jr49vhf", sourceLayer: "hdd_5_3-dgyhg6"
+	},
+	{
+		url: "mapbox://iea.2hb1cigo", sourceLayer: "hdd_5_4-5ug53j"
+	},
+	{
+		url: "mapbox://iea.a6my9de2", sourceLayer: "hdd_5_5-cjeb0p"
+	}
+];
 
+export function setGridColor(temp) {
+	return [
+		"step",
+		["get", "val"],
+		"hsla(0, 0%, 8%, 0.5)",
+		0,
+		"#d53e4f",
+		100,
+		"#f46d43",
+		300,
+		"#fdae61",
+		600,
+		"#fee08b",
+		1000,
+		"#ffffbf",
+		1400,
+		"#e6f598",
+		1600,
+		"#abdda4",
+		1800,
+		"#66c2a5",
+		2300,
+		"#3288bd"
+	]
+}

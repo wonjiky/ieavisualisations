@@ -135,7 +135,7 @@ export default ({ baseURL, match }) => {
 
   if ( !data ) return <div>Loading...</div>
   return (
-    <MapContainer>
+    <MapContainer selector={match.path.substring(1)}>
       <CCUSContainer
         data={data}
         toggle={legendToggle}

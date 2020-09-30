@@ -4,7 +4,6 @@ import classes from './css/ControlContainer.module.css'
 
 export default ({ children, label, dark, help }) => {
   const [open, setOpen] = React.useState(true);
-
   return (
     <section className={
       !open && !dark

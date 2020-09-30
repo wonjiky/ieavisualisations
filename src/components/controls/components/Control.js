@@ -3,7 +3,6 @@ import {  Slider, Toggle, Dropdown } from '../index'
 import global from './css/Global.module.css'
 
 export default props => {
-  
   switch (props.type) {
     case 'dropdown':
       return <Dropdown {...props} />
