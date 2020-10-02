@@ -35,3 +35,14 @@
     /* margin-top: 16px; */
     /* border-radius: 7px; */
 }
+
+
+.SliderContainer {  
+    display: flex;
+    flex-flow: column;
+}
+
+.SliderContainer span {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}

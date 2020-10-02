@@ -1,93 +1,118 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Papa from 'papaparse'
 import { MapContainer } from '../../../components/container'
-import { countryToIso3 as ISO } from '../../../global'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
+import { getCountryNameByISO, getMonthString, uppercase } from './util'
+import variables from './assets/variables.json'
 import Weather from './Weather'
-import { string } from 'prop-types'
 
-export default function(props) {
+export default function() {
 
-  const [data, setData] = useState(null);
-	const [interval, setInterval] = useState('month');
-	const [indicator, setIndicator] = useState('hdd');
-	const [viewType, setViewType] = useState('country');
-	const [time, setTime] = useState('Jun-20');
+	const [data, setData] = useState(null);
+	const [countryData, setCountryData] = useState(null);
+	const [selectedCountry, setSelectedCountry] = useState(null);
+	const [date, setDate] = useState({ day: 1, month: 8, year: 2011});
+	const [variable, setVariable] = useState({id: 'Temperaturedaily', name: 'Temp latitude weighted'});
+	const [mapType, setMapType] = useState('country');
+	const [interval, setInterval] = useState('day');
 	const [active, setActive] = useState({ open: false, target: null });
+
+	let { day, month, year } = date;
+	let joinedDate = `${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
+	let query = interval === 'day' ? { date: joinedDate, variable: variable.id } 
+		: interval === 'month' ? { month, year, variable: variable.id } 
+		: { year, variable: variable.id };
+	let mapQueryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+	// let countryQueryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+	let maxDay = new Date(year, month, 0).getDate();
+	const hide = React.useCallback(() => {
+    setActive({ open: false, target: null })
+    document.removeEventListener('click', hide)
+	}, [])
+
+	React.useEffect(() => {
+    if (!active.open) return;
+    document.addEventListener('click', hide)
+  },[ active.open, hide ])
 	
-	let month='Apr';
-	
-	const INDICATOR_LIST = [ 'hdd', 'cdd', 'solar radiation']; 
-	let URL = `${props.baseURL}weather/country/${interval}/${indicator}.csv`;
-	if ( interval === 'day') URL = `${props.baseURL}weather/country/day/solar radiation/${month}.csv`;
-  
-  useEffect (() => {
-		if ( viewType !== 'country') return;
-		axios.get(URL)
+	useEffect (() => {
+		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
 			.then(response => {
-				const fetchResult = Papa.parse(response.data, { header: false }).data;
-				function getData(data){
-					return data.reduce((result, country) => {
-						let iso =  ISO[country[0]];
-						let duplicate = result.find(item => item.ISO3 === iso);
-						if (!duplicate && iso) {
-							result.push({ 
-								country: country.splice(0,1)[0], 
-								ISO3: iso,
-								data: country
-							});
-						}
-						return result;
-					},[])
+				const result = response.data.map(d => ({ ...d, name: getCountryNameByISO(d.country) }));
+				if (response.data.length !== 0) {
+					setData(result);
+				} else {
+					alert(`NO DATA FOR ${variable.name}`)
 				}
-
-				function getTimeRange() {
-					let temp = [...fetchResult[0]],
-					idx = temp.indexOf('country');
-					temp.splice(idx, 1)
-					return temp;
-				}
-				setData({
-					tempData: getData(fetchResult),
-					timeRange: getTimeRange(),
-					type: indicator,
-        })				
 			})
-	}, [URL, indicator, viewType])
+	}, [mapQueryString])
 
-	
 
-  if (!data) return <div>Loading...</div>
+	function withIntervalLogic(entries) { return entries[['year', 'month', 'day'].findIndex(d => d === interval)] }
 
-	function open(e) {
-		setActive({ open: true, target: e.target.value })
+	const controls = {
+		topleft: [
+			{ 
+				type: 'radio',
+				options: ['Country','Grid'],
+				selected: uppercase(mapType),
+				dark: true,
+				flow: 'row',
+				click: value => 
+					setMapType(value.toLowerCase()),
+			},
+			{
+				type: 'dropdown',
+				label: 'Variables',
+				options: variables.map(d => d.name),
+				selected: uppercase(variable.name),
+				dark: true,
+				top: true,
+				flow: 'row',
+				active: active,
+				open: e => setActive({ open: true, target: e.target.value }),
+				hide: e => hide(e),
+				click: e => setVariable({
+					id: variables.find(d => d.name === e).id,
+					name: variables.find(d => d.name === e).name
+				})
+			}
+		],
+		bottomleft: [
+			{ 
+				type: 'radio',
+				options: ['Year', 'Month', 'Day'],
+				selected: uppercase(interval),
+				dark: true,
+				flow: 'row',
+				click: value => 
+					setInterval(value.toLowerCase())
+			},
+			{ 
+				type: 'newslider',
+				selected: uppercase(interval),
+				dark: true,
+				flow: 'row',
+				// label: getDateLabel(date),
+				label: withIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`]),
+				value: withIntervalLogic([year, month, day]),
+				min: withIntervalLogic([2000, 1, 1]),
+				max: withIntervalLogic([ 2020, year === 2020 ? 8 : 12, maxDay ]),
+				step: 1,
+				change: e => setDate(interval !== 'day' 
+					? { ...date, [interval] : Number(e.target.value), day: 1 }
+					: { ...date, [interval] : Number(e.target.value) 
+				})
+			}
+		]
 	}
 
-	function hide(e) {
-		if(e && e.relatedTarget) e.relatedTarget.click();
-		setActive({ open: false, target: null })
-	}
-
-	let controls = [
-		{ 
-			type: 'radio',
-			options: ['Country','Grid'],
-      selected: viewType.charAt(0).toUpperCase() + viewType.slice(1),
-      dark: true,
-      flow: 'row',
-      click: value => setViewType(value.toLowerCase()),
-    },
-	]
 
 	return (
 		<MapContainer selector={'Weather_Map'}>
 			<Weather
 				data={data}
-				time={time}
-				interval={interval}
-				viewType={viewType}
-				changeViewUnit={value => setInterval(value)}
+				mapType={mapType}
 			/>
 			<ControlContainer>
 				<Controls
@@ -98,61 +123,20 @@ export default function(props) {
 							padding: '0',
 						}}
 					> 
-					{controls.map((control, idx) => 
+					{controls.topleft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
-					{/* <Dropdown 
-						label={'View by'}
-						options={['country', 'grid']}
-						click={e => setViewType(e)}
-						selected={viewType}
-						active={active}
-						open={e => open(e)}
-						hide={e => hide(e)}
-					/> */}
-					{/* <Dropdown 
-						label={'Indicators'}
-						options={INDICATOR_LIST}
-						click={e => setIndicator(e)}
-						selected={indicator}
-						active={active}
-						open={e => open(e)}
-						hide={e => hide(e)}
-					/> */}
-					{/* <div>
-						<button onClick={_ => toggleFullScreen()}>
-							Hello
-						</button>
-					</div> */}
-					{/* <Drop
-					/> */}
-					{/* <Dropdown 
-						label={'Interval'}
-						options={['day', 'month']}
-						click={value => {
-							if((time.substring(0,3) === 'Apr' && indicator === 'solar radiation') 
-							|| (data.timeRange.length > 10 && indicator === 'solar radiation')) {
-									setInterval(value)
-							} else {
-							alert('Data by day does not exist. Please select (April, Solar Radiation)')
-							}}
-						}
-						selected={interval}
-						active={active}
-						open={e => open(e)}
-						hide={e => hide(e)}
-					/> */}
-					{/* <Slider
-						height={10}
-						label={'Time'}
-						currTime={currTime}
-						width={'100%'}
-						time={50}
-						range={[0, data.timeRange.length -1]}
-						change={value => setTime(data.timeRange[value])}
-					/> */}
-					{/* {controls.map(control => 
-						<Control key={control.label} {...control} /> )} */}
-				</Controls>
+				</Controls>	
+				<Controls
+						column
+						style={{
+							bottom: '40px',
+							left: '20px',
+							padding: '0',
+						}}
+					> 
+					{controls.bottomleft.map((control, idx) => 
+            <Control key={idx} {...control} /> )}
+				</Controls>	
 			</ControlContainer>
 		</MapContainer>
   )

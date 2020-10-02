@@ -55,7 +55,13 @@
   display: block;
 }
 
-
 .Options:hover {
   background: #e6e6e6;
+}
+
+.Dropdown span {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

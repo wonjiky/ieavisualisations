@@ -29,6 +29,14 @@ export const Help = ({ click, dark }) => (
   </button>
 )
 
+export const DownArrow = ({ click, dark }) => (
+  <button onClick={click} className={dark ? [classes.Button, classes.dark].join(' ') : classes.Button}>
+    <svg viewBox="0 0 20 20">
+      <path stroke={dark ? '#fff' : '#000'} strokeWidth="0.1" d="M10 14.1L4.5 8.6l1.1-1.1 4.4 4.4 4.4-4.4 1.1 1.1z"/>
+    </svg>
+  </button>
+)
+
 export const Expand = ({ click }) => (
   <div className={classes.ExpandContainer}>
     <div className={classes.Expand}>

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "CDDdailybypop",
+    "info": "Cooling degree days: reference temperature 65 F",
+    "name": "CDD 65 F",
+    "unit": "°C"
+  },
+  {
+    "id": "CDDHIdailybypop18",
+    "info": "Cooling degree days from temperature corrected by humidity: reference temperature 18 C",
+    "name": "CDD_hum 18 C",
+    "unit": "°C"
+  },
+  {
+    "id": "Clouddaily",
+    "info": "Cloud coverage",
+    "name": "Cloud coverage",
+    "unit": "%"
+  },
+  {
+    "id": "Daylightdailybypop",
+    "info": "Minutes of sun light, weighted on population distribution",
+    "name": "Sun light pop weighted",
+    "unit": "minute"
+  },
+  {
+    "id": "DNIdaily",
+    "info": "Direct normal radiation",
+    "name": "Direct normal radiation",
+    "unit": "J/m2/h"
+  },
+  {
+    "id": "Evapdaily",
+    "info": "Evaporation",
+    "name": "Evaporation",
+    "unit": "m/h"
+  },
+  {
+    "id": "GHIdaily",
+    "info": "Global horizontal irradiance",
+    "name": "Global horizontal irradiance",
+    "unit": "J/m2/h"
+  },
+  {
+    "id": "HDDdailybypop",
+    "info": "Heating degree days: reference temperature 65 F",
+    "name": "HDD 65 F",
+    "unit": "°C"
+  },
+  {
+    "id": "HeatIndexdailybypop",
+    "info": "Temperature corrected by humidity (Heat index)",
+    "name": "Heat index",
+    "unit": "°C"
+  },
+  {
+    "id": "Humidexdailybypop",
+    "info": "Humidex",
+    "name": "Humidex",
+    "unit": "°C"
+  },
+  {
+    "id": "Precdaily",
+    "info": "Precipitation",
+    "name": "Precipitation",
+    "unit": "m/h"
+  },
+  {
+    "id": "Pressuredaily",
+    "info": "Surface pressure",
+    "name": "Surface pressure",
+    "unit": "Pa"
+  },
+  {
+    "id": "RHdaily",
+    "info": "Relative humidity",
+    "name": "Relative humidity",
+    "unit": "%"
+  },
+  {
+    "id": "Runoffdaily",
+    "info": "Runoff",
+    "name": "Runoff",
+    "unit": "m/h"
+  },
+  {
+    "id": "Temperaturedaily",
+    "info": "2 meter mean temperature, weighted on latitude",
+    "name": "Temp latitude weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturedailybypop",
+    "info": "2 meter mean temperature, weighted on population distribution",
+    "name": "Temp pop weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturemaxdaily",
+    "info": "2 meter maximum temperature, weighted on latitude",
+    "name": "Temp max latitude weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturemaxdailybypop",
+    "info": "2 meter maximum temperature, weighted on population distribution",
+    "name": "Temp max pop weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturemindaily",
+    "info": "2 meter minimum temperature, weighted on latitude",
+    "name": "Temp min latitude weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturemindailybypop",
+    "info": "2 meter minimum temperature, weighted on population distribution",
+    "name": "Temp min pop weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturewbdaily",
+    "info": "2 meter wet bulb temperature, weighted on latitude",
+    "name": "Temp wb latitude weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Temperaturewbdailybypop",
+    "info": "2 meter wet bulb temperature, weighted on population distribution",
+    "name": "Temp wb pop weighted",
+    "unit": "°C"
+  },
+  {
+    "id": "Wind100intdaily",
+    "info": "100 meter wind speed",
+    "name": "100 meter wind speed",
+    "unit": "m/s"
+  },
+  {
+    "id": "Wind10intdaily",
+    "info": "10 meter wind speed",
+    "name": "10 meter wind speed",
+    "unit": "m/s"
+  }
+ ]

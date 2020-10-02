@@ -1,6 +1,14 @@
-export function colorsByVariables(countries, type, viewUnit) {
+import countries from './assets/countriesIso.json'
+
+export function colorsByVariables(countries) {
+// export function colorsByVariables(countries, type, viewUnit) {
+
+	
 	let ranges = {
 		month: {
+			temperatureDaily: {
+				colors: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
+			},
 			hdd: {
 				colors: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
 				values: [[0], [0,10], [10,100], [100,200], [200,300], [300,400], [400,500], [500,700], [700]]
@@ -21,27 +29,29 @@ export function colorsByVariables(countries, type, viewUnit) {
 			}
 		}
 	}
-
-	let countriesByValueRange = [];
 	let testCountries = [...countries];
-	let { colors, values } = ranges[viewUnit][type];
+	let min = Math.min(...countries.map(d => d.value)),
+	max = Math.max(...countries.map(d => d.value))
+	let { colors } = ranges.month.temperatureDaily;
+	let values = [], countriesByValueRange = [], denominator = 8;
 
-	for ( let i = 0; i < values.length; i ++ ) {
+	for (let i = 0; i <= denominator; i++ ) {
+		let incre = ((max - min) / denominator) * i;
+		let result = min + incre;
+		values.push(i === 0 ? 0 : Math.trunc(result))
 		countriesByValueRange.push([]);
 	}
 
-	testCountries.forEach(country => {
-		let value = country.value, item = country.ID;
+	testCountries.forEach(c => {
+		let { value, country } = c; 
 		for (let i = 0; i < values.length; i++) {
-			let singleValue = values[i].length === 1;
-			let min = values[i][0], max = values[i][1];
-			if ( singleValue && i === 0 ) {
-				if ( min === value ) countriesByValueRange[i].push(item)
-			} else if ( singleValue && i === values.length -1 ){
-				if ( min < value ) countriesByValueRange[i].push(item)
-			} else {
-				if ( min < value && value < max ) countriesByValueRange[i].push(item)
-			}
+			let currVal = values[i]
+			let nextVal = values[i + 1];
+			let lastVal = values[values.length - 1];
+
+			if ((currVal < value && value < nextVal) || (value > lastVal) ) {
+				countriesByValueRange[i].push(country)
+			} 
 		}
 	});
 
@@ -51,15 +61,16 @@ export function colorsByVariables(countries, type, viewUnit) {
 	})
 	colors.splice(0,0, 'case');
 	colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');
+
 	return colors;
 }
 
-export function getCountryPopupInfo(countries, selected, timeIdx) {
-	const selectedCountry = countries.filter(country => country.ISO3 === selected)[0];
+export function getCountryPopupInfo(countries, selected) {
+	const selectedCountry = countries.filter(country => country.country === selected)[0];
 	if ( selected && selectedCountry ) {
 		return `
-			<strong>${selectedCountry.country}</strong>
-			<p>Value: ${selectedCountry.data[timeIdx]}</p>
+			<strong>${selectedCountry.name}</strong>
+			<p>Value: ${selectedCountry.value}</p>
 		`
 	}
 	return `<b>Value doe not exist for this country</b>`
@@ -107,4 +118,15 @@ export function setGridColor(temp) {
 		2300,
 		"#3288bd"
 	]
+}
+
+export function uppercase(str) { return str.charAt(0).toUpperCase() + str.slice(1) };
+
+export function getCountryNameByISO(iso) { 
+	let exist = countries.find(d => d.ISO3 === iso)
+	return !exist ? null : exist.region;
+}
+
+export function getMonthString(date) {
+	return new Date(1, date - 1, 1).toLocaleString('default', { month: 'long' });
 }

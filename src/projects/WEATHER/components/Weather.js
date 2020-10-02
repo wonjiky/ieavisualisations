@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { colorsByVariables, getCountryPopupInfo, GRID_LAYERS, setGridColor } from './util'
 import { useMap } from '../../../components/customHooks'
 
-export default function({ data, time, interval, viewType }) {
+export default function({ data, mapType }) {
 	
 	const config = { 
 		map: 'oecd',
@@ -15,16 +15,17 @@ export default function({ data, time, interval, viewType }) {
       [180, 84],
     ]
 	};
-	const { timeRange, tempData, type } = data;
-	const { map, popUp, mapContainerRef } = useMap(config);
 
+	const { map, mapContainerRef, popUp } = useMap(config);
 
 	useEffect(setDefaultStyle, [map]);
 	useEffect(addGridData, [map]);
 	
 	function setDefaultStyle() {
 		if (!map) return;
-		let borders = ['solid', 'dotted']
+
+		const borders = ['solid', 'dotted'];
+
 		for ( let i in borders){
 			let idx = parseInt(i) + 1;
 			map
@@ -41,11 +42,13 @@ export default function({ data, time, interval, viewType }) {
 
 	function addGridData() {
 		if (!map) return;
-		let layers = GRID_LAYERS;
-    for ( let i in layers ) {
-      map.addSource(`hdd-grid-${i}`, { type: "vector", url: layers[i].url });
-    }
 
+		const layers = GRID_LAYERS;
+		
+		for ( let i in layers ) {
+      map.addSource(`hdd-grid-${i}`, { type: "vector", url: layers[i].url });
+		}
+		
     for ( let i in layers) {
       map.addLayer({
         'id': `grid-${i}`,
@@ -67,56 +70,42 @@ export default function({ data, time, interval, viewType }) {
     }
 	}
 
+	// Change country fill based on new variable data.
 	useEffect (() => {
-		let currData = [];
-		let currTimeIdx = timeRange.indexOf(time);
-		if ( !map || currTimeIdx === -1  ) return;
-		tempData.forEach(country => 
-			currData.push({ ID: country.ISO3, value: parseFloat(country.data[currTimeIdx]) })
-		);
-		map.setPaintProperty( "shapes-0", "fill-color", colorsByVariables(currData, type, interval));
-
-	},  [map, type, time, timeRange, tempData, interval]);
+		if ( !map  ) return;
+		map.setPaintProperty( "shapes-0", "fill-color", colorsByVariables(data));
+	},  [map, data]);
 
 
-	// Toggle between Grid and Country view
+	// Toggle between Grid and Country view.
 	useEffect (() => {
 		if(!map) return ;
-		let type = viewType === 'country';
-		let setVisibilty = view => view  ? 'visible' : 'none';
-		map.setLayoutProperty("shapes-0", "visibility", setVisibilty(type))
+		let type = mapType === 'country';
+		let setVisibility = view => view  ? 'visible' : 'none';
+		map.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
 		for (let i = 0; i <= 4; i++ ) {
-			map.setLayoutProperty(`grid-${i}`, "visibility", setVisibilty(!type))
+			map.setLayoutProperty(`grid-${i}`, "visibility", setVisibility(!type))
 		}
-
-	}, [map, viewType])
+	}, [map, mapType])
 
 	
 	// Mouse hover events
 	useEffect (() => {
 		if ( !map ) return;
-
-		let layerType = viewType === 'country' 
+		let layerType = mapType === 'country' 
 			? { layerLength: 1, layer: 'shapes' } : { layerLength: 4, layer: 'grid' };	
 
 		for (let i = 0; i <= layerType.layerLength; i++ ) {
-			map
-				.on('mousemove', `${layerType.layer}-${i}`, mouseOver)
-				.on('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
-		}
-
-		return () => {
-			map.off('mousemove', 'shapes-0', mouseOver)
-			map.off('mouseleave', 'shapes-0', mouseLeave)
+			map.on('mousemove', `${layerType.layer}-${i}`, mouseOver)
+			map.on('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
 		}
 	})
 
 	function mouseOver(e) {
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
-		let currTimeIdx = timeRange.indexOf(time);
 		let selected = e.features[0].properties.ISO3;
-		let value = viewType === 'country' 
-			? getCountryPopupInfo(tempData, selected, currTimeIdx)
+		let value = mapType === 'country' 
+			? getCountryPopupInfo(data, selected)
 			: parseFloat(e.features[0].properties.val.toFixed(2));
 		
 		map

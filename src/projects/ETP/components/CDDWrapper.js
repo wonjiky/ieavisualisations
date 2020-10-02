@@ -147,6 +147,7 @@ function CDDWrapper(props) {
 
   React.useEffect(() => {
     if (!active.open) return;
+    console.log('hello')
     document.addEventListener('click', hide)
   },[ active.open, hide ])
   

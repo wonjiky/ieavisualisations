@@ -10,7 +10,7 @@ export default ({ label, options, click, selected, top, active, open, dark }) =>
         {label}
       </label>
       <button value={label} onClick={e => open(e)}>
-        {selected}
+        <span>{selected}</span>
       </button>     
       <div id='dropdown' className={active.open && active.target === label 
         ? [classes.DropdownOptions, classes.active].join(' ') 
@@ -22,7 +22,9 @@ export default ({ label, options, click, selected, top, active, open, dark }) =>
             {options.map(item => 
               <li key={item}  onClick={_ => click(item)} className={classes.Options}>
                 <button>
-                  {item}
+                  <span>
+                    {item}
+                  </span>
                 </button>
               </li>
             )}

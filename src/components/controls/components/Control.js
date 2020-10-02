@@ -1,5 +1,5 @@
 import React from 'react'
-import {  Slider, Toggle, Dropdown } from '../index'
+import { NewSlider, Slider, Toggle, Dropdown } from '../index'
 import global from './css/Global.module.css'
 
 export default props => {
@@ -13,6 +13,9 @@ export default props => {
 
     case 'slider':
       return <Slider {...props} />
+
+    case 'newslider':
+      return <NewSlider {...props} />
 
     case 'divider':
       return <div className={global.ControlDivider} style={{ 
