@@ -31,7 +31,6 @@ export default ({ baseURL, match }) => {
   });
 
   React.useEffect(() => {
-    
     const URL = [
       axios.get(`${baseURL}etp/ccus/${currRegion}_Saline.json`),
       axios.get(`${baseURL}etp/ccus/${currRegion}_emissions.csv`),
@@ -133,115 +132,89 @@ export default ({ baseURL, match }) => {
     return activeStorage;
   }
 
-  if ( !data ) return <div>Loading...</div>
+
+  let legends = [
+    {
+      type: 'continuous',
+      header: ['CO2 emissions (Mt/year)', '2'],
+      labels: [0, 225],
+      colors: ['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700'],
+      round: false,
+    },
+    {
+      type: 'category',
+      header: ['Potential CO2 storage', '2'],
+      labels: ['Oil and gas reservoirs', 'Saline aquifers'],
+      colors: ['#5b6162', 'stripe'],
+      selected: arrayGetValue(['Oil and gas reservoirs', 'Saline aquifers']),
+      round: false,
+      click: val => {
+        setLegendToggle(prev => ({ ...prev, [val]: !legendToggle[val] }))
+      }
+    },
+    {
+      type: 'category',
+      header: ['CO2 sources', '2'],
+      labels: ['Iron and steel', 'Cement', 'Fuel refining', 'Chemicals', 'Power'],
+      colors: colors,
+      selected: legendToggle.sources,
+      round: true,
+      click: val => { 
+        setLegendToggle(
+          !legendToggle.sources.includes(val)
+          ? prev => ({ ...prev, sources: [...prev.sources, val] })
+          : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
+        )
+      }
+    }
+  ];
+
+  if (currRegion === 'Europe') {
+    legends = [
+      ...legends,
+      {
+        type: 'category',
+        header: [`CO2 storage hubs`, '2'],
+        labels: ['Hubs'],
+        colors: ['symbol'],
+        symbolColor: ['#000'],
+        selected: legendToggle.hubs ? ['Hubs'] : [],
+        round: true,
+        click: _ => setLegendToggle( prev => 
+          ({ ...prev, hubs: !legendToggle.hubs }))
+      }
+    ]
+  } else if (currRegion === 'US') {
+    legends = [
+      ...legends,
+      {
+        type: 'category',
+        header: ['CO2 pipelines', '2'],
+        labels: ['Pipelines'],
+        symbolColor: ['#000'],
+        colors: ['line'],
+        selected: legendToggle.pipelines ? ['Pipelines']:[],
+        click: _ => {
+          setLegendToggle(prev => ({
+            ...prev,
+            pipelines: !legendToggle.pipelines
+          }))
+        }
+      }
+    ]
+  }
+
   return (
-    <MapContainer selector={match.path.substring(1)}>
+    <MapContainer selector={match.path.substring(1)} loaded={data}>
       <CCUSContainer
         data={data}
         toggle={legendToggle}
         regions={{ region: currRegion, bounds: bounds[currRegion]}}
       />
-      <ControlContainer>
-        <Controls
-          column
-          bg
-          style={{
-            flexFlow: 'column',
-            bottom: '35px',
-            left: '20px',
-            width: '230px'
-          }}
-        >
-          <Legends
-            type={'continuous'}
-            header={['CO2 emissions (Mt/year)', '2']}
-            labels={[0, 225]}
-            colors={['#e3a850', '#da8142', '#d36337', '#ce5030', '#c21e1e', '#a02115', '#8a230f', '#78240a', '#522700']}
-            round={false}
-          />
-          <Legends
-            type={'category'}
-            header={['Potential CO2 storage', '2']}
-            labels={['Oil and gas reservoirs', 'Saline aquifers']}
-            colors={['#5b6162', 'stripe']}
-            selected={arrayGetValue(['Oil and gas reservoirs', 'Saline aquifers'])}
-            round={false}
-            click={val => {
-              setLegendToggle(prev => ({
-                ...prev,
-                [val]: !legendToggle[val]
-              }))
-            }}
-          />
-          <Legends 
-            type={'category'}
-            header={['CO2 sources', '2']}
-            labels={data.types}
-            colors={colors}
-            selected={legendToggle.sources}
-            round={true}
-            click={val => { 
-              setLegendToggle(
-                !legendToggle.sources.includes(val)
-                ? prev => ({ ...prev, sources: [...prev.sources, val] })
-                : prev => ({ ...prev, sources: legendToggle.sources.filter(d => d !== val) })
-              )
-            }}
-          />
-          {currRegion === 'Europe' 
-            ? <Legends 
-              type={'category'}
-              header={[`CO2 storage hubs`, '2']}
-              labels={['Hubs']}
-              colors={['symbol']}
-              symbolColor={['#000']}
-              selected={legendToggle.hubs ? ['Hubs'] : [] }
-              round
-              click={_ => {
-                setLegendToggle(prev => ({
-                  ...prev,
-                  hubs: !legendToggle.hubs
-                }))
-              }}
-            />
-            : null
-          }
-          {currRegion === 'US' 
-            ? <Legends 
-              round
-              type={'category'}
-              header={['CCUS projects']}
-              labels={['Operating', 'Under development']}
-              colors={['symbol', 'symbol']}
-              symbolColor={["#0044ff", "#49d3ff"]}
-              selected={legendToggle.projects}
-              click={val => {
-                setLegendToggle(
-                  !legendToggle.projects.includes(val)
-                  ? prev => ({ ...prev, projects: [...prev.projects, val] })
-                  : prev => ({ ...prev, projects: legendToggle.projects.filter(d => d !== val) })
-                )
-              }}
-            />
-            : null
-          }
-          {currRegion === 'US' 
-            ? <Legends 
-              type={'category'}
-              header={['CO2 pipelines', '2']}
-              labels={['Pipelines']}
-              symbolColor={['#000']}
-              colors={['line']}
-              selected={legendToggle.pipelines ? ['Pipelines']:[]}
-              click={_ => {
-                setLegendToggle(prev => ({
-                  ...prev,
-                  pipelines: !legendToggle.pipelines
-                }))
-              }}
-            />
-            : null
-          }
+      <ControlContainer bg={true}>
+        <Controls position='bottomLeft'>
+          {legends.map((legend, idx) => 
+            <Legends key={idx} {...legend} />)}
           <div className={classes.Introduction}>
             <p>
               * Click on legend to switch on/off layers<br/>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { colorsByVariables, getCountryPopupInfo, GRID_LAYERS, setGridColor } from './util'
 import { useMap } from '../../../components/customHooks'
 
-export default function({ data, mapType }) {
+export default function({ data, mapType, selectedCountry, click }) {
 	
 	const config = { 
 		map: 'oecd',
@@ -73,7 +73,7 @@ export default function({ data, mapType }) {
 	// Change country fill based on new variable data.
 	useEffect (() => {
 		if ( !map  ) return;
-		map.setPaintProperty( "shapes-0", "fill-color", colorsByVariables(data));
+		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
 	},  [map, data]);
 
 
@@ -88,6 +88,10 @@ export default function({ data, mapType }) {
 		}
 	}, [map, mapType])
 
+	// useEffect (() => {
+	// 	if(!map || !selectedCountry) return;
+	// 	map.setPaintProperty("shapes-0", "fill-opacity", ["match", ["get", "ISO3"], [selectedCountry], 0.5, 1])	
+	// }, [map, selectedCountry])
 	
 	// Mouse hover events
 	useEffect (() => {
@@ -98,8 +102,23 @@ export default function({ data, mapType }) {
 		for (let i = 0; i <= layerType.layerLength; i++ ) {
 			map.on('mousemove', `${layerType.layer}-${i}`, mouseOver)
 			map.on('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
+			map.on('click', `${layerType.layer}-${i}`, mouseClick)
+		}
+		
+		return () => {
+			for (let i = 0; i <= layerType.layerLength; i++ ) {
+				map.off('mousemove', `${layerType.layer}-${i}`, mouseOver)
+				map.off('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
+				map.off('click', `${layerType.layer}-${i}`, mouseClick)
+			}
 		}
 	})
+
+	function mouseClick(e) {
+		let selected = e.features[0].properties.ISO3;
+		click(selected)
+		map.setPaintProperty("shapes-0", "fill-opacity", ["match", ["get", "ISO3"], [selected], 0.2, 1])	
+	}
 
 	function mouseOver(e) {
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
@@ -109,17 +128,21 @@ export default function({ data, mapType }) {
 			: parseFloat(e.features[0].properties.val.toFixed(2));
 		
 		map
-			.getCanvas().style.cursor = 'pointer';
+		// .setPaintProperty("shapes-0", "fill-opacity", ["match", ["get", "ISO3"], [selected], 0.5, 1])
+		.getCanvas().style.cursor = 'pointer';
 		popUp   
 			.setLngLat(mousePos)
 			.setHTML(value)
 			.addTo(map);
+
 	}
 
 	function mouseLeave() {
-		map.getCanvas().style.cursor = '';
+		map
+			// .setPaintProperty("shapes-0", "fill-opacity", 1)
+			.getCanvas().style.cursor = ''
 		popUp.remove();
 	}
 
 	return <div ref={mapContainerRef} className='map' />;
-}
+} 

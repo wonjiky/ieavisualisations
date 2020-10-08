@@ -1,58 +1,37 @@
-.ControlOverlay {
+.Help{
     position: absolute;
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    width: 300px;
-    background: white;
-    margin: 20px 20px;
-    padding: 30px 20px;
-    box-sizing: border-box;
-}
-
-.ControlOverlay h1 {
-    margin: 0;
-    color: #525252;
-}
-
-.ControlOverlay ul {
-    display: flex;
-    list-style: none;
-    margin: 0 0 10px 0;
-    padding: 0;
-}
-
-.Slider {
-    margin-bottom: 30px;
-}
-
-.SliderType {
-    text-align: center;
-}
-
-.ControlOverlay li {
-    width: 100%;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     cursor: pointer;
-    padding: 7px;
-    font-weight: 800;
-    box-sizing:border-box;
+    top: 280px;
+    margin-left: 20px;
 }
 
-.Select {
-    margin-bottom: 20px;
+.Help > svg {
+    height: 100%;
+    margin-top: 0;
 }
 
-.Options {
-    background: #e3e3e3;
-    color: #525252;
+/* #454545 */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
 }
 
-.selected {
-    background: #525252;
-    color: #e3e3e3;
+td, th {
+    height: 2rem;
+    text-align: left;
+    padding: 5px;
 }
 
-.Indicator {
-    flex-flow: column;
-    margin: 0 !important;
+td {
+    border-bottom: .5px solid #ccc;
+}
+
+th {
+    font-size: 1.45rem;
+    padding-bottom: 7px;
+    border-bottom: 4px solid #ccc;
 }

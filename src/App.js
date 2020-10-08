@@ -9,7 +9,7 @@ import './App.css';
 
 
 function App() {
-	
+
 	let password = [' ', ' ', ' ', ' '];
 	if (process.env.NODE_ENV === 'production') password = [
 		process.env.REACT_APP_GTF_PW, 
@@ -30,6 +30,7 @@ function App() {
 
 	let baseURL = process.env.REACT_APP_DEV;
 	if (process.env.NODE_ENV === 'production') baseURL = process.env.REACT_APP_PROD;	
+
 	return (
 		<Router basename={process.env.PUBLIC_URL}>
 			<Switch>

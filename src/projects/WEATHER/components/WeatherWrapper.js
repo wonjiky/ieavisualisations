@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { MapContainer } from '../../../components/container'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
-import { getCountryNameByISO, getMonthString, uppercase } from './util'
+import { getCountryNameByISO, getMonthString, uppercase, withIntervalLogic } from './util'
+import { Modal } from '../../../components/modal'
+import { Icon } from '../../../components/icons'
 import variables from './assets/variables.json'
 import Weather from './Weather'
+import classes from './css/Weather.module.css'
+import { findSubpowerFromText } from '../../../global'
+import CountryInfo from './CountryInfo'
 
 export default function() {
 
@@ -16,24 +21,31 @@ export default function() {
 	const [mapType, setMapType] = useState('country');
 	const [interval, setInterval] = useState('day');
 	const [active, setActive] = useState({ open: false, target: null });
+	const [openInfo, setOpenInfo] = useState(false);
+
 
 	let { day, month, year } = date;
 	let joinedDate = `${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
 	let query = interval === 'day' ? { date: joinedDate, variable: variable.id } 
 		: interval === 'month' ? { month, year, variable: variable.id } 
 		: { year, variable: variable.id };
+	
 	let mapQueryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
-	// let countryQueryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
 	let maxDay = new Date(year, month, 0).getDate();
-	const hide = React.useCallback(() => {
-    setActive({ open: false, target: null })
+
+	let startDate = withIntervalLogic(['20000101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], interval);
+	let endDate = withIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], interval);
+	let countryQueryString = `${selectedCountry}/?startDate=${startDate}&endDate=${endDate}`;
+
+	const hide = React.useCallback((e) => {
+		setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
 	}, [])
 
 	React.useEffect(() => {
-    if (!active.open) return;
+    if (!active.open && !openInfo) return;
     document.addEventListener('click', hide)
-  },[ active.open, hide ])
+  },[ active.open, openInfo,  hide ])
 	
 	useEffect (() => {
 		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
@@ -42,102 +54,128 @@ export default function() {
 				if (response.data.length !== 0) {
 					setData(result);
 				} else {
-					alert(`NO DATA FOR ${variable.name}`)
+					alert(`Data does not exist for this variable`)
 				}
 			})
-	}, [mapQueryString])
+	}, [mapQueryString]) // eslint-disable-next-line react-hooks/exhaustive-deps
 
+	useEffect (() => {
+		if (!selectedCountry) return;
+		axios.get(`https://api.iea.org/weather/country/${countryQueryString}`)
+			.then(response => {
+				let data = [];
+				const result = response.data[0][variable.id]
+				result.forEach((d, idx) => data.push([idx+1,d]))
+				setCountryData(data);
+			})
+	}, [ selectedCountry, countryQueryString, variable.id ]) // eslint-disable-next-line react-hooks/exhaustive-deps
+	
 
-	function withIntervalLogic(entries) { return entries[['year', 'month', 'day'].findIndex(d => d === interval)] }
-
+	
 	const controls = {
 		topleft: [
 			{ 
-				type: 'radio',
-				options: ['Country','Grid'],
-				selected: uppercase(mapType),
-				dark: true,
-				flow: 'row',
-				click: value => 
-					setMapType(value.toLowerCase()),
-			},
-			{
-				type: 'dropdown',
-				label: 'Variables',
-				options: variables.map(d => d.name),
-				selected: uppercase(variable.name),
-				dark: true,
-				top: true,
-				flow: 'row',
-				active: active,
-				open: e => setActive({ open: true, target: e.target.value }),
-				hide: e => hide(e),
-				click: e => setVariable({
-					id: variables.find(d => d.name === e).id,
-					name: variables.find(d => d.name === e).name
-				})
-			}
-		],
-		bottomleft: [
-			{ 
-				type: 'radio',
-				options: ['Year', 'Month', 'Day'],
+				type: 'slider',
 				selected: uppercase(interval),
-				dark: true,
-				flow: 'row',
-				click: value => 
-					setInterval(value.toLowerCase())
-			},
-			{ 
-				type: 'newslider',
-				selected: uppercase(interval),
-				dark: true,
-				flow: 'row',
-				// label: getDateLabel(date),
-				label: withIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`]),
-				value: withIntervalLogic([year, month, day]),
-				min: withIntervalLogic([2000, 1, 1]),
-				max: withIntervalLogic([ 2020, year === 2020 ? 8 : 12, maxDay ]),
+				label: withIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`], interval),
+				value: withIntervalLogic([year, month, day], interval),
+				min: withIntervalLogic([2000, 1, 1], interval),
+				max: withIntervalLogic([ 2020, year === 2020 ? 8 : 12, maxDay ], interval),
 				step: 1,
 				change: e => setDate(interval !== 'day' 
 					? { ...date, [interval] : Number(e.target.value), day: 1 }
 					: { ...date, [interval] : Number(e.target.value) 
 				})
-			}
+			},
+			{ 
+				type: 'radio',
+				options: ['Country','Grid'],
+				selected: uppercase(mapType),
+				flow: 'row',
+				click: value => 
+					setMapType(value.toLowerCase()),
+			},
+			{ 
+				type: 'radio',
+				options: ['Year', 'Month', 'Day'],
+				selected: uppercase(interval),
+				flow: 'row',
+				click: value => 
+					setInterval(value.toLowerCase())
+			},
+			{
+				type: 'dropdown',
+				label: 'Variables',
+				info: true,
+				options: variables,
+				selected: uppercase(variable.name),
+				active: active,
+				open: e => setActive({ open: true, target: e.target.value }),
+				click: e => setVariable({ id: e.id, name: e.name })
+			},
+		],
+		bottomLeft: [
+			{
+				type: 'dropdown',
+				label: 'Country',
+				options: !data ? [] : data.sort((a,b) => b.name - a.name),
+				info: true,
+				selected: !selectedCountry ? 'Please select' : getCountryNameByISO(selectedCountry),
+				bottom: true,
+				active: active,
+				open: e => setActive({ open: true, target: e.target.value }),
+				click: e => setSelectedCountry(e.country)			
+			},
 		]
 	}
 
-
 	return (
-		<MapContainer selector={'Weather_Map'}>
-			<Weather
-				data={data}
-				mapType={mapType}
+		<MapContainer selector={'Weather_Map'} loaded={data}>
+			<Weather 
+				data={data} 
+				mapType={mapType} 
+				selectedCountry={selectedCountry}
+				click={e => setSelectedCountry(e)}
 			/>
-			<ControlContainer>
-				<Controls
-						column
-						style={{
-							top: '20px',
-							left: '20px',
-							padding: '0',
-						}}
-					> 
+			<ControlContainer dark bg>
+				<Controls position= 'topLeft' style={{'width': '270px'}}> 
 					{controls.topleft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
-				</Controls>	
-				<Controls
-						column
-						style={{
-							bottom: '40px',
-							left: '20px',
-							padding: '0',
-						}}
-					> 
-					{controls.bottomleft.map((control, idx) => 
+				</Controls>
+				{/* <Controls position= 'bottomLeft' style={{'bottom': '100px', 'width': '270px'}}> 
+					{controls.bottomLeft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
-				</Controls>	
+				</Controls>	 */}
 			</ControlContainer>
+			<Icon type='help' dark={true} fill button={true} click={_ => setOpenInfo(!openInfo)} styles={classes.Help}/> 
+			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)} dark>
+				<table>
+					<thead>
+						<tr>
+							<th>Variable</th>
+							<th>Description</th>
+							<th>Unit</th>
+						</tr>
+					</thead>
+					<tbody>
+						{variables.map((variable, idx) =>
+							<tr key={idx}>
+								<td>{variable.name}</td>
+								<td>{variable.info}</td>
+								<td>{findSubpowerFromText(variable.unit, '2')}</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+			</Modal>
+			<CountryInfo 
+				data={countryData}
+				selectedCountry={selectedCountry}
+				interval={interval}
+				variable={variable}
+				unit={variables.find(d => d.id === variable.id).unit}
+				date={date}
+			/>
 		</MapContainer>
   )
 };

@@ -194,7 +194,7 @@ export default () => {
 	})
     
 	return (
-		<MapContainer> 
+		<MapContainer loaded={data} selector='gtf-country'> 
 			<div ref={mapContainerRef} className='map' />
 		</MapContainer>
 	)

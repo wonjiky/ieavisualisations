@@ -10,7 +10,7 @@
 .ToggleLabel {
   display: flex;
   line-height: 1.25rem;
-  font-size: .7rem;
+  font-size: .8rem;
 }
 
 .ControlContainer > button {

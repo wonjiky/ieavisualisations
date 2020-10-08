@@ -1,16 +1,60 @@
 .ControlWrapper {
-  position: absolute;
   display: flex;
-  background: rgba(255,255,255,0.8);
-  padding: 10px 14px;
+  flex-flow: column;
   z-index: 2;
-  box-shadow: 0 0 10px rgba(0,0,0,.2);
   box-sizing: border-box;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ControlWrapper > div:not(:last-child) {
+  margin-bottom: 14px;
+}
+
+.background {
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
 }
 
 .dark{
-  background: rgba(27,27,27,0.8) !important;
+  background: rgba(43,43,43,.95) !important;
   color: white !important;
+}
+
+.bottomLeft,
+.bottomRight,
+.topLeft,
+.topRight {
+  position: absolute;
+}
+
+.topLeft { 
+  top:0;
+  left: 0;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.bottomLeft { 
+  bottom:0;
+  left: 0;
+  margin-bottom: 40px;
+  margin-left: 20px;
+}
+
+.topRight { 
+  top:0;
+  right: 0;
+  margin-top: 40px;
+  margin-right: 20px;
+}
+
+.bottomRight { 
+  bottom:0;
+  right: 0;
+  margin-bottom: 40px;
+  margin-right: 20px;
 }
 
 @media screen and (max-width: 729px) {

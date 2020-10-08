@@ -178,7 +178,7 @@ function CDDWrapper(props) {
     }
   }
   return (
-    <MapContainer>
+    <MapContainer selector='CDD' loaded={data}>
       <CDD
         years={year}
         selectedRegion={region}
@@ -188,36 +188,16 @@ function CDDWrapper(props) {
         type={type}
         hdd={hdd}
       />
-      <ControlContainer dark>
-        <Controls
-          column
-          style={{
-            top: '20px',
-            left: '20px',
-            padding: '0',
-          }}
-        > 
+      <ControlContainer dark bg>
+        <Controls position='topLeft'> 
           {controls.map((control, idx) => 
             <Control key={idx} {...control} /> )}
         </Controls>
-        <Controls
-          column dark bg
-          style={{
-            bottom: '35px',
-            right: '20px',
-          }}
-        >
+        <Controls position='bottomRight'>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
         </Controls>
-        <Controls
-          column dark bg
-          style={{
-            bottom: '35px',
-            left: '20px',
-            width: '230px'
-          }}
-        >
+        <Controls position='bottomLeft'>
           {dropdown.map((drop, idx) => 
             <Control key={idx} {...drop} /> )}
           {Object.values(finalIndicators).map((finalIndicator, idx) => 

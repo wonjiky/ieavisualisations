@@ -1,3 +1,4 @@
+import React from 'react'
 import countries from './assets/countriesIso.json'
 
 export function colorsByVariables(countries) {
@@ -29,6 +30,7 @@ export function colorsByVariables(countries) {
 			}
 		}
 	}
+	if (!countries) console.log('Cannot read countries :', countries);
 	let testCountries = [...countries];
 	let min = Math.min(...countries.map(d => d.value)),
 	max = Math.max(...countries.map(d => d.value))
@@ -61,7 +63,6 @@ export function colorsByVariables(countries) {
 	})
 	colors.splice(0,0, 'case');
 	colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');
-
 	return colors;
 }
 
@@ -129,4 +130,14 @@ export function getCountryNameByISO(iso) {
 
 export function getMonthString(date) {
 	return new Date(1, date - 1, 1).toLocaleString('default', { month: 'long' });
+}
+
+export function withIntervalLogic(entries, interval) { return entries[['year', 'month', 'day'].findIndex(d => d === interval)] }
+
+export function usePrevious(value) {
+	const ref = React.useRef();
+	React.useEffect(() => {
+		ref.current = value;
+	})
+	return ref.current;
 }

@@ -1,0 +1,39 @@
+.Button > button {
+  background: none;
+  box-shadow: none;
+}
+
+.Button {
+  padding: 20px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ModalWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: rgba(43,43,43,0.95);
+  display: none;
+}
+
+.open {
+  display: block;
+}
+
+.full {
+  width: 100vw;
+  height: 100vh;
+}
+
+.ModalContent {
+  overflow-y: scroll;
+  margin: 50px 0;
+  height: calc(100vh - 190px);
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
