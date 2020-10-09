@@ -24,7 +24,34 @@
 .CountryWrapper {
   display: flex;
   width: 100%;
+  flex-flow: column;
   color: white;
-  font-size: 1.75rem;
+  
+}
+
+.CountryWrapper span {
   font-weight: bold;
+  font-size: 1.5rem;
+  padding-bottom: 5px;
+}
+
+.CountryLegendWrapper {
+  display: flex;
+  flex-flow: row;
+  font-size: 1rem;
+}
+
+.CountryLegendItem {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin-right: 20px;  
+}
+
+.Legend{
+  height: 12px;
+  width: 12px;
+  margin-left: 10px;
+  border: 1px solid #000;
+  border-radius: 50%;
 }

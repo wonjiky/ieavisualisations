@@ -10,12 +10,13 @@ import Weather from './Weather'
 import classes from './css/Weather.module.css'
 import { findSubpowerFromText } from '../../../global'
 import CountryInfo from './CountryInfo'
+import { array } from 'prop-types'
 
 export default function() {
 
 	const [data, setData] = useState(null);
-	const [countryData, setCountryData] = useState(null);
-	const [selectedCountry, setSelectedCountry] = useState(null);
+	const [countryData, setCountryData] = useState([]);
+	const [selectedCountry, setSelectedCountry] = useState([]);
 	const [date, setDate] = useState({ day: 1, month: 8, year: 2011});
 	const [variable, setVariable] = useState({id: 'Temperaturedaily', name: 'Temp latitude weighted'});
 	const [mapType, setMapType] = useState('country');
@@ -35,7 +36,7 @@ export default function() {
 
 	let startDate = withIntervalLogic(['20000101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], interval);
 	let endDate = withIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], interval);
-	let countryQueryString = `${selectedCountry}/?startDate=${startDate}&endDate=${endDate}`;
+	let countryQueryString = `${selectedCountry[0]}/?startDate=${startDate}&endDate=${endDate}`;
 
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
@@ -45,7 +46,46 @@ export default function() {
 	React.useEffect(() => {
     if (!active.open && !openInfo) return;
     document.addEventListener('click', hide)
-  },[ active.open, openInfo,  hide ])
+	},[ active.open, openInfo,  hide ])
+	
+	function getCountries(newArr, exist, value) {
+		if (newArr.length === 0) {
+			newArr.push(value);
+		} else if (0 < newArr.length && newArr.length < 2) {
+			if (!exist) newArr.splice(0,0, value) 
+			else return newArr;
+		} else {
+			if (!exist) {
+				newArr.pop()
+				newArr.splice(0,0, value) 
+			} else return;
+		}
+		return newArr;
+	}
+
+	const getSelectedCountries = value =>  {
+		let newArr = [...selectedCountry];
+		let exist = newArr.find(d => d === value);
+		setSelectedCountry(getCountries(newArr, exist, value))
+	}
+	
+	const fetchCountryData = React.useCallback((e) => {
+		if(Object.keys(selectedCountry).length === 0) return;
+		axios.get(`https://api.iea.org/weather/country/${countryQueryString}`)
+			.then(response => {
+				let data = [];
+				let result = response.data[0][variable.id]
+				result.forEach((d, idx) => data.push([idx+1,d]))
+
+				let tempArr = [...countryData];
+				let exist = tempArr
+					.map(d => d[0])
+					.find(t => t === selectedCountry[0]);
+				setCountryData(getCountries(tempArr, exist, [selectedCountry[0], data]));
+			})
+	}, [selectedCountry, countryQueryString, variable.id, countryData])
+
+	useEffect(fetchCountryData, [selectedCountry]);
 	
 	useEffect (() => {
 		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
@@ -57,21 +97,8 @@ export default function() {
 					alert(`Data does not exist for this variable`)
 				}
 			})
-	}, [mapQueryString]) // eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [mapQueryString])
 
-	useEffect (() => {
-		if (!selectedCountry) return;
-		axios.get(`https://api.iea.org/weather/country/${countryQueryString}`)
-			.then(response => {
-				let data = [];
-				const result = response.data[0][variable.id]
-				result.forEach((d, idx) => data.push([idx+1,d]))
-				setCountryData(data);
-			})
-	}, [ selectedCountry, countryQueryString, variable.id ]) // eslint-disable-next-line react-hooks/exhaustive-deps
-	
-
-	
 	const controls = {
 		topleft: [
 			{ 
@@ -114,19 +141,19 @@ export default function() {
 				click: e => setVariable({ id: e.id, name: e.name })
 			},
 		],
-		bottomLeft: [
-			{
-				type: 'dropdown',
-				label: 'Country',
-				options: !data ? [] : data.sort((a,b) => b.name - a.name),
-				info: true,
-				selected: !selectedCountry ? 'Please select' : getCountryNameByISO(selectedCountry),
-				bottom: true,
-				active: active,
-				open: e => setActive({ open: true, target: e.target.value }),
-				click: e => setSelectedCountry(e.country)			
-			},
-		]
+		// bottomLeft: [
+		// 	{
+		// 		type: 'dropdown',
+		// 		label: 'Country',
+		// 		options: !data ? [] : data.sort((a,b) => b.name - a.name),
+		// 		info: true,
+		// 		selected: !selectedCountry ? 'Please select' : getCountryNameByISO(selectedCountry),
+		// 		bottom: true,
+		// 		active: active,
+		// 		open: e => setActive({ open: true, target: e.target.value }),
+		// 		click: e => setSelectedCountry(selectedCountry.push(e.country))			
+		// 	},
+		// ]
 	}
 
 	return (
@@ -135,17 +162,13 @@ export default function() {
 				data={data} 
 				mapType={mapType} 
 				selectedCountry={selectedCountry}
-				click={e => setSelectedCountry(e)}
+				click={getSelectedCountries}
 			/>
 			<ControlContainer dark bg>
 				<Controls position= 'topLeft' style={{'width': '270px'}}> 
 					{controls.topleft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
 				</Controls>
-				{/* <Controls position= 'bottomLeft' style={{'bottom': '100px', 'width': '270px'}}> 
-					{controls.bottomLeft.map((control, idx) => 
-            <Control key={idx} {...control} /> )}
-				</Controls>	 */}
 			</ControlContainer>
 			<Icon type='help' dark={true} fill button={true} click={_ => setOpenInfo(!openInfo)} styles={classes.Help}/> 
 			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)} dark>
@@ -170,7 +193,7 @@ export default function() {
 			</Modal>
 			<CountryInfo 
 				data={countryData}
-				selectedCountry={selectedCountry}
+				countries={selectedCountry}
 				interval={interval}
 				variable={variable}
 				unit={variables.find(d => d.id === variable.id).unit}

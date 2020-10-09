@@ -5,32 +5,31 @@ import { getMonthString, withIntervalLogic, getCountryNameByISO, usePrevious } f
 import classes from './css/CountryInfo.module.css'
 
 export default props => {
-  const { selectedCountry, interval, date } = props;
-  const newData = props.data !== usePrevious(props.data);
-  const newCountry = selectedCountry !== usePrevious(selectedCountry);
+  const { countries, interval, date } = props;
+  // const newData = props.data[0] !== usePrevious(props.data[0]);
+  // const newCountry = countries[0] !== usePrevious(countries[0]);
   // const newVariable = variable.id !== usePrevious(variable.id);
-
-  /**
-   * 데이터가 이전이랑 같을때
-   * 나라가 이전이랑 다를때
-   * 베리어블이 이전이랑 다를때
-   * 
-   * 
-   * 데이터가 다르고 나라가 다를때
-   * 데이터가 다르고 베리어블이 다를때
-   */
+  let color = ['#fff', 'yellow']
+  let series = props.data.map((d,idx) => ({id: d[0], data: d[1], color: color[idx]}));
   
   return (
     <div className={classes.Wrapper}>
-      {!props.data 
-        ? <span> {selectedCountry ? 'Loading...' : 'Select a country by clicking on the map'} </span>
+      {props.data.length === 0
+        ? <span> {countries.length > 0 ? 'Loading...' : 'Select up to 2 countries by clicking on the map'} </span>
         : <>
             <div className={classes.CountryWrapper}>
-              {getCountryNameByISO(selectedCountry)}
-              {withIntervalLogic([' a from 2000 - 2020', ` in ${date.year}`, ` in ${getMonthString(date.month)}`], interval)}
-              {!newData && newCountry ? ' loading...' :  ''}
+              {/* {!newData && newCountry ? ' loading...' :  ''} */}
+              <span>{withIntervalLogic(['From 2000 - 2020', `${date.year}`, `${getMonthString(date.month)}`], interval)}</span>
+              <div className={classes.CountryLegendWrapper}>
+                {props.data.map((d, idx) => (
+                  <div key={idx} className={classes.CountryLegendItem}>
+                    {getCountryNameByISO(d[0])}
+                    <div className={classes.Legend} style={{background: color[idx]}}/>
+                  </div>
+                ))}
+              </div>
             </div>
-            <Chart {...props} /> 
+            <Chart series={series} {...props} /> 
           </>}
     </div>
   )
@@ -40,9 +39,10 @@ const Chart = ({
   data, 
   date, 
   interval, 
-  unit
+  unit,
+  series
 }) => {
-
+  
   const containerProps = {
     style: {
       height:'170px',
@@ -50,7 +50,7 @@ const Chart = ({
       backgroundColor: 'transparent'
     }
   }
-  
+
   const options = {
     chart: {
       type: 'spline',
@@ -72,9 +72,9 @@ const Chart = ({
       offset: 0,
       minorTickLength: 0,
       tickLength: 0,
-      category: withIntervalLogic([
-        data.map(d => d[0]),data.map(d => d[0]),data.map(d => d[0])
-        ], interval),
+      // category: withIntervalLogic([
+      //   data.map(d => d[0]),data.map(d => d[0]),data.map(d => d[0])
+      //   ], interval),
       tickInterval: 1,
       lineWidth: 0
     },
@@ -84,18 +84,14 @@ const Chart = ({
           let time = withIntervalLogic([year, getMonthString(month), `${getMonthString(month)} ${this.x}`] , interval)
           return `
             <strong>${time}</strong><br/>
+            <strong>${getCountryNameByISO(this.series.userOptions.id)}</strong><br/>
             ${this.y.toFixed(2)}${unit}
           `
       }
     },
-    series: [
-      {
-        data: data,
-        color: '#fff'
-      }
-    ]
+    series: series
   };
-  
+
   return (
     <HighchartsReact 
       highcharts={Highcharts} 
