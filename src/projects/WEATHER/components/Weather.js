@@ -70,13 +70,6 @@ export default function({ data, mapType, selectedCountry, click }) {
     }
 	}
 
-	// Change country fill based on new variable data.
-	useEffect (() => {
-		if ( !map  ) return;
-		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
-	},  [map, data]);
-
-
 	// Toggle between Grid and Country view.
 	useEffect (() => {
 		if(!map) return ;
@@ -86,12 +79,24 @@ export default function({ data, mapType, selectedCountry, click }) {
 		for (let i = 0; i <= 4; i++ ) {
 			map.setLayoutProperty(`grid-${i}`, "visibility", setVisibility(!type))
 		}
-	}, [map, mapType])
+	}, [map, mapType]);
 
-	// useEffect (() => {
-	// 	if(!map || !selectedCountry) return;
-	// 	map.setPaintProperty("shapes-0", "fill-opacity", ["match", ["get", "ISO3"], [selectedCountry], 0.5, 1])	
-	// }, [map, selectedCountry])
+	// Change country fill based on new variable data or selectedCountries.
+	useEffect (() => {
+		if (!map) return;
+		if ( selectedCountry.length < 1 ) {
+			map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
+		}else if (selectedCountry.length < 2) {
+			map.setPaintProperty("shapes-0", "fill-color", ["match", ["get", "ISO3"], [selectedCountry[0][0]], selectedCountry[0][1], colorsByVariables(data)])	
+		} else {
+			map.setPaintProperty("shapes-0", "fill-color", ['case',
+				["match", ["get", "ISO3"], [selectedCountry[0][0]], true, false], selectedCountry[0][1],
+				["match", ["get", "ISO3"], [selectedCountry[1][0]], true, false], selectedCountry[1][1],
+				colorsByVariables(data)
+			])	
+		}
+	}, [map, selectedCountry, data])
+	
 	
 	// Mouse hover events
 	useEffect (() => {
@@ -117,7 +122,6 @@ export default function({ data, mapType, selectedCountry, click }) {
 	function mouseClick(e) {
 		let selected = e.features[0].properties.ISO3;
 		click(selected)
-		map.setPaintProperty("shapes-0", "fill-opacity", ["match", ["get", "ISO3"], [selected], 0.2, 1])	
 	}
 
 	function mouseOver(e) {
@@ -128,18 +132,15 @@ export default function({ data, mapType, selectedCountry, click }) {
 			: parseFloat(e.features[0].properties.val.toFixed(2));
 		
 		map
-		// .setPaintProperty("shapes-0", "fill-opacity", ["match", ["get", "ISO3"], [selected], 0.5, 1])
 		.getCanvas().style.cursor = 'pointer';
 		popUp   
 			.setLngLat(mousePos)
 			.setHTML(value)
 			.addTo(map);
-
 	}
 
 	function mouseLeave() {
 		map
-			// .setPaintProperty("shapes-0", "fill-opacity", 1)
 			.getCanvas().style.cursor = ''
 		popUp.remove();
 	}

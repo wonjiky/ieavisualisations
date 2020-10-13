@@ -141,3 +141,18 @@ export function usePrevious(value) {
 	})
 	return ref.current;
 }
+
+export function getCountryInfo(arr, hasCountry, value, colors) {
+	let len = arr.length;
+
+	if (len > 2) return;
+	if (len === 0) {
+		arr.push([value, colors[0]]);
+	} else if (len === 1) {
+		!hasCountry && arr.splice(0,0, [value, colors ? colors[1] : ''])
+	} else if (len > 1) {
+		let color = arr[0][1] === colors[0] ? colors[1] : colors[0];
+		!hasCountry && (arr.pop() && arr.splice(0,0, [value, color]))
+	}
+	return arr;
+}

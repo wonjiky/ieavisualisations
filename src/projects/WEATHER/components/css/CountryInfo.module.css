@@ -1,7 +1,7 @@
 .Wrapper {
   width: 100vw;
-  height: 190px;
-  padding: 10px  20px;
+  height: 200px;
+  padding: 10px 20px;
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
@@ -12,6 +12,10 @@
   align-items: center;
   justify-content: center;
   flex-flow: column;
+}
+
+.hide {
+  display: none;
 }
 
 .Wrapper > span {
@@ -26,7 +30,6 @@
   width: 100%;
   flex-flow: column;
   color: white;
-  
 }
 
 .CountryWrapper span {
@@ -45,13 +48,47 @@
   display: flex;
   flex-flow: row;
   align-items: center;
-  margin-right: 20px;  
+  padding: 4px 5px 4px 9px;
+  margin-right: 10px;  
+  border-radius: 15px;
+  cursor: pointer;
+  background: rgba(43,43,43,.95) !important;
+}
+
+.CountryLegendItem:last-child {
+  margin: 0;
 }
 
 .Legend{
   height: 12px;
   width: 12px;
   margin-left: 10px;
-  border: 1px solid #000;
   border-radius: 50%;
+  display: block;
+}
+
+.Close{
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: 10px;
+  border-radius: 50%;
+  background: none;
+  display: none;
+}
+
+.Close:hover {
+  background: none;
+}
+
+.Close > svg {
+  display: block;
+  fill: none;
+}
+
+.CountryLegendItem:hover .Legend {
+  display: none;
+}
+
+.CountryLegendItem:hover .Close {
+  display: block;
 }
