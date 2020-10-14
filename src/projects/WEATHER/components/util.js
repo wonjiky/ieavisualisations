@@ -50,10 +50,14 @@ export function colorsByVariables(countries) {
 			let currVal = values[i]
 			let nextVal = values[i + 1];
 			let lastVal = values[values.length - 1];
+			let isRange = (currVal < value && value < nextVal);
 
-			if ((currVal < value && value < nextVal) || (value > lastVal) ) {
+			if (isRange && value < lastVal) {
 				countriesByValueRange[i].push(country)
-			} 
+			} else if (!isRange && value > lastVal) {
+				countriesByValueRange[values.length - 1].push(country)
+				break;
+			}
 		}
 	});
 
@@ -66,12 +70,11 @@ export function colorsByVariables(countries) {
 	return colors;
 }
 
-export function getCountryPopupInfo(countries, selected) {
+export function getPopupInfo(countries, selected, unit) {
 	const selectedCountry = countries.filter(country => country.country === selected)[0];
 	if ( selected && selectedCountry ) {
 		return `
-			<strong>${selectedCountry.name}</strong>
-			<p>Value: ${selectedCountry.value}</p>
+			${selectedCountry.name} : <b>${selectedCountry.value.toFixed(2)}${unit}</b>
 		`
 	}
 	return `<b>Value doe not exist for this country</b>`
@@ -142,17 +145,28 @@ export function usePrevious(value) {
 	return ref.current;
 }
 
-export function getCountryInfo(arr, hasCountry, value, colors) {
-	let len = arr.length;
-
-	if (len > 2) return;
+export function getCountryInfo(value, hasCountry, arr, colors, index) {
+	let len = Object.keys(arr).length;
+	if (len > 2 || hasCountry) return arr;
 	if (len === 0) {
-		arr.push([value, colors[0]]);
-	} else if (len === 1) {
-		!hasCountry && arr.splice(0,0, [value, colors ? colors[1] : ''])
-	} else if (len > 1) {
-		let color = arr[0][1] === colors[0] ? colors[1] : colors[0];
-		!hasCountry && (arr.pop() && arr.splice(0,0, [value, color]))
+		arr.firstCountry = value;
+	} else {
+		arr.secondCountry = arr.firstCountry;
+		arr.firstCountry = value;
 	}
 	return arr;
+
+	// let len = arr.length;
+	// if (len > 2 || hasCountry) return arr;
+
+	// if (len === 0) {
+	// 	arr.push({ country: value, color: colors[0]});
+	// } else if (len === 1) {
+	// 	arr.splice(0,0, { country: value, color: colors[1]})
+	// } else {
+	// 	let color = arr[0].color === colors[0] ? colors[1] : colors[0];
+	// 	arr.pop();
+	//  	arr.splice(0,0, { country: value, color: color });
+	// }
+	// return arr;
 }

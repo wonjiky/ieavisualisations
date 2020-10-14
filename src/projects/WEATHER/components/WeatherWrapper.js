@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { MapContainer } from '../../../components/container'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
-import { getCountryNameByISO, getMonthString, uppercase, withIntervalLogic, getCountryInfo } from './util'
+import { getCountryNameByISO, getMonthString, uppercase, withIntervalLogic } from './util'
 import { Modal } from '../../../components/modal'
 import { Icon } from '../../../components/icons'
 import variables from './assets/variables.json'
@@ -14,8 +14,10 @@ import CountryInfo from './CountryInfo'
 export default function() {
 
 	const [data, setData] = useState(null);
-	const [countryData, setCountryData] = useState([]);
-	const [selectedCountry, setSelectedCountry] = useState([]);
+	const [index, setIndex] = useState(true);
+	const [firstCountry, setFirstCountry] = useState(null);
+	const [secondCountry, setSecondCountry] = useState(null);
+	const [selectedCountries, setSelectedCountries] = useState({ firstCountry: { ISO: null, color: '#727272'}, secondCountry: { ISO: null, color: '#e6e6e6' } });
 	const [date, setDate] = useState({ day: 1, month: 8, year: 2011});
 	const [variable, setVariable] = useState({id: 'Temperaturedaily', name: 'Temp latitude weighted'});
 	const [mapType, setMapType] = useState('country');
@@ -29,12 +31,14 @@ export default function() {
 		: interval === 'month' ? { month, year, variable: variable.id } 
 		: { year, variable: variable.id };
 	let maxDay = new Date(year, month, 0).getDate();
+	let mapQueryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+
 	let startDate = withIntervalLogic(['20000101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], interval);
 	let endDate = withIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], interval);
-	let mapQueryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
-	let countryQueryString = `${selectedCountry.length >= 1 ? selectedCountry[0][0] : null}/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}`;
-	let splineColors = [ '#727272', '#e6e6e6'];
-	
+	let countryQuery = `/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}`;
+
+	// let splineColors = { firstCountry: '#727272', secondCountry: '#e6e6e6'};
+
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
@@ -45,27 +49,38 @@ export default function() {
     document.addEventListener('click', hide)
 	},[ active.open, openInfo,  hide ])
 	
-	function getSelectedCountries(value) {
+	function getSelectedCountries(value, index) {
 		if (!getCountryNameByISO(value)) return;
-		let newArr = [...selectedCountry];
-		let hasCountry = newArr.find(d => d[0] === value);
-		setSelectedCountry(getCountryInfo(newArr, hasCountry, value, splineColors));
+		let idx = index ? 'firstCountry' : 'secondCountry';
+		let currArr = { ...selectedCountries };
+		if (Object.keys(currArr).length > 2) return currArr;
+		setSelectedCountries({ ...selectedCountries, [idx]:  { ...selectedCountries[idx], ISO: value } });
 	}
 	
-	const fetchCountryData = React.useCallback(() => {
-		if(Object.keys(selectedCountry).length === 0) return;
-		axios.get(`https://api.iea.org/weather/country/${countryQueryString}`)
+	useEffect(() => {
+		if(!selectedCountries.firstCountry.ISO) return;
+		axios.get(`https://api.iea.org/weather/country/${selectedCountries.firstCountry.ISO}${countryQuery}`)
 			.then(response => {
-				let result = response.data
-				let tempArr = [...countryData];
-				let hasCountry = tempArr
-					.map(d =>  d[0][0])
-					.find(t => t === selectedCountry[0][0]);
-				setCountryData(getCountryInfo(tempArr, hasCountry, [selectedCountry[0][0], result], splineColors));
+				setFirstCountry({
+					ISO: selectedCountries.firstCountry.ISO,
+					color: selectedCountries.firstCountry.color,
+					data: response.data,
+					interval: interval === 'day' ? 86400000 : interval === 'month' ? 2592000000 : 31104000000	
+				});
 			})
-	}, [selectedCountry, countryQueryString, countryData, splineColors]);
-	
-	useEffect(fetchCountryData, [selectedCountry, countryQueryString]);
+	}, [selectedCountries.firstCountry, countryQuery, interval])
+
+	useEffect(() => {
+		if(!selectedCountries.secondCountry.ISO) return;
+		axios.get(`https://api.iea.org/weather/country/${selectedCountries.secondCountry.ISO}${countryQuery}`)
+			.then(response => {
+				setSecondCountry({
+					ISO: selectedCountries.secondCountry.ISO,
+					color: selectedCountries.secondCountry.color,
+					data: response.data
+				});
+			})
+	}, [selectedCountries.secondCountry, countryQuery])
 
 	useEffect(() => {
 		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
@@ -77,6 +92,8 @@ export default function() {
 			})
 	}, [mapQueryString]);
 
+	let countryData = [];
+	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
 
 	const controls = {
 		topleft: [
@@ -99,9 +116,14 @@ export default function() {
 				selected: uppercase(mapType),
 				flow: 'row',
 				click: value => {
-					setMapType(value.toLowerCase())
-					setCountryData([])
-					setSelectedCountry([])
+					setMapType(value.toLowerCase());
+					setFirstCountry(null);
+					setSecondCountry(null);
+					setIndex(true);
+					setSelectedCountries({ 
+						firstCountry: { ISO: null, color: '#727272'}, 
+						secondCountry: { ISO: null, color: '#e6e6e6' } 
+					});
 				}
 			},
 			{ 
@@ -124,14 +146,21 @@ export default function() {
 			},
 		]
 	}
-
+	
 	return (
 		<MapContainer selector={'Weather_Map'} loaded={data}>
 			<Weather 
 				data={data} 
 				mapType={mapType} 
-				selectedCountry={selectedCountry}
-				click={getSelectedCountries}
+				selectedCountries={selectedCountries}
+				unit={variables.find(d => d.id === variable.id).unit}
+				click={e => {
+					let currArr = { ...selectedCountries };
+					let hasCountry = Object.values(currArr).map(d => d.ISO).includes(e);
+					if (hasCountry) return;
+					setIndex(!index);
+					getSelectedCountries(e, index);	
+				}}
 			/>
 			<ControlContainer dark bg>
 				<Controls position= 'topLeft' style={{'width': '270px'}}> 
@@ -145,15 +174,18 @@ export default function() {
 			</Modal>
 			<CountryInfo 
 				data={countryData}
+				countries={selectedCountries}
 				mapType={mapType}
-				countries={selectedCountry}
 				unit={variables.find(d => d.id === variable.id).unit}
 				click={e => {
-					// let idx =  selectedCountry.findIndex(d => d[0] === e)
-					let idx =  countryData.findIndex(d => d[0][0] === e)
-					// let temp = countryData.splice(0,idx)
-					setSelectedCountry(selectedCountry.splice(0,idx))
-					setCountryData(countryData.splice(0,idx))
+					let country = Object.values(selectedCountries)
+						.findIndex(d => d.ISO === e) === 0 ? 'firstCountry' : 'secondCountry';
+					country === 'firstCountry' ? setFirstCountry(null) : setSecondCountry(null);
+					country === 'firstCountry' ? setIndex(true) : setIndex(false);
+					setSelectedCountries({
+						...selectedCountries,
+						[country]: { ...selectedCountries[country], ISO: null }
+					})
 				}}
 			/>
 		</MapContainer>

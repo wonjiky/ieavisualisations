@@ -1,8 +1,14 @@
 import React, { useEffect } from 'react'
-import { colorsByVariables, getCountryPopupInfo, GRID_LAYERS, setGridColor } from './util'
+import { colorsByVariables, getPopupInfo, GRID_LAYERS, setGridColor } from './util'
 import { useMap } from '../../../components/customHooks'
 
-export default function({ data, mapType, selectedCountry, click }) {
+export default function({ 
+	data, 
+	mapType, 
+	selectedCountries, 
+	click,
+	unit,
+ }) {
 	
 	const config = { 
 		map: 'oecd',
@@ -84,18 +90,24 @@ export default function({ data, mapType, selectedCountry, click }) {
 	// Change country fill based on new variable data or selectedCountries.
 	useEffect (() => {
 		if (!map) return;
-		if ( selectedCountry.length < 1 ) {
-			map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
-		}else if (selectedCountry.length < 2) {
-			map.setPaintProperty("shapes-0", "fill-color", ["match", ["get", "ISO3"], [selectedCountry[0][0]], selectedCountry[0][1], colorsByVariables(data)])	
-		} else {
-			map.setPaintProperty("shapes-0", "fill-color", ['case',
-				["match", ["get", "ISO3"], [selectedCountry[0][0]], true, false], selectedCountry[0][1],
-				["match", ["get", "ISO3"], [selectedCountry[1][0]], true, false], selectedCountry[1][1],
-				colorsByVariables(data)
-			])	
-		}
-	}, [map, selectedCountry, data])
+		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
+
+		// const { firstCountry, secondCountry } = selectedCountries;
+		// if ( !firstCountry.ISO && !secondCountry.ISO ) {
+		// 	map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
+		// } else if ( firstCountry.ISO && !secondCountry.ISO) {
+		// 	map.setPaintProperty("shapes-0", "fill-color", ["match", ["get", "ISO3"], [firstCountry.ISO], firstCountry.color, colorsByVariables(data)])	
+		// } else if ( !firstCountry.ISO && secondCountry.ISO) {
+		// 	map.setPaintProperty("shapes-0", "fill-color", ["match", ["get", "ISO3"], [secondCountry.ISO], secondCountry.color, colorsByVariables(data)])	
+		// } else {
+		// 	map.setPaintProperty("shapes-0", "fill-color", ['case',
+		// 		["match", ["get", "ISO3"], [firstCountry.ISO], true, false], firstCountry.color,
+		// 		["match", ["get", "ISO3"], [secondCountry.ISO], true, false], secondCountry.color,
+		// 		colorsByVariables(data)
+		// 	])	
+		// }
+
+	}, [map, data]) //, selectedCountries])
 	
 	
 	// Mouse hover events
@@ -128,12 +140,13 @@ export default function({ data, mapType, selectedCountry, click }) {
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
 		let selected = e.features[0].properties.ISO3;
 		let value = mapType === 'country' 
-			? getCountryPopupInfo(data, selected)
+			? getPopupInfo(data, selected, unit)
 			: parseFloat(e.features[0].properties.val.toFixed(2));
 		
 		map
 		.getCanvas().style.cursor = 'pointer';
-		popUp   
+		popUp.addClassName('weather');
+		popUp
 			.setLngLat(mousePos)
 			.setHTML(value)
 			.addTo(map);

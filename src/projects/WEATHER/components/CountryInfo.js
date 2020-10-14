@@ -6,32 +6,42 @@ import { getCountryNameByISO } from './util'
 import classes from './css/CountryInfo.module.css'
 
 export default ({ data, countries, mapType, unit, click }) => {
-
+  
   let series = data.map(d => ({
-    id: d[0][0], 
-    name: getCountryNameByISO(d[0][0]),
-    data: d[0][1], 
-    color: d[1],
-    marker: { symbol: 'circle' }
+    id: d.ISO, 
+    name: getCountryNameByISO(d.ISO),
+    data: d.data, 
+    color: d.color,
+    marker: { symbol: 'circle' },
+    interval: d.interval
   }));
 
   return (
     <div className={mapType === 'country' ? classes.Wrapper : classes.hide}>
-      {data.length === 0
-        ? <span> {countries.length > 0 ? 'Loading...' : 'Select up to 2 countries by clicking on the map'} </span>
+      {!countries.firstCountry.ISO && !countries.secondCountry.ISO
+        ? <span>Select up to 2 countries by clicking on the map</span>
         : <>
             <div className={classes.CountryWrapper}>
               <div className={classes.CountryLegendWrapper}>
-                {data.map((d, idx) => (
-                  <div key={idx} className={classes.CountryLegendItem} onClick={_ => click(d[0][0])}>
-                    {getCountryNameByISO(d[0][0])}
-                    <div className={classes.Legend} style={{background: d[1]}}/>
-                    <Icon type='close' dark={true} stroke='#fff' styles={classes.Close} viewBox={'-4 -4 26 26'} />
-                  </div>
+                {Object.values(countries).map((d,idx) => (
+                  d.ISO && 
+                    <div key={idx} className={classes.CountryLegendItem} onClick={_ => click(d.ISO)}>
+                      {getCountryNameByISO(d.ISO)}
+                      {data.find(c => c.ISO === d.ISO)
+                        ? <div className={classes.Legend} style={{background: d.color}}/> 
+                        : ' loading...'}
+                      <Icon 
+                        type='close' 
+                        dark={true} 
+                        stroke='#fff' 
+                        styles={classes.Close} 
+                        viewBox={'-4 -4 26 26'} 
+                      />
+                    </div>
                 ))}
               </div>
             </div>
-            <Chart series={series} data={data} unit={unit} /> 
+            {data.length !== 0 && <Chart series={series} unit={unit}/> }
           </>}
     </div>
   );
@@ -68,8 +78,9 @@ const Chart = ({ series, unit }) => {
       offset: 0,
       minorTickLength: 0,
       tickLength: 0,
+      lineWidth: 0,
       type: 'datetime',
-      lineWidth: 0
+      tickInterval: series[0].interval
     },
     tooltip: {
       valueDecimals: 2,
@@ -78,7 +89,7 @@ const Chart = ({ series, unit }) => {
       shared: true,
       xDateFormat: '%Y-%m-%d',
     },
-    series: series,
+    series: series
   };
 
   return (

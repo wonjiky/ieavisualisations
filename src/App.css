@@ -178,3 +178,7 @@ ul li {
 	position: relative;
 	width: 100%;
 }
+
+.weather .mapboxgl-popup-content {
+	padding: 10px !important;
+}

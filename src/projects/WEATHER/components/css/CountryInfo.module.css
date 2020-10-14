@@ -9,8 +9,8 @@
   z-index: 2;
   background: linear-gradient(0deg, rgba(54,54,54,1) 10%, rgba(54,54,54, .8) 50%, rgba(54,54,54, .4) 75%, rgba(54,54,54, 0) 100%);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
   flex-flow: column;
 }
 
@@ -19,7 +19,8 @@
 }
 
 .Wrapper > span {
-  margin-top: 40px;
+  margin-top: 70px;
+  align-self: center;
   border: 1px solid #fff;
   padding: 10px 20px;
   color: white;
@@ -92,3 +93,5 @@
 .CountryLegendItem:hover .Close {
   display: block;
 }
+
+
