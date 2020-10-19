@@ -38,7 +38,8 @@ const Wrapper = ({ button, children, dark, click, styles }) => {
     ? <button onClick={click} className={dark ? [classes.Button, classes.dark, styles].join(' ') : [classes.Button, styles].join(' ')}>
         {children}
       </button>
-    : <div className={dark ? [classes.dark, styles].join(' ') : styles} style={{'width':'100%', 'height': '100%'}}> 
+    : <div className={dark ? [classes.dark, styles].join(' ') : styles}>
+      {/* style={{'width':'100%', 'height': '100%'}}>  */}
         {children} 
       </div>
   )
@@ -71,6 +72,16 @@ const iconTypes = {
   downArrow: {
     title: 'Down',
     path: ["M10 14.1L4.5 8.6l1.1-1.1 4.4 4.4 4.4-4.4 1.1 1.1z"],
+    viewBox: "0 0 20 20"
+  },
+  rightArrow: {
+    title: 'Right',
+    path: ["M14.94 11.5l-6.97 6.97 1.06 1.06 8.03-8.03-8.03-8.03-1.06 1.06 6.97 6.97z"],
+    viewBox: "0 0 20 20"
+  },
+  leftArrow: {
+    title: 'Left',
+    path: ["M9.06 11.5l6.97-6.97-1.06-1.06-8.03 8.03 8.03 8.03 1.06-1.06-6.97-6.97z"],
     viewBox: "0 0 20 20"
   },
   expand: {

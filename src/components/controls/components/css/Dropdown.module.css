@@ -9,13 +9,19 @@
 .Dropdown button > span {
   display: block;
   text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
-  overflow: auto;
 }
 
 .Dropdown:hover .Icon {
   background: rgba(255,255,255,0.1);
   transition: background .2s linear;
+}
+
+
+.Dropdown .Icon > div{
+  height: 100%;
+  width: 100%;
 }
 
 .DropdownOptions {
@@ -77,59 +83,47 @@
 .DropdownOptions ul li {
   width: 100%;
   color: #000;
-  cursor: pointer;
   font-weight: normal;
   font-size: .8rem;
   background: transparent;
-  box-sizing:border-box;
-  padding: 7px;
+  padding: 0;
   text-align: left;
-  
-  
 }
 
-.DropdownOptions ul > li:hover {
+.OptionItem {
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.OptionItem:hover {
   background: #e6e6e6;
 }
 
-.OptionsInfoWrapper {
-  float: right;
-  /* position: relative; */
+.DropdownOptions ul li svg {
+  width: 10px;
+  height: 10px;
 }
 
-.OptionsInfoWrapper > svg{
-  width: 12px;
-  height: 12px;
-  border: 1px solid #000;
-  border-radius: 50%;
+.DropdownOptions ul li svg div{
+  width: unset !important;
+  height: unset !important;
 }
 
-.OptionsInfoTooltip {
-  visibility: hidden;
-  position: absolute;
+.NestedGroupTitle{
+  display: flex;
+  flex-flow: row;
+  padding: 14px 8px 4px 8px;
+  color: grey;
+  font-size: .7rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NestedOptions {
   cursor: pointer;
-  background: white;
-  border: 1px solid #000;
-  box-sizing: border-box;
-  padding: 8px 12px;
-  width: 70%;
-  max-width: 170px;
 }
 
-.InfoTooltip {
-  visibility: hidden;
-  display: block;
-  position: absolute;
+.NestedList { 
+  padding: 0!important;
 }
 
-.OptionsInfoWrapper:hover svg > g {
-  fill: #fff;
-} 
-
-.OptionsInfoWrapper:hover > svg {
-  background: #000;
-} 
-
-.OptionsInfoWrapper:hover .OptionsInfoTooltip {
-  visibility: visible;
-}

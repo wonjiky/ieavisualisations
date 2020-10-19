@@ -5,7 +5,6 @@ import { useMap } from '../../../components/customHooks'
 export default function({ 
 	data, 
 	mapType, 
-	selectedCountries, 
 	click,
 	unit,
  }) {
@@ -91,24 +90,7 @@ export default function({
 	useEffect (() => {
 		if (!map) return;
 		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
-
-		// const { firstCountry, secondCountry } = selectedCountries;
-		// if ( !firstCountry.ISO && !secondCountry.ISO ) {
-		// 	map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
-		// } else if ( firstCountry.ISO && !secondCountry.ISO) {
-		// 	map.setPaintProperty("shapes-0", "fill-color", ["match", ["get", "ISO3"], [firstCountry.ISO], firstCountry.color, colorsByVariables(data)])	
-		// } else if ( !firstCountry.ISO && secondCountry.ISO) {
-		// 	map.setPaintProperty("shapes-0", "fill-color", ["match", ["get", "ISO3"], [secondCountry.ISO], secondCountry.color, colorsByVariables(data)])	
-		// } else {
-		// 	map.setPaintProperty("shapes-0", "fill-color", ['case',
-		// 		["match", ["get", "ISO3"], [firstCountry.ISO], true, false], firstCountry.color,
-		// 		["match", ["get", "ISO3"], [secondCountry.ISO], true, false], secondCountry.color,
-		// 		colorsByVariables(data)
-		// 	])	
-		// }
-
-	}, [map, data]) //, selectedCountries])
-	
+	}, [map, data])
 	
 	// Mouse hover events
 	useEffect (() => {

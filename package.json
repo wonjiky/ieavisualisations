@@ -6,6 +6,7 @@
     "@flowmap.gl/core": "^7.2.3",
     "@flowmap.gl/react": "^7.2.3",
     "@iea/react-components": "^1.0.0",
+    "@international-energy-agency/vue-ui": "^0.1.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",

@@ -43,7 +43,7 @@ export function colorsByVariables(countries) {
 		values.push(i === 0 ? 0 : Math.trunc(result))
 		countriesByValueRange.push([]);
 	}
-
+	
 	testCountries.forEach(c => {
 		let { value, country } = c; 
 		for (let i = 0; i < values.length; i++) {
@@ -139,9 +139,7 @@ export function withIntervalLogic(entries, interval) { return entries[['year', '
 
 export function usePrevious(value) {
 	const ref = React.useRef();
-	React.useEffect(() => {
-		ref.current = value;
-	})
+	React.useEffect(() => ref.current = value)
 	return ref.current;
 }
 
@@ -155,18 +153,4 @@ export function getCountryInfo(value, hasCountry, arr, colors, index) {
 		arr.firstCountry = value;
 	}
 	return arr;
-
-	// let len = arr.length;
-	// if (len > 2 || hasCountry) return arr;
-
-	// if (len === 0) {
-	// 	arr.push({ country: value, color: colors[0]});
-	// } else if (len === 1) {
-	// 	arr.splice(0,0, { country: value, color: colors[1]})
-	// } else {
-	// 	let color = arr[0].color === colors[0] ? colors[1] : colors[0];
-	// 	arr.pop();
-	//  	arr.splice(0,0, { country: value, color: color });
-	// }
-	// return arr;
 }

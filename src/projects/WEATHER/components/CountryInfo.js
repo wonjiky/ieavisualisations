@@ -15,17 +15,17 @@ export default ({ data, countries, mapType, unit, click }) => {
     marker: { symbol: 'circle' },
     interval: d.interval
   }));
-
+  console.log(countries);
   return (
     <div className={mapType === 'country' ? classes.Wrapper : classes.hide}>
-      {!countries.firstCountry.ISO && !countries.secondCountry.ISO
+      {countries.length === 0
         ? <span>Select up to 2 countries by clicking on the map</span>
         : <>
             <div className={classes.CountryWrapper}>
               <div className={classes.CountryLegendWrapper}>
-                {Object.values(countries).map((d,idx) => (
+                {countries.sort((a,b) => a.id.localeCompare(b.id)).map((d,idx) => (
                   d.ISO && 
-                    <div key={idx} className={classes.CountryLegendItem} onClick={_ => click(d.ISO)}>
+                    <div key={idx} className={classes.CountryLegendItem} onClick={_ => click(d.id)}>
                       {getCountryNameByISO(d.ISO)}
                       {data.find(c => c.ISO === d.ISO)
                         ? <div className={classes.Legend} style={{background: d.color}}/> 

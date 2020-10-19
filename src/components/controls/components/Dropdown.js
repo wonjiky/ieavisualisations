@@ -2,6 +2,7 @@ import React from 'react'
 import classes from './css/Dropdown.module.css'
 import { Icon } from '../../icons'
 import global from './css/Global.module.css'
+import { queryByTestId } from '@testing-library/react';
 
 export default ({ 
   label, 
@@ -15,8 +16,11 @@ export default ({
   dark 
 }) => {
 
-  let dropdownDir = bottom ? {top: 'unset', bottom: '0px'} : null;
-  return (
+  let list = options.reduce((r, a) => {
+    r[a.nested] = [...r[a.nested] || [], a];
+    return r;
+  }, {});
+  return(
     <div className={dark ? [global.ControlContainer, classes.Dropdown, global.dark].join(' ') : [global.ControlContainer, classes.Dropdown].join(' ')}>
       <label className={global.ControlLabel}>
         {label}
@@ -29,26 +33,50 @@ export default ({
             <Icon type='downArrow' />
         </div>
       </button>     
-      <div id='dropdown' className={active.open && active.target === label 
-        ? [classes.DropdownOptions, classes.active].join(' ') 
-        : classes.DropdownOptions}
-        style={dropdownDir}
+      <div 
+        id='dropdown' 
+        style={bottom ? {top: 'unset', bottom: '0px'} : null}
+        className={active.open && active.target === label 
+          ? [classes.DropdownOptions, classes.active].join(' ') 
+          : classes.DropdownOptions}
         >
         <div>
           <ul>
-            {options.map((option,idx) =>
-              <li key={idx} onClick={_ => click(option)}>
-                <span>
-                  {!info ? option : option.name}
-                </span>
-              </li>
-            )}
+            {Object.entries(list).map((option,idx) =>
+              option[0] === 'single' 
+                ? <Single key={idx} option={option[1]} info={info} click={click}/>
+                : <Nested key={idx} option={option[1]} info={info} click={click}/> )}
           </ul>
         </div>
       </div>
     </div>
   )
-}
+};
+
+const Nested = ({ option, click, info }) => (
+  <li> 
+    <div className={classes.NestedGroupTitle}>
+      {option[0].nested}
+    </div>
+    <ul className={classes.NestedList}>
+      <Single click={click} info={info} option={option}/>
+    </ul>
+  </li>
+);
+
+const Single = ({ option, click, info }) => (
+  option.map(d => 
+    <li key={d.id} onClick={_ => click(d)} className={classes.NestedOptions}>
+      <div className={classes.OptionItem}>
+        {!info ? d : d.name}
+      </div>
+    </li>
+  )
+);
+
+
+
+
 
 
 
