@@ -6,6 +6,8 @@ export default function({
 	data, 
 	mapType, 
 	click,
+	decimal,
+	colType,
 	unit,
  }) {
 	
@@ -14,7 +16,7 @@ export default function({
 		style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
 		center: [0,30], 
 		minZoom: 1.3,
-		maxZoom: 3,
+		maxZoom: 4,
 		maxBounds: [
       [-180, -70],
       [180, 84],
@@ -89,8 +91,8 @@ export default function({
 	// Change country fill based on new variable data or selectedCountries.
 	useEffect (() => {
 		if (!map) return;
-		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data));
-	}, [map, data])
+		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data, colType));
+	}, [map, data, colType])
 	
 	// Mouse hover events
 	useEffect (() => {
@@ -122,7 +124,7 @@ export default function({
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
 		let selected = e.features[0].properties.ISO3;
 		let value = mapType === 'country' 
-			? getPopupInfo(data, selected, unit)
+			? getPopupInfo(data, selected, unit, decimal)
 			: parseFloat(e.features[0].properties.val.toFixed(2));
 		
 		map

@@ -2,23 +2,22 @@ import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { MapContainer } from '../../../components/container'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
-import { getCountryNameByISO, getMonthString, uppercase, withIntervalLogic } from './util'
+import { getCountryNameByISO, getMonthString, uppercase, withIntervalLogic, colorArray } from './util'
 import { Modal } from '../../../components/modal'
+import { Legends } from '../../../components/legends'
 import { Icon } from '../../../components/icons'
 import variables from './assets/variables.json'
 import Weather from './Weather'
 import classes from './css/Weather.module.css'
-import { findSubpowerFromText } from '../../../global'
 import CountryInfo from './CountryInfo'
 
 export default function() {
-
 	const [data, setData] = useState(null);
 	const [index, setIndex] = useState(true);
 	const [firstCountry, setFirstCountry] = useState(null);
 	const [secondCountry, setSecondCountry] = useState(null);
 	const [date, setDate] = useState({ day: 1, month: 8, year: 2011});
-	const [variable, setVariable] = useState({id: 'Temperaturedaily', name: 'Temp latitude weighted'});
+	const [variable, setVariable] = useState({id: variables.country[0].id, name: variables.country[0].name});
 	const [mapType, setMapType] = useState('country');
 	const [interval, setInterval] = useState('day');
 	const [active, setActive] = useState({ open: false, target: null });
@@ -36,6 +35,8 @@ export default function() {
 	let startDate = withIntervalLogic(['20100101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], interval);
 	let endDate = withIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], interval);
 	let countryQuery = `/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}`;
+
+	const { unit, decimal, nested} = variables[mapType].find(d => d.id === variable.id);
 
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
@@ -88,14 +89,14 @@ export default function() {
 	useEffect(() => {
 		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
 		.then(response => {
-			const result = response.data.map(d => ({ ...d, name: getCountryNameByISO(d.country) }));
+			const result = response.data.map(d => ({ 
+				...d, 
+				name: getCountryNameByISO(d.country), 
+				value: parseFloat(d.value.toFixed(decimal))
+			}));
 			if (response.data.length !== 0) setData(result)
-			else {
-				alert('No data');
-				setVariable({ id: 'Temperaturedaily', name: 'Temp latitude weighted' });
-			}
 		})
-	}, [mapQueryString]);
+	}, [mapQueryString, variable, decimal]);
 
 	let countryData = [];
 	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
@@ -107,7 +108,7 @@ export default function() {
 				selected: uppercase(interval),
 				label: withIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`], interval),
 				value: withIntervalLogic([year, month, day], interval),
-				min: withIntervalLogic([2000, 1, 1], interval),
+				min: withIntervalLogic([2010, 1, 1], interval),
 				max: withIntervalLogic([ 2020, year === 2020 ? 8 : 12, maxDay ], interval),
 				step: 1,
 				change: e => setDate(interval !== 'day' 
@@ -140,14 +141,28 @@ export default function() {
 				type: 'dropdown',
 				label: 'Variables',
 				info: true,
-				options: variables,
+				options: variables[mapType],
 				selected: uppercase(variable.name),
 				active: active,
 				open: e => setActive({ open: true, target: e.target.value }),
 				click: e => setVariable({ id: e.id, name: e.name })
 			}
 		]
-	}
+	};
+
+	const legends = [
+		{
+			type: 'continuous',
+			header: 'hello',
+			subInHeader: false,
+			labels: data 
+				? [parseFloat(Math.min(...data.map(d => d.value))).toFixed(decimal), 
+					`${Math.max(...data.map(d => parseFloat(d.value).toFixed(decimal)))} ${unit}`] : [],
+			colors: !colorArray[nested] 
+				? colorArray.default : colorArray[nested],
+			round: false
+		},
+	]
 
 	return (
 		<MapContainer selector={'Weather_Map'} loaded={data}>
@@ -155,7 +170,10 @@ export default function() {
 				data={data} 
 				mapType={mapType} 
 				selectedCountries={selectedCountries}
-				unit={variables.find(d => d.id === variable.id).unit}
+				variables={variables[mapType]}
+				unit={unit}
+				decimal={decimal}
+				colType={nested}
 				click={e => {
 					if ([ ...selectedCountries ].map(d => d.ISO).includes(e)) return;
 					setIndex(!index);
@@ -163,25 +181,31 @@ export default function() {
 				}}
 			/>
 			<ControlContainer dark bg>
-				<Controls position= 'topLeft' style={{'width': '290px'}}> 
+				<Controls position='topLeft' style={{'width': '280px'}}> 
 					{controls.topleft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
 				</Controls>
+				<Controls position='bottomRight'  customClass={classes.Test}>
+          {legends.map((legend, idx) => 
+            <Legends key={idx} {...legend} />)}
+        </Controls>
 			</ControlContainer>
 			<Icon type='help' dark={true} fill button={true} click={_ => setOpenInfo(!openInfo)} styles={classes.Help}/> 
 			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)} dark>
-				<Table body={variables} head={['Variable', 'Description', 'Unit']} />
+				<Table body={variables[mapType]} head={['Variable', 'Description', 'Unit']} />
 			</Modal>
 			<CountryInfo 
 				data={countryData}
 				countries={selectedCountries}
 				mapType={mapType}
-				unit={variables.find(d => d.id === variable.id).unit}
+				unit={unit}
+				decimal={decimal}
 				click={id => {
 					let currArray = [ ...selectedCountries ];
 					let pos = currArray.findIndex(d => d.id === id);
 					currArray.splice(pos, 1)
 					id === 'firstCountry' ? setFirstCountry(null) : setSecondCountry(null);
+					id === 'firstCountry' ? setIndex(true) : setIndex(false);
 					setSelectedCountries(currArray);
 				}}
 			/>
@@ -201,7 +225,7 @@ const Table = ({ body, head }) => (
 				<tr key={idx}>
 					<td>{item.name}</td>
 					<td>{item.info}</td>
-					<td>{findSubpowerFromText(item.unit, '2')}</td>
+					<td>{item.unit}</td>
 				</tr>
 			)}
 		</tbody>

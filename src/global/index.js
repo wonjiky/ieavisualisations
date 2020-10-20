@@ -22,8 +22,12 @@ export const findSubpowerFromText = (text, sub) => {
       ),
       text.substring(tempLowestIndex + tempLowestWord.length)
     ];
-    return <>{t[0]}<sup>{t[1]}</sup>{t[2]}</>
+
+    console.log(<span>{t[0]}<sup>{t[1]}</sup>{t[2]}</span>)
+    return t
     } else {
     return text;
   }
+
+  
 };

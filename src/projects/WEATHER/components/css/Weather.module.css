@@ -35,3 +35,9 @@ th {
     padding-bottom: 7px;
     border-bottom: 4px solid #ccc;
 }
+
+.Test{ 
+    background: transparent !important;
+    box-shadow: none;
+    bottom: 100px;
+}

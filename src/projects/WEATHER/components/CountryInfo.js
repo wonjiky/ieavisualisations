@@ -5,7 +5,8 @@ import { Icon } from '../../../components/icons'
 import { getCountryNameByISO } from './util'
 import classes from './css/CountryInfo.module.css'
 
-export default ({ data, countries, mapType, unit, click }) => {
+Highcharts.setOptions({ lang: { thousandsSep:'' } });
+export default ({ data, countries, decimal, mapType, unit, click }) => {
   
   let series = data.map(d => ({
     id: d.ISO, 
@@ -15,7 +16,7 @@ export default ({ data, countries, mapType, unit, click }) => {
     marker: { symbol: 'circle' },
     interval: d.interval
   }));
-  console.log(countries);
+
   return (
     <div className={mapType === 'country' ? classes.Wrapper : classes.hide}>
       {countries.length === 0
@@ -41,14 +42,15 @@ export default ({ data, countries, mapType, unit, click }) => {
                 ))}
               </div>
             </div>
-            {data.length !== 0 && <Chart series={series} unit={unit}/> }
+            {data.length !== 0 
+              && <Chart series={series} unit={unit} decimal={decimal} /> }
           </>}
     </div>
   );
 }
 
-const Chart = ({ series, unit }) => {
-  
+const Chart = ({ series, unit, decimal }) => {
+
   const containerProps = {
     style: {
       height:'170px',
@@ -83,8 +85,8 @@ const Chart = ({ series, unit }) => {
       tickInterval: series[0].interval
     },
     tooltip: {
-      valueDecimals: 2,
-      valueSuffix: unit,
+      valueDecimals: decimal,
+      valueSuffix: ` ${unit}`,
       borderWidth: 0,
       shared: true,
       xDateFormat: '%Y-%m-%d',

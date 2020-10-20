@@ -1,82 +1,45 @@
 import React from 'react'
 import countries from './assets/countriesIso.json'
+import { scaleQuantile } from 'd3-scale'
 
-export function colorsByVariables(countries) {
-// export function colorsByVariables(countries, type, viewUnit) {
-
-	
-	let ranges = {
-		month: {
-			temperatureDaily: {
-				colors: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
-			},
-			hdd: {
-				colors: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
-				values: [[0], [0,10], [10,100], [100,200], [200,300], [300,400], [400,500], [500,700], [700]]
-			},
-			cdd: {
-				colors: [ '#ffffd9', '#edf8b1', '#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8', '#253494', '#081d58' ],
-				values: [[0], [0,10], [10,100], [100,200], [200,300], [300,400], [400,500], [500,700], [700]]
-			},
-			'solar radiation': {
-				colors: [ '#d53e4f', '#f46d43', '#fdae61', '#fee08b', '#ffffbf', '#e6f598', '#abdda4', '#66c2a5', '#3288bd' ],
-				values: [[0,10], [10,20], [20,30], [30,40], [40,50], [50,60], [60,80], [80,90], [90]]
-			}
-		},
-		day: {
-			'solar radiation': {
-				colors: [ '#d53e4f', '#f46d43', '#fdae61', '#fee08b', '#ffffbf', '#e6f598', '#abdda4', '#66c2a5', '#3288bd' ],
-				values: [[70000, 300000], [300000, 400000], [400000, 600000], [600000, 700000], [700000, 900000], [900000, 1000000], [1000000,1100000], [1100000,1200000], [1200000]]
-			}
-		}
-	}
-	if (!countries) console.log('Cannot read countries :', countries);
-	let testCountries = [...countries];
-	let min = Math.min(...countries.map(d => d.value)),
-	max = Math.max(...countries.map(d => d.value))
-	let { colors } = ranges.month.temperatureDaily;
-	let values = [], countriesByValueRange = [], denominator = 8;
-
-	for (let i = 0; i <= denominator; i++ ) {
-		let incre = ((max - min) / denominator) * i;
-		let result = min + incre;
-		values.push(i === 0 ? 0 : Math.trunc(result))
-		countriesByValueRange.push([]);
-	}
-	
-	testCountries.forEach(c => {
-		let { value, country } = c; 
-		for (let i = 0; i < values.length; i++) {
-			let currVal = values[i]
-			let nextVal = values[i + 1];
-			let lastVal = values[values.length - 1];
-			let isRange = (currVal < value && value < nextVal);
-
-			if (isRange && value < lastVal) {
-				countriesByValueRange[i].push(country)
-			} else if (!isRange && value > lastVal) {
-				countriesByValueRange[values.length - 1].push(country)
-				break;
-			}
-		}
-	});
-
-	countriesByValueRange.forEach((value, idx) => {
-		let countryPos = (idx * 2);
-		colors.splice(countryPos, 0, ["match", ["get", "ISO3"], value, true, false ])
-	})
-	colors.splice(0,0, 'case');
-	colors.splice((colors.length * 2) + 1, 0, '#a3a3a3');
-	return colors;
+export const colorArray = {
+	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
+	CDD: ['#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#b30000','#7f0000'],
+	HDD: ['#ffffe0', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#4e72ad', '#3b5ea3', '#264a9a', '#003790'],
+	Wind: ['#ffffff','#f0f0f0','#d9d9d9','#bdbdbd','#969696','#737373','#525252','#252525','#000000'],
 }
 
-export function getPopupInfo(countries, selected, unit) {
+export function colorsByVariables(countries, colType) {
+
+	let tempColors = !colorArray[colType] ? colorArray.default : colorArray[colType];
+	let tempCountries = [...countries];
+	let finalColors = [...tempColors];
+	let removeIndex = [];
+
+	for (let i = 0; i < tempColors.length; i++ ) finalColors.splice(i * 2, 0, ["match", ["get", "ISO3"], [], true, false ]);
+	let scale = scaleQuantile( countries.map(d => d.value), tempColors );
+
+	tempCountries.forEach(c => {
+		let { value, country } = c; 
+		let colorScale = e => !!e ? scale(e) : tempColors[0];
+		let idx = tempColors.findIndex(d => d === colorScale(value));
+		finalColors[idx * 2][2].push(country)
+	});
+	
+	for (let i in finalColors) 
+	if (finalColors[i][2].length === 0 ) removeIndex.push(Number(i));
+
+	for (let i = removeIndex.length -1; i >= 0; i--)
+		finalColors.splice(removeIndex[i], 2);
+
+	finalColors.splice(0,0, 'case');
+	finalColors.splice((finalColors.length * 2) + 1, 0, '#a3a3a3');
+	return finalColors;
+}
+
+export function getPopupInfo(countries, selected, unit, decimal) {
 	const selectedCountry = countries.filter(country => country.country === selected)[0];
-	if ( selected && selectedCountry ) {
-		return `
-			${selectedCountry.name} : <b>${selectedCountry.value.toFixed(2)}${unit}</b>
-		`
-	}
+	if ( selected && selectedCountry ) return `${selectedCountry.name} : <b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
 	return `<b>Value doe not exist for this country</b>`
 }
 

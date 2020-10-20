@@ -93,7 +93,6 @@ function CDD({
         map
           .setPaintProperty(layer, 'circle-opacity', ["case", ["==", ["get", mainColor ],0], 1, 1])
           .setPaintProperty(layer, 'circle-color', mainLayerColors(mainColor, hdd))
-          // .setLayoutProperty(popLayer, 'visibility', 'none');
       }
     }
 
