@@ -17,7 +17,7 @@ export default ({
 }) => {
 
   let list = options.reduce((r, a) => {
-    r[a.nested] = [...r[a.nested] || [], a];
+    r[a.group] = [...r[a.group] || [], a];
     return r;
   }, {});
   return(
@@ -44,8 +44,8 @@ export default ({
           <ul>
             {Object.entries(list).map((option,idx) =>
               option[0] === 'single' 
-                ? <Single key={idx} option={option[1]} info={info} click={click}/>
-                : <Nested key={idx} option={option[1]} info={info} click={click}/> )}
+                ? <Single key={`single-${idx}`} option={option[1]} info={info} click={click}/>
+                : <Group key={`group-${idx}`} option={option[1]} info={info} click={click}/> )}
           </ul>
         </div>
       </div>
@@ -53,10 +53,10 @@ export default ({
   )
 };
 
-const Nested = ({ option, click, info }) => (
+const Group = ({ option, click, info }) => (
   <li> 
     <div className={classes.NestedGroupTitle}>
-      {option[0].nested}
+      {option[0].group}
     </div>
     <ul className={classes.NestedList}>
       <Single click={click} info={info} option={option}/>

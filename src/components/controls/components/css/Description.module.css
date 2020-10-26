@@ -1,0 +1,12 @@
+.Introduction > p {
+  font-size: .65rem;
+  margin-top: 10px;
+  line-height: .9rem;
+}
+
+.Introduction::before {
+  display: block;
+  content: '';
+  background: white;
+  height: 1px;
+}

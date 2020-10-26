@@ -10,11 +10,34 @@ export default ({
   strokeWidth,
   stroke,
   fill,
-  styles
+  styles,
+  float
 }) => {
-  let icon = iconTypes[type];
+
+  let styleType = {
+    dark: {
+      button: [classes.Button, classes.dark, styles].join(' '),
+      icon: [classes.Icon, classes.dark, styles].join(' '),
+    },
+    light: {
+      button: [classes.Button, styles].join(' '),
+      icon: [classes.Icon, styles].join(' '),
+    },
+    float: {
+      button: [classes.Button, classes.Float, styles].join(' '),
+      icon: [classes.Icon, classes.Float, styles].join(' '),
+    }
+  };
+
+  const icon = iconTypes[type];
+  const style = dark === true 
+    ? styleType.dark 
+    : dark === 'float'
+    ? styleType.float
+    : styleType.light;
+
   return (
-    <Wrapper button={button} dark={dark} click={click} styles={styles}>
+    <Wrapper button={button} click={click} style={style}>
       <svg viewBox={viewBox || icon.viewBox}>
         <title>{icon.title}</title>
         {icon.path.map((path, idx) => 
@@ -30,20 +53,16 @@ export default ({
     </Wrapper>
   )
 }
-
   
-const Wrapper = ({ button, children, dark, click, styles }) => {
-  return (
-    button 
-    ? <button onClick={click} className={dark ? [classes.Button, classes.dark, styles].join(' ') : [classes.Button, styles].join(' ')}>
+const Wrapper = ({ button, children, click, style }) => (
+  button 
+    ? <button onClick={click} className={style.button}>
         {children}
       </button>
-    : <div className={dark ? [classes.dark, styles].join(' ') : styles}>
-      {/* style={{'width':'100%', 'height': '100%'}}>  */}
+    : <div className={style.icon}>
         {children} 
       </div>
-  )
-}
+)
 
 const iconTypes = {
   menu: {
@@ -67,6 +86,11 @@ const iconTypes = {
   help: {
       title: 'Help',
       path: ["M9.292 11.89h.888v-.516c0-.732.516-1.236 1.056-1.752.576-.552 1.176-1.116 1.176-2.004 0-1.008-.648-1.992-2.28-1.992-1.464 0-2.46.984-2.544 2.388h.936c.084-.948.696-1.56 1.596-1.56.888 0 1.284.492 1.284 1.2 0 .576-.408 1.008-.876 1.476-.6.588-1.236 1.188-1.236 2.16v.6zm.42 2.484c.42 0 .768-.336.768-.768a.766.766 0 00-.768-.768.766.766 0 00-.768.768c0 .432.348.768.768.768z"],
+      viewBox: "0 0 20 20"
+  },
+  download: {
+      title: 'Download',
+      path: ["M11 21.883l-6.235-7.527-.765.644 7.521 9 7.479-9-.764-.645-6.236 7.529v-21.884h-1v21.883z"],
       viewBox: "0 0 20 20"
   },
   downArrow: {

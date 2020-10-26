@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
-import { colorsByVariables, getPopupInfo, GRID_LAYERS, setGridColor } from './util'
+import { colorsByVariables, getPopupInfo } from './util'
+// import Image from '../../../assets/t2m_inlll_CDD_HI_monthly_EU18.tif'
+import Image from '../../../assets/grid_02.png'
+import { GRID_LAYERS, setGridColor } from './util'
 import { useMap } from '../../../components/customHooks'
 
 export default function({ 
@@ -18,7 +21,7 @@ export default function({
 		minZoom: 1.3,
 		maxZoom: 4,
 		maxBounds: [
-      [-180, -70],
+      [-180, -74],
       [180, 84],
     ]
 	};
@@ -27,16 +30,71 @@ export default function({
 
 	useEffect(setDefaultStyle, [map]);
 	useEffect(addGridData, [map]);
+
+
+	function addGridData() {
+		if (!map) return;
+
+		// const layers = GRID_LAYERS;
+		map
+			.addSource('raster_tiles', {
+				'type': 'image',
+				'url': Image,
+				'coordinates': [
+					[-180,85],
+					[180, 85],
+					[180, -85],
+					[-180, -85]
+					// [-180,81.8],
+					// [180, 81.8],
+					// [180, -81.8],
+					// [-180, -81.8]
+				]
+			})
+			.addLayer({
+				'id': 'simple-tiles',
+				'type': 'raster',
+				'source': 'raster_tiles',
+				'minzoom': 0,
+				'maxzoom': 22,
+				"paint": {
+					'raster-opacity': 1
+				}
+			}, 'shapes-0');
+		
+		// for ( let i in layers ) {
+    //   map.addSource(`hdd-grid-${i}`, { type: "vector", url: layers[i].url });
+		// }
+		
+    // for ( let i in layers) {
+    //   map.addLayer({
+    //     'id': `grid-${i}`,
+    //     'source': `hdd-grid-${i}`,
+    //     'type': 'circle',
+    //     'source-layer': layers[i].sourceLayer,
+    //     'paint': {
+    //       'circle-radius': [
+    //         'interpolate',
+    //         ['exponential', 0.5],
+    //         ['zoom'],
+    //         config.minZoom, 1.8,
+    //         config.maxZoom, 2.6
+    //       ],
+    //       'circle-opacity': .8,
+    //       'circle-color': setGridColor()
+    //     }
+    //   }, 'shapes-0')
+    // }
+	}
 	
 	function setDefaultStyle() {
 		if (!map) return;
-
 		const borders = ['solid', 'dotted'];
-
 		for ( let i in borders){
 			let idx = parseInt(i) + 1;
 			map
 				.setPaintProperty( `${borders[i]}-${idx}`, "line-color", '#404040')
+				// .setPaintProperty( `${borders[i]}-${idx}`, "line-color", '#404040')
 				.setPaintProperty( `${borders[i]}-${idx}`, "line-width", [
 					'interpolate',
 					['exponential', 0.5],
@@ -47,46 +105,18 @@ export default function({
 		}
 	}
 
-	function addGridData() {
-		if (!map) return;
-
-		const layers = GRID_LAYERS;
-		
-		for ( let i in layers ) {
-      map.addSource(`hdd-grid-${i}`, { type: "vector", url: layers[i].url });
-		}
-		
-    for ( let i in layers) {
-      map.addLayer({
-        'id': `grid-${i}`,
-        'source': `hdd-grid-${i}`,
-        'type': 'circle',
-        'source-layer': layers[i].sourceLayer,
-        'paint': {
-          'circle-radius': [
-            'interpolate',
-            ['exponential', 0.5],
-            ['zoom'],
-            config.minZoom, 1.8,
-            config.maxZoom, 2.6
-          ],
-          'circle-opacity': .8,
-          'circle-color': setGridColor()
-        }
-      }, 'shapes-0')
-    }
-	}
-
 	// Toggle between Grid and Country view.
 	useEffect (() => {
 		if(!map) return ;
 		let type = mapType === 'country';
 		let setVisibility = view => view  ? 'visible' : 'none';
 		map.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
-		for (let i = 0; i <= 4; i++ ) {
-			map.setLayoutProperty(`grid-${i}`, "visibility", setVisibility(!type))
-		}
+		map.setLayoutProperty(`simple-tiles`, "visibility", setVisibility(!type))
+		// for (let i = 0; i <= 4; i++ ) {
+		// 	map.setLayoutProperty(`grid-${i}`, "visibility", setVisibility(!type))
+		// }
 	}, [map, mapType]);
+
 
 	// Change country fill based on new variable data or selectedCountries.
 	useEffect (() => {
@@ -94,6 +124,7 @@ export default function({
 		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data, colType));
 	}, [map, data, colType])
 	
+
 	// Mouse hover events
 	useEffect (() => {
 		if ( !map ) return;
@@ -101,16 +132,18 @@ export default function({
 			? { layerLength: 1, layer: 'shapes' } : { layerLength: 4, layer: 'grid' };	
 
 		for (let i = 0; i <= layerType.layerLength; i++ ) {
-			map.on('mousemove', `${layerType.layer}-${i}`, mouseOver)
-			map.on('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
-			map.on('click', `${layerType.layer}-${i}`, mouseClick)
+			map
+				.on('mousemove', `${layerType.layer}-${i}`, mouseOver)
+				.on('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
+				.on('click', `${layerType.layer}-${i}`, mouseClick)
 		}
 		
 		return () => {
 			for (let i = 0; i <= layerType.layerLength; i++ ) {
-				map.off('mousemove', `${layerType.layer}-${i}`, mouseOver)
-				map.off('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
-				map.off('click', `${layerType.layer}-${i}`, mouseClick)
+				map
+					.off('mousemove', `${layerType.layer}-${i}`, mouseOver)
+					.off('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
+					.off('click', `${layerType.layer}-${i}`, mouseClick)
 			}
 		}
 	})
@@ -120,15 +153,15 @@ export default function({
 		click(selected)
 	}
 
+
 	function mouseOver(e) {
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
 		let selected = e.features[0].properties.ISO3;
-		let value = mapType === 'country' 
+		let value = mapType === 'country' 	
 			? getPopupInfo(data, selected, unit, decimal)
 			: parseFloat(e.features[0].properties.val.toFixed(2));
 		
-		map
-		.getCanvas().style.cursor = 'pointer';
+			map.getCanvas().style.cursor = 'pointer';
 		popUp.addClassName('weather');
 		popUp
 			.setLngLat(mousePos)
@@ -136,9 +169,9 @@ export default function({
 			.addTo(map);
 	}
 
+
 	function mouseLeave() {
-		map
-			.getCanvas().style.cursor = ''
+		map.getCanvas().style.cursor = ''
 		popUp.remove();
 	}
 

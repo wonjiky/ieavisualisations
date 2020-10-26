@@ -1,5 +1,5 @@
 import React from 'react'
-import { Slider, Toggle, Dropdown } from '../index'
+import { Slider, Button, Dropdown, Input, Description } from '../index'
 import global from './css/Global.module.css'
 
 export default props => {
@@ -7,9 +7,13 @@ export default props => {
     case 'dropdown':
       return <Dropdown {...props} />
 
-    case 'check':
+    case 'button':
+    case 'buttonGroup':
+      return <Button {...props} />;
+
+    case 'checkbox':
     case 'radio':
-      return <Toggle {...props} />;
+      return <Input {...props} />
 
     case 'slider':
       return <Slider {...props} />
@@ -19,6 +23,9 @@ export default props => {
         width: '100%', 
         marginBottom: `${props.marginBottom ? props.marginBottom : 0}px`, 
         marginTop: `${props.marginTop ? props.marginTop : 0}px`, }} />
+
+    case 'description':
+      return <Description {...props} />
         
     default:
       return null;

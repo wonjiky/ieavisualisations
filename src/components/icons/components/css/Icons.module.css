@@ -10,7 +10,21 @@
   box-shadow: 0 0 10px rgba(0,0,0,.2);
 }
 
-.Button:last-child {
+.Icon {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  background: transparent;
+  transition: background .19s linear;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+}
+
+
+
+.Button:last-child,
+.Icon:last-child {
   margin: 0;
 }
 
@@ -19,7 +33,8 @@
   margin-top: 3px;
 }
 
-.Button:hover {
+.Button:hover,
+.Icon:hover {
   transition: background .19s linear;
   background-color: rgb(237, 237, 237);
   border-radius: 50%;
@@ -31,4 +46,13 @@
 
 .dark:hover {
   background: #353333;
+}
+
+.Float {
+  background: #04f;
+}
+
+.Float:hover{
+  transition: background .19s linear;
+  background: #002999;
 }

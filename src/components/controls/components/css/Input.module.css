@@ -1,0 +1,28 @@
+.InputWrapper {
+  padding: 0 5px;
+}
+
+.InputItem {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.disabled {
+  color: rgba(255, 255, 255, 0.3);
+  cursor: default;
+}
+
+.InputItem > input {
+  float: right;
+  cursor: pointer;
+}
+
+.InputItem:hover {
+  text-decoration: underline;
+}
+
+.InputItem:not(:last-child) {
+  margin-bottom:8px;
+}
+

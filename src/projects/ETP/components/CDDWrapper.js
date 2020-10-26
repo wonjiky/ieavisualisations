@@ -23,7 +23,7 @@ function CDDWrapper(props) {
 
   let controls = [
 		{ 
-			type: 'radio',
+			type: 'buttonGroup',
 			options: ['HDD','CDD'],
       selected: hdd,
       dark: true,
@@ -31,7 +31,7 @@ function CDDWrapper(props) {
       click: value => setHdd(value),
     },
     {
-      type: 'radio',
+      type: 'buttonGroup',
       options: [2019, 2030, 2070],
       selected: year,
       dark: true,
@@ -39,7 +39,7 @@ function CDDWrapper(props) {
 			click: value => setYear(value)
     },
     {
-      type: 'radio',
+      type: 'buttonGroup',
       options: ['SDS', 'STEPS'],
       selected: type,
       dark: true,
@@ -47,7 +47,7 @@ function CDDWrapper(props) {
       click: value => setType(value),
     },
     {
-      type: 'check',
+      type: 'button',
       flow: 'column',
       selected: selectedPop,
       dark: true,

@@ -3,18 +3,18 @@ import { Icon } from '../../icons'
 import classes from './css/ControlContainer.module.css'
 
 export default ({ children, dark, help, bg }) => {
+
   const [open, setOpen] = React.useState(true);
+  const style = !open && !dark
+    ? classes.ControlContainer 
+    : open && !dark
+    ? [classes.ControlContainer, classes.open].join(' ') 
+    : !open && dark
+    ? [classes.ControlContainer, classes.dark].join(' ')
+    : [classes.ControlContainer, classes.open, classes.dark].join(' ')
+
   return (
-    <section className={
-      !open && !dark
-      ? classes.ControlContainer 
-      : open && !dark
-      ? [classes.ControlContainer, classes.open].join(' ') 
-      : !open && dark
-      ? [classes.ControlContainer, classes.dark].join(' ')
-      : [classes.ControlContainer, classes.open, classes.dark].join(' ')
-      }
-    >
+    <section className={style}>
       <div className={classes.ToggleWrapper}>
         <div className={classes.ToggleContainer}> 
           {help ? 

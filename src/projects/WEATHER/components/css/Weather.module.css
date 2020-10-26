@@ -1,19 +1,66 @@
-.Help{
+.ButtonWrapper {
     position: absolute;
+    margin-left: 20px;
+    display: flex;
+    top: 410px;
+}
+
+.Help,
+.Download {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     cursor: pointer;
-    top: 280px;
-    margin-left: 20px;
 }
 
-.Help > svg {
+.Help > svg,
+.Download > svg {
     height: 100%;
     margin-top: 0;
 }
 
-/* #454545 */
+.DownloadContainer {
+    display: flex;
+    position: relative;
+}
+
+.DownloadButton {
+    margin-right: 10px;
+}
+
+.DownloadButton:hover + .DownloadWrapper{
+    visibility: visible;
+    opacity: 1;
+    transition: 0.3s;
+}
+
+.DownloadWrapper {
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    padding: 0 20px;
+    align-items: center;
+    background: #fff;
+    transition: 0.3s;
+}
+
+.DownloadWrapper:before {
+    content:'';
+    display:block;
+    width:0;
+    height:0;
+    position:absolute;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent; 
+    border-right: 7px solid #fff;
+    left: 39px;
+}
+
+.DownloadWrapper {
+    text-decoration: none;
+    font-size: .8rem;
+    color: #000;
+}
 
 table {
     border-collapse: collapse;
