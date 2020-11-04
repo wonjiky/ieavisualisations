@@ -22,7 +22,63 @@
   text-decoration: underline;
 }
 
+.disabled:hover {
+  text-decoration: none !important;
+}
+
 .InputItem:not(:last-child) {
   margin-bottom:8px;
 }
 
+.Label {
+  display: flex;
+  align-items:center;
+}
+
+.onHoverInfoWrapper {
+  margin-left: 5px;
+
+}
+
+.onHoverInfo {
+  width: 18px;
+  height: 18px;
+}
+
+.onHoverInfo:hover .InfoWrapper {
+  visibility: visible;
+}
+
+.InfoWrapper {
+  position: absolute;
+  visibility: hidden;
+  background: #fff;
+  color: #000;
+  padding: 4px 10px;
+  z-index: 2;
+  height: 20% !important;
+  width: 20% !important;
+  /* margin-left: 25px; */
+}
+
+/* .InfoWrapper:before {
+  content:'';
+  display:block;
+  width:0;
+  height:0;
+  position:absolute;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; 
+  border-right: 7px solid #fff;
+  left: -4px;
+} */
+
+.onHoverInfo:hover > div > svg > path:first-child {
+  fill: rgba(255,255,255,0.7);
+  transition: .19s linear;
+}
+
+.onHoverInfo > div {
+  height: 100%;
+  width: 100%;
+}

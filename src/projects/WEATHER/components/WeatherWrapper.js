@@ -10,15 +10,16 @@ import variables from './assets/variables.json'
 import Weather from './Weather'
 import classes from './css/Weather.module.css'
 import CountryInfo from './CountryInfo'
+import { mapBox } from '../../../components/customHooks/components/util/util'
 
-export default function() {
+export default function({ baseURL }) {
 
 	const initialVariable = variables.country.sort((a,b) => a.group.localeCompare(b.group))[0]
 	const [data, setData] = useState(null);
 	const [index, setIndex] = useState(true);
 	const [firstCountry, setFirstCountry] = useState(null);
 	const [secondCountry, setSecondCountry] = useState(null);
-	const [date, setDate] = useState({ day: 1, month: 8, year: 2011});
+	const [date, setDate] = useState({ day: 1, month: 9, year: 2020});
 	const [mapType, setMapType] = useState('country');
 	const [variable, setVariable] = useState({id: initialVariable.id, name: initialVariable.name});
 	const [interval, setInterval] = useState('day');
@@ -28,30 +29,32 @@ export default function() {
 	const [selectedCountries, setSelectedCountries] = useState([]);
 	
 	const { day, month, year } = date;
+
+	// Produce query for choropleth data
 	const getQuery = query => Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
 	let joinedDate = `${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
-	let query = interval === 'day' ? { date: joinedDate, variable: variable.id } 
-		: interval === 'month' ? { month, year, variable: variable.id, valueType: valueType}
-		: { year, variable: variable.id }; 
+	let query = withIntervalLogic([{ year, variable: variable.id }, { month, year, variable: variable.id, valueType }, { date: joinedDate, variable: variable.id }], interval)
 	let mapQueryString = getQuery(query);
-		
+	
+	// Produce query for country data
 	let maxDay = new Date(year, month, 0).getDate();
 	let startDate = withIntervalLogic(['20100101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], interval);
 	let endDate = withIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], interval);
-	let countryQuery = `/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}&valueType=${valueType}`;
-
-	let downloadQuery = interval === 'month' 
-		? { variable: variable.id, year: year, valueType: valueType } 
-		: { variable: variable.id, daily: true, year: year, valueType: valueType };
-	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
-	let dowloadButtonLabel = interval === 'month'
-		? `Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} for ${year}`
-		: interval === 'day'
-		? `Daily ${variable.name} values for ${getMonthString(month)} ${year}`
-		:	`Daily ${variable.name} values for ${year}`
-
-	const { unit, decimal, group} = variables[mapType].find(d => d.id === variable.id);
+	let countryQuery = valueType === 'Value' 
+		? `/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}&valueType=${valueType}`
+		: `/?year=${year}&variable=${variable.id}&valueType=${valueType}`;
 	
+
+	// Produce download link and query
+	let downloadQuery = withIntervalLogic([{ variable: variable.id, daily: true, year}, { variable: variable.id, year, valueType}, { variable: variable.id, daily: true, year, month}], interval);
+	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
+	let downloadButtonLabel = withIntervalLogic([
+		`Daily ${variable.name} values for ${year}`,
+		`Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} for ${year}`,
+		`Daily ${variable.name} values for ${getMonthString(month)} ${year}`
+	], interval);
+
+	const { unit, decimal, group, color} = variables[mapType].find(d => d.id === variable.id);
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
@@ -99,7 +102,6 @@ export default function() {
 	}, [selectedCountries, countryQuery, interval]);
 
 	useEffect(fetchCountryData, [selectedCountries, countryQuery]);
-
 	useEffect(() => {
 		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
 		.then(response => {
@@ -117,7 +119,6 @@ export default function() {
 
 	const controls = {
 		topleft: [
-			
 			{ 
 				type: 'buttonGroup',
 				options: ['Country','Grid'],
@@ -138,7 +139,7 @@ export default function() {
 				label: withIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`], interval),
 				value: withIntervalLogic([year, month, day], interval),
 				min: withIntervalLogic([2000, 1, 1], interval),
-				max: withIntervalLogic([ 2020, year === 2020 ? 8 : 12, maxDay ], interval),
+				max: withIntervalLogic([ 2020, year === 2020 ? 9 : 12, maxDay ], interval),
 				step: 1,
 				change: e => setDate(interval !== 'day' 
 					? { ...date, [interval] : Number(e.target.value), day: 1 }
@@ -147,6 +148,7 @@ export default function() {
 			},
 			{ 
 				type: 'buttonGroup',
+				// type: mapType === 'country' ? 'buttonGroup' : null,
 				options: ['Year', 'Month', 'Day'],
 				selected: uppercase(interval),
 				flow: 'row',
@@ -156,12 +158,11 @@ export default function() {
 				}
 			},
 			{
-				type: 'radio',
-				info: true,
+				type: mapType === 'country' ? 'radio' : null,
 				options: [
-					{ label: 'Value', value: 'Value'}, 
-					{ label: 'Anomaly', value: 'Anomalies'}, 
-					{ label: 'Climatology', value: 'Value Climatologies'}, 
+					{ label: 'Value', value: 'Value' }, 
+					{ label: 'Anomaly', value: 'Anomalies' }, 
+					{ label: 'Climatology', value: 'Value Climatologies' }
 				],
 				flow: 'column',
 				disabled: interval === 'month' ? false : true,
@@ -181,11 +182,12 @@ export default function() {
 			},
 			{
 				type: 'description',
-				options: ['* Anomaly and climatology values are only available in monthly view'],
+				options: ['* Anomaly and climatology values are only available in monthly country view'],
 			},
 		]
 	};
 
+	
 	const legends = [
 		{
 			type: 'continuous',
@@ -194,31 +196,29 @@ export default function() {
 			labels: data 
 				? [parseFloat(Math.min(...data.map(d => d.value))).toFixed(decimal), 
 					`${Math.max(...data.map(d => parseFloat(d.value).toFixed(decimal)))} ${unit}`] : [],
-			colors: !colorArray[group] 
-				? colorArray.default : colorArray[group],
+			colors: !colorArray[color||group] 
+				? colorArray.default : colorArray[color||group],
 			round: false
 		}
-	]
+	];
 
-	const buttons =[
-		{
-			type: 'help',
-			dark: 'float',
-			fill: true,
-			button: true,
-			styles: classes.Help,
-			click: _ => setOpenInfo(!openInfo)
-		},
-		{
-			type: 'download',
-			dark: 'float',
-			stroke: true,
-			strokeWidth: 1,
-			button: false,
-			viewBox: "-13 -11 50 50",
-			styles: classes.Download
-		},
-	]
+	let gridTypes = {
+		"Temperaturedailybypop":"T_monthly_from_daily",
+		"Temperaturemaxdailybypop":"Tmax_monthly_from_daily",
+		"Temperaturemindailybypop":"Tmin_monthly_from_daily",
+		"CDDdailybypop18":"CDD_monthly18",
+		"CDDHIdailybypop18":"CDD_HI_monthly18",
+		"HDDdailybypop18":"HDD_monthly18",
+		"Precdaily":"Prec_monthly",
+		"Snowfalldaily":"Snow_monthly",
+		"Runoffdaily":"Runoff_monthly",
+		"Evapdaily":"Evap_monthly",
+		"Daylightdaily":"Daylight_monthly",
+		"DNIdaily":"DNI_monthly",
+		"GHIdaily":"GHI_monthly",
+		"Wind100intdaily":"Wind_100_int_monthly",
+		"Wind10intdaily": "Wind_10_int_monthly"
+	}
 
 	return (
 		<MapContainer selector={'Weather_Map'} loaded={data}>
@@ -226,17 +226,26 @@ export default function() {
 				data={data} 
 				mapType={mapType} 
 				selectedCountries={selectedCountries}
-				variables={variables[mapType]}
+				gridURL={`${baseURL}weather/grid/2020/01/${gridTypes[variable.id]}.png`}
 				unit={unit}
 				decimal={decimal}
-				colType={group}
+				colType={color || group}
 				click={e => {
 					if ([ ...selectedCountries ].map(d => d.ISO).includes(e)) return;
 					setIndex(!index);
 					getSelectedCountries(e, index);	
 				}}
 			/>
-			<ControlContainer dark={true} bg>
+			<ControlContainer 
+			 	bg
+				dark={true} 
+				help={true}
+				helpClick={_ => setOpenInfo(!openInfo)}	
+				helpTitle="Glossary of map terms"
+				download={true}
+				downloadLink={download}
+				downloadLabel={downloadButtonLabel}
+			>
 				<Controls position='bottomRight'  customClass={classes.Test}>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
@@ -246,19 +255,20 @@ export default function() {
             <Control key={idx} {...control} /> )}
 				</Controls>
 			</ControlContainer>
-			<div className={classes.ButtonWrapper}>
-				<Icon fill button type='help' dark='float'  styles={classes.Help} click={_ => setOpenInfo(!openInfo)} />
+			<div className={classes.ButtonWrapper} style={{"top": mapType === 'country' ? "410px" : "275px" }}>
+				<Icon fill button type='help' dark='float' styles={classes.Help} click={_ => setOpenInfo(!openInfo)} title="Glossary of map terms"/>
 				<div className={classes.DownloadContainer}>
 					<a href={download} className={classes.DownloadButton}>
 						<Icon strokeWidth={1} stroke type='download' viewBox='-13 -11 50 50' dark='float' styles={classes.Download} />
 					</a>
 					<div className={classes.DownloadWrapper}>
-						{dowloadButtonLabel}
+						{downloadButtonLabel}
 					</div>
 				</div>
 			</div>
 			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)} dark>
-				<Table body={variables[mapType]} head={['Variable', 'Description', 'Unit']} />
+				<ValueType body={variables.valueTypes} head={['Name', 'Description']} />
+				<Table body={variables[mapType]} head={['Name', 'Description', 'Unit']} />
 			</Modal>
 			<CountryInfo 
 				data={countryData}
@@ -279,21 +289,38 @@ export default function() {
   )
 };
 
+const ValueType = ({ body, head }) => (
+	<div className={classes.ModalText}>
+		<h5>Value types</h5>
+		{body.map(d => 
+			<div key={d.id} className={classes.ModalTextContent}>
+				<h6>{d.id}</h6>
+				<p>{d.info}</p>
+			</div>
+		)}
+	</div>
+)
+
 const Table = ({ body, head }) => (
-	<table>
-		<thead>
-			<tr>
-				{head.map((item, idx) => <th key={idx}> {item} </th>)}				
-			</tr>
-		</thead>
-		<tbody>
-			{body.map((item, idx) =>
-				<tr key={idx}>
-					<td>{item.name}</td>
-					<td>{item.info}</td>
-					<td>{item.unit}</td>
-				</tr>
-			)}
-		</tbody>
-	</table>
+	<div className={classes.Table}>
+		<h5>Variables</h5>
+		<div className={classes.TableWrapper}>
+			<table>
+				<thead>
+					<tr>
+						{head.map((item, idx) => <th key={idx}> {item} </th>)}				
+					</tr>
+				</thead>
+				<tbody>
+					{body.map((item, idx) => 
+						<tr key={idx}>
+							<td>{item.name}</td>
+							<td>{item.info}</td>
+							<td>{item.unit}</td>
+						</tr>
+					)}
+				</tbody>
+			</table>
+		</div>
+	</div>
 )

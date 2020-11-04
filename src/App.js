@@ -1,6 +1,7 @@
 import React from 'react';
 import { Weather } from './projects/WEATHER';
 import { GTF_Flow, GTF_Vector } from './projects/GTF';
+import { Electricity } from './projects/Electricity';
 import { CCUS } from './projects/CCUS';
 import { CDDMap } from './projects/ETP';
 import { Auth } from './components/fakeAuth';
@@ -26,6 +27,7 @@ function App() {
 		{ id: 5, item: 'ETP CCUS - Europe', url: '/etp-ccus-europe', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
 		{ id: 6, item: 'ETP CCUS - China', url: '/etp-ccus-china', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
 		{ id: 7, item: 'ETP2020 - CDD', url: '/ETP2020-cdd', component: CDDMap, exact: true, pw: password[3], title: 'ETP2020 - CDD Map' },
+		{ id: 8, item: 'COVID impact on electricity', url: '/electricity-project', component: Electricity, exact: true, pw: password[3], title: 'Electricity-project' },
 	];
 
 	let baseURL = process.env.REACT_APP_DEV;

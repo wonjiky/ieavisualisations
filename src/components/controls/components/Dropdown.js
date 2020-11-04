@@ -2,7 +2,6 @@ import React from 'react'
 import classes from './css/Dropdown.module.css'
 import { Icon } from '../../icons'
 import global from './css/Global.module.css'
-import { queryByTestId } from '@testing-library/react';
 
 export default ({ 
   label, 
@@ -20,8 +19,15 @@ export default ({
     r[a.group] = [...r[a.group] || [], a];
     return r;
   }, {});
+  let dropdownStyle = active.open && active.target === label 
+    ? [classes.DropdownOptions, classes.active].join(' ') 
+    : classes.DropdownOptions;
+  let wrapperStyle = dark 
+    ? [global.ControlContainer, classes.Dropdown, global.dark].join(' ') 
+    : [global.ControlContainer, classes.Dropdown].join(' ');
+
   return(
-    <div className={dark ? [global.ControlContainer, classes.Dropdown, global.dark].join(' ') : [global.ControlContainer, classes.Dropdown].join(' ')}>
+    <div className={wrapperStyle}>
       <label className={global.ControlLabel}>
         {label}
       </label>
@@ -30,16 +36,10 @@ export default ({
         <div className={dark 
           ? [classes.Icon, classes.dark].join(' ') 
           : classes.Icon}>
-            <Icon type='downArrow' />
+            <Icon type='downArrow' dark={true} />
         </div>
       </button>     
-      <div 
-        id='dropdown' 
-        style={bottom ? {top: 'unset', bottom: '0px'} : null}
-        className={active.open && active.target === label 
-          ? [classes.DropdownOptions, classes.active].join(' ') 
-          : classes.DropdownOptions}
-        >
+      <div id='dropdown' style={bottom ? {top: 'unset', bottom: '0px'} : null} className={dropdownStyle}>
         <div>
           <ul>
             {Object.entries(list).map((option,idx) =>

@@ -1,6 +1,6 @@
 import React from 'react'
 import mapboxgl from 'mapbox-gl'
-import { oecd, mapBox, lineDashArray  } from './util/util'
+import { oecd, mapBox, lineDashArray, centroids  } from './util/util'
 import "mapbox-gl/dist/mapbox-gl.css"
 
 export default config => {
@@ -30,6 +30,27 @@ export default config => {
 
 	React.useEffect(mapType, []);
 
+	function addCentroids(map) {
+		if (!config.centroids) return;
+		if (config.centroids) {
+			const { layers, sources } = centroids;
+			map
+				.addSource('centroids', { type: 'vector', url: sources.url})
+				.addLayer({
+					'id': layers.id,
+					'source': layers.source,
+					'source-layer': layers.sourceLayer,
+					'type': 'circle',
+				})
+				.addLayer({
+					'id': 'label-layer',
+					'source': layers.source,
+					'source-layer': layers.sourceLayer,
+					'type': 'symbol',
+				})
+		}
+	}
+
 	function fetchOecdMap () {
 		
 		const map = new mapboxgl.Map({...mapConfig, container: mapContainerRef.current});
@@ -38,7 +59,7 @@ export default config => {
 			setPopUp(tooltip);
 			setMap(map);
 			map.addControl(new mapboxgl.NavigationControl());
-
+			
 			for ( let i in oecd.sources ) {
 				let source = oecd.sources[i];
 				map.addSource(source.id, { type: 'vector', url: source.url })
@@ -60,6 +81,8 @@ export default config => {
 					...meta
 				});
 			}
+
+			addCentroids(map);
 
 		});
 	}
@@ -101,6 +124,8 @@ export default config => {
 					'layout': layer.layout,
 				})
 			}
+
+			addCentroids(map);
 
 		})
 	}

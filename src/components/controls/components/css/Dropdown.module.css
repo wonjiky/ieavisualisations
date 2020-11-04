@@ -13,8 +13,8 @@
   white-space: nowrap;
 }
 
-.Dropdown:hover .Icon {
-  background: rgba(255,255,255,0.1);
+.Dropdown:hover .Icon > div {
+  background: #353333;
   transition: background .2s linear;
 }
 

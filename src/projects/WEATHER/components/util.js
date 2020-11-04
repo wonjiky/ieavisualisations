@@ -4,19 +4,21 @@ import { scaleQuantile } from 'd3-scale'
 
 export const colorArray = {
 	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
-	CDD: ['#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#b30000','#7f0000'],
+	// CDD: ['#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#b30000','#7f0000'],
+	CDD: ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'],
 	HDD: ['#ffffe0', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#4e72ad', '#3b5ea3', '#264a9a', '#003790'],
-	Wind: ['#ffffff','#f0f0f0','#d9d9d9','#bdbdbd','#969696','#737373','#525252','#252525','#000000'],
+	Cloud: ['#ffffff','#e6e6e6','#cbcbcb','#bdbdbd','#a3a3a3','#8f8f8f','#7b7b7b','#636363','#4a4a4a'],
+	Precipitation: ['#ffffff','#e3ece2','#cadcc8','#a4c3a2','#93b790','#6a9c66','#528c4e','#3c7e38','#165312'],
+	Humidity: ['#ffe470','#e8d473','#c8bf77','#a8a97b','#85917f','#657b83','#4a6987','#29538b','#003790']
 }
 
-export function colorsByVariables(countries, colType) {
-
+export function colorsByVariables(countries, colType, selector) {
 	let tempColors = !colorArray[colType] ? colorArray.default : colorArray[colType];
 	let tempCountries = [...countries];
 	let finalColors = [...tempColors];
 	let removeIndex = [];
 
-	for (let i = 0; i < tempColors.length; i++ ) finalColors.splice(i * 2, 0, ["match", ["get", "ISO3"], [], true, false ]);
+	for (let i = 0; i < tempColors.length; i++ ) finalColors.splice(i * 2, 0, ["match", ["get", selector], [], true, false ]);
 	let scale = scaleQuantile( countries.map(d => d.value), tempColors );
 
 	tempCountries.forEach(c => {
@@ -92,6 +94,10 @@ export function uppercase(str) { return str.charAt(0).toUpperCase() + str.slice(
 export function getCountryNameByISO(iso) { 
 	let exist = countries.find(d => d.ISO3 === iso)
 	return !exist ? null : exist.region;
+}
+
+export function getCentroidLabelByISO(data) {
+	return ["to-string", ["get", "region"]]
 }
 
 export function getMonthString(date) {

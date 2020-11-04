@@ -2,7 +2,6 @@
     position: absolute;
     margin-left: 20px;
     display: flex;
-    top: 410px;
 }
 
 .Help,
@@ -65,26 +64,69 @@
 table {
     border-collapse: collapse;
     width: 100%;
+    padding: 10px;
 }
 
 td, th {
     height: 2rem;
     text-align: left;
-    padding: 5px;
+    padding: 7px;
 }
 
 td {
     border-bottom: .5px solid #ccc;
 }
 
+td:last-child {
+    font-size: .8rem;
+    text-align: center;
+}
+
 th {
-    font-size: 1.45rem;
-    padding-bottom: 7px;
+    font-size: 1rem;
     border-bottom: 4px solid #ccc;
+}
+
+.Table h5,
+.ModalText h5 {
+    margin: 0 0 25px;
+    font-size: 2rem;
+    color: #E6E6E6;
+}
+
+.Table,
+.ModalText {
+    margin-bottom: 40px;
+}
+
+.Table h6,
+.ModalText h6 {
+    font-size: 1.25rem;
+    margin: 0 0 10px;
+}
+
+.TableWrapper{
+    padding: 0 20px;
+}
+
+.ModalTextContent p {
+    width: 80%;
+}
+
+.ModalTextContent{
+    margin-bottom: 20px;
+    line-height: 1.25rem;
+    padding: 0 20px;
 }
 
 .Test{ 
     background: transparent !important;
     box-shadow: none;
     bottom: 100px;
+}
+
+@media screen and (max-width: 729px) {
+	.ButtonWrapper {
+		display: none;
+	}
 }

@@ -285,7 +285,6 @@ export default ({ data, regions, toggle }) => {
     }
 
     return () => {
-      
       for ( let reservoir in reservoirs ) {
         map
           .removeLayer(`${regions.region}-Rsv-${reservoir}`)

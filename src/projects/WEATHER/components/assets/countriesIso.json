@@ -164,7 +164,7 @@
     "ISO3": "CHL"
   },
   {
-    "region": "China (People's Rebulic of)",
+    "region": "China (People's Republic of)",
     "ISO3": "CHN"
   },
   {
@@ -469,7 +469,7 @@
   },
   {
     "region": "Kosovo",
-    "ISO3": "KSV"
+    "ISO3": "XKX"
   },
   {
     "region": "Kuwait",
@@ -593,7 +593,7 @@
   },
   {
     "region": "Martinique",
-    "ISO3": "MTIQ"
+    "ISO3": "MTQ"
   },
   {
     "region": "Mauritius",

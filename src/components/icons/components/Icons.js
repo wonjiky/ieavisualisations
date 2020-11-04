@@ -9,9 +9,8 @@ export default ({
   viewBox,
   strokeWidth,
   stroke,
-  fill,
   styles,
-  float
+  title,
 }) => {
 
   let styleType = {
@@ -39,13 +38,13 @@ export default ({
   return (
     <Wrapper button={button} click={click} style={style}>
       <svg viewBox={viewBox || icon.viewBox}>
-        <title>{icon.title}</title>
+        <title>{title ? title : icon.title}</title>
         {icon.path.map((path, idx) => 
           <path 
             key={idx} 
             strokeWidth={strokeWidth || ''}
             stroke={stroke ? (dark ? '#fff' : '#000') : ''} 
-            fill={fill ? (dark ? '#fff' : '#000') : ''} 
+            fill={dark ? '#fff' : '#000'} 
             d={path}
           />
         )}

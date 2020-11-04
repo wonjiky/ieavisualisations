@@ -1,0 +1,1 @@
+export { default as Electricity } from './components/ElecWrapper' 

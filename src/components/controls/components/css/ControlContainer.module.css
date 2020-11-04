@@ -14,7 +14,7 @@
 
   .ControlContainer {
     position: fixed;
-    width: 100vw;
+    width: inherit;
     height: 400px;
     z-index: 10;
     box-sizing: border-box;
@@ -64,9 +64,74 @@
 
   .dark {
     color: #fff !important;
-    background: linear-gradient(0deg, rgba(37,37,37,0.8) 0%, rgba(37,37,37,0.8) 75%,  rgba(37,37,37,1) 85%, rgba(37,37,37,0.9) 100%);
+    /* background: linear-gradient(0deg, rgba(37,37,37,0.8) 0%, rgba(37,37,37,0.8) 75%,  rgba(37,37,37,1) 85%, rgba(37,37,37,0.9) 100%); */
+    background: rgba(37,37,37,0.97);
   }
 }
 
+.ButtonWrapper {
+  position: absolute;
+  margin-left: 20px;
+  display: flex;
+  top: 410px;
+}
 
+.Help,
+.Download {
+  /* width: 36px;
+  height: 36px; */
+  border-radius: 50%;
+  cursor: pointer;
+}
 
+.Help > svg,
+.Download > svg {
+  height: 100%;
+  margin-top: 0;
+}
+
+.DownloadContainer {
+  display: flex;
+  position: relative;
+}
+
+.DownloadButton {
+  margin-right: 10px;
+}
+
+.DownloadButton:hover + .DownloadWrapper{
+  visibility: visible;
+  opacity: 1;
+  transition: 0.3s;
+}
+
+.DownloadWrapper {
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  width: 220px;
+  margin-left: -130px;
+  visibility: hidden;
+  opacity: 0;
+  padding: 8px 20px;
+  text-align: center;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.DownloadWrapper:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.DownloadWrapper {
+  text-decoration: none;
+  font-size: .8rem;
+  color: #000;
+}

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { colorsByVariables, getPopupInfo } from './util'
+import { colorsByVariables, getPopupInfo, getCentroidLabelByISO } from './util'
 // import Image from '../../../assets/t2m_inlll_CDD_HI_monthly_EU18.tif'
 import Image from '../../../assets/grid_02.png'
-import { GRID_LAYERS, setGridColor } from './util'
+// import { GRID_LAYERS, setGridColor } from './util'
 import { useMap } from '../../../components/customHooks'
 
 export default function({ 
@@ -12,14 +12,16 @@ export default function({
 	decimal,
 	colType,
 	unit,
+	gridURL,
  }) {
 	
 	const config = { 
 		map: 'oecd',
+		centroids: true,
 		style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
 		center: [0,30], 
 		minZoom: 1.3,
-		maxZoom: 4,
+		maxZoom: 5.5,
 		maxBounds: [
       [-180, -74],
       [180, 84],
@@ -29,72 +31,91 @@ export default function({
 	const { map, mapContainerRef, popUp } = useMap(config);
 
 	useEffect(setDefaultStyle, [map]);
-	useEffect(addGridData, [map]);
+	// useEffect(addGridData, [map, mapType, variable]);
 
 
-	function addGridData() {
-		if (!map) return;
+	// useEffect(() => {
+	// 	if (!map || mapType === 'country') return;
 
-		// const layers = GRID_LAYERS;
+	// 	return () => {
+	// 		console.log('return')
+	// 		map
+	// 			.removeLayer('raster-tile')
+	// 			.removeSource('grid-tile')
+	// 	}
+	// },[map, mapType, variable])
+
+	useEffect(() => {
+		if (!map || mapType === 'country') return;
 		map
-			.addSource('raster_tiles', {
-				'type': 'image',
-				'url': Image,
-				'coordinates': [
-					[-180,85],
-					[180, 85],
-					[180, -85],
-					[-180, -85]
-					// [-180,81.8],
-					// [180, 81.8],
-					// [180, -81.8],
-					// [-180, -81.8]
-				]
-			})
-			.addLayer({
-				'id': 'simple-tiles',
-				'type': 'raster',
-				'source': 'raster_tiles',
-				'minzoom': 0,
-				'maxzoom': 22,
-				"paint": {
-					'raster-opacity': 1
-				}
-			}, 'shapes-0');
-		
-		// for ( let i in layers ) {
-    //   map.addSource(`hdd-grid-${i}`, { type: "vector", url: layers[i].url });
-		// }
-		
-    // for ( let i in layers) {
-    //   map.addLayer({
-    //     'id': `grid-${i}`,
-    //     'source': `hdd-grid-${i}`,
-    //     'type': 'circle',
-    //     'source-layer': layers[i].sourceLayer,
-    //     'paint': {
-    //       'circle-radius': [
-    //         'interpolate',
-    //         ['exponential', 0.5],
-    //         ['zoom'],
-    //         config.minZoom, 1.8,
-    //         config.maxZoom, 2.6
-    //       ],
-    //       'circle-opacity': .8,
-    //       'circle-color': setGridColor()
-    //     }
-    //   }, 'shapes-0')
-    // }
-	}
+		.addSource('grid-tile', {
+			'type': 'image',
+			'url': gridURL,
+			'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]
+		})
+		.addLayer({
+			'id': 'raster-tile',
+			'type': 'raster',
+			'source': 'grid-tile',
+			'minzoom': 0,
+			'maxzoom': 22,
+			"paint": {
+				'raster-opacity': 1
+			}
+		}, 'shapes-0');	
+		return () => {
+			map
+				.removeLayer('raster-tile')
+				.removeSource('grid-tile')
+		}
+	}, [map, mapType, gridURL])
+	// function addGridData() {
+	// 	if (!map || mapType === 'country') return;
+	// 	let types = {
+	// 		"Temperaturedailybypop":"T_monthly_from_daily",
+  //     "Temperaturemaxdailybypop":"Tmax_monthly_from_daily",
+  //     "Temperaturemindailybypop":"Tmin_monthly_from_daily",
+  //     "CDDdailybypop18":"CDD_monthly18",
+  //     "CDDHIdailybypop18":"CDD_HI_monthly18",
+  //     "HDDdailybypop18":"HDD_monthly18",
+  //     "Precdaily":"Prec_monthly",
+  //     "Snowfalldaily":"Snow_monthly",
+  //     "Runoffdaily":"Runoff_monthly",
+  //     "Evapdaily":"Evap_monthly",
+  //     "Daylightdaily":"Daylight_monthly",
+  //     "DNIdaily":"DNI_monthly",
+  //     "GHIdaily":"GHI_monthly",
+  //     "Wind100intdaily":"Wind_100_int_monthly",
+	// 		"Wind10intdaily": "Wind_10_int_monthly"
+	// 	}
+
+	// 	map
+	// 		.addSource('raster_tiles', {
+	// 			'type': 'image',
+	// 			'url': `./weather/grid/2020/01/${types[variable]}.png`,
+	// 			'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]
+	// 		})
+	// 		.addLayer({
+	// 			'id': 'raster-tile',
+	// 			'type': 'raster',
+	// 			'source': 'raster_tiles',
+	// 			'minzoom': 0,
+	// 			'maxzoom': 22,
+	// 			"paint": {
+	// 				'raster-opacity': 1
+	// 			}
+	// 		}, 'shapes-0');
+	// }
 	
 	function setDefaultStyle() {
 		if (!map) return;
 		const borders = ['solid', 'dotted'];
+
+		// Set border line color and width
 		for ( let i in borders){
 			let idx = parseInt(i) + 1;
 			map
-				.setPaintProperty( `${borders[i]}-${idx}`, "line-color", '#404040')
-				// .setPaintProperty( `${borders[i]}-${idx}`, "line-color", '#404040')
+				.setPaintProperty( `${borders[i]}-${idx}`, "line-color",  '#404040')
 				.setPaintProperty( `${borders[i]}-${idx}`, "line-width", [
 					'interpolate',
 					['exponential', 0.5],
@@ -103,6 +124,35 @@ export default function({
 					config.maxZoom, 0.4
 				]);
 		}
+
+		// Remove all centroids for disputed regions
+		map
+			.setFilter('centroids-layer', [
+				"all",
+				[
+					"match", ["get", "ISO3"],
+					["ABCDE", "ABCD-ESH", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"],
+					false, true
+				],
+				[
+					"match", ["id"],
+					[61, 255, 253, 87, 233, 86],
+					false,true
+				]
+			])
+			.setFilter('label-layer', [
+				"all",
+				[
+					"match", ["get", "ISO3"],
+					["ABCDE", "ABCD-ESH", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"],
+					false, true
+				],
+				[
+					"match", ["id"],
+					[61, 255, 253, 87, 233, 86],
+					false,true
+				]
+			])
 	}
 
 	// Toggle between Grid and Country view.
@@ -110,41 +160,81 @@ export default function({
 		if(!map) return ;
 		let type = mapType === 'country';
 		let setVisibility = view => view  ? 'visible' : 'none';
-		map.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
-		map.setLayoutProperty(`simple-tiles`, "visibility", setVisibility(!type))
-		// for (let i = 0; i <= 4; i++ ) {
-		// 	map.setLayoutProperty(`grid-${i}`, "visibility", setVisibility(!type))
-		// }
+		map
+			.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
+			.setLayoutProperty("centroids-layer", "visibility", setVisibility(type))
+			.setLayoutProperty("label-layer", "visibility", setVisibility(type))
+
+		if( !type ) map.setLayoutProperty("raster-tile", "visibility", setVisibility(!type));
 	}, [map, mapType]);
 
 
 	// Change country fill based on new variable data or selectedCountries.
 	useEffect (() => {
 		if (!map) return;
-		map.setPaintProperty("shapes-0", "fill-color", colorsByVariables(data, colType));
-	}, [map, data, colType])
+		map
+			.setPaintProperty( "shapes-0", "fill-color", [
+				'interpolate', ['exponential', 0.5], ['zoom'],
+				2.4, colorsByVariables(data, colType, 'ISO3'),
+				4, '#fff',
+			])
+			.setPaintProperty('centroids-layer', 'circle-radius', [
+				'interpolate', ['exponential', 0.5], ['zoom'],
+				2, 0,
+				3, 12
+			])
+			.setPaintProperty( "centroids-layer", "circle-opacity", [
+				'interpolate', ['exponential', 0.5], ['zoom'],
+				2, 0, 
+				3, 1
+			])
+			.setPaintProperty( "centroids-layer", "circle-stroke-opacity", [
+				'interpolate', ['exponential', 0.5],
+				['zoom'],
+				2, 0,
+				3, 1
+			])
+			.setPaintProperty( 'label-layer', "text-opacity", [
+				'interpolate', ['exponential', 0.5],
+				['zoom'],
+				2, 0,
+				3, 1
+			])
+			.setLayoutProperty('label-layer', 'text-size', [
+				'interpolate', ['exponential', 0.5],
+				['zoom'],
+				2, 1,
+				3, 14
+			])
+			.setPaintProperty('label-layer', "text-translate", [0,20])
+			.setPaintProperty('label-layer', 'text-halo-color', "hsl(0, 0%, 100%)")
+			.setPaintProperty('label-layer', 'text-halo-width', 1)
+			.setLayoutProperty('label-layer', 'text-field', getCentroidLabelByISO(data))
+			.setPaintProperty('centroids-layer', 'circle-color', colorsByVariables(data, colType, 'ISO3'))
+			.setPaintProperty('centroids-layer', 'circle-stroke-color', '#000')
+			.setPaintProperty('centroids-layer', 'circle-stroke-width', 1);
+
+	}, [map, config.minZoom, config.maxZoom, data, colType])
 	
 
 	// Mouse hover events
 	useEffect (() => {
 		if ( !map ) return;
-		let layerType = mapType === 'country' 
-			? { layerLength: 1, layer: 'shapes' } : { layerLength: 4, layer: 'grid' };	
-
-		for (let i = 0; i <= layerType.layerLength; i++ ) {
-			map
-				.on('mousemove', `${layerType.layer}-${i}`, mouseOver)
-				.on('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
-				.on('click', `${layerType.layer}-${i}`, mouseClick)
-		}
-		
+		map
+			.on('mousemove', `shapes-0`, mouseOver)
+			.on('mouseleave', `shapes-0`, mouseLeave)
+			.on('click', `shapes-0`, mouseClick)
+			.on('click', `centroids-layer`, mouseClick)
+			.on('mousemove', `centroids-layer`, mouseOver)
+			.on('mouseleave', `centroids-layer`, mouseLeave);
 		return () => {
-			for (let i = 0; i <= layerType.layerLength; i++ ) {
-				map
-					.off('mousemove', `${layerType.layer}-${i}`, mouseOver)
-					.off('mouseleave', `${layerType.layer}-${i}`, mouseLeave)
-					.off('click', `${layerType.layer}-${i}`, mouseClick)
-			}
+			map
+				.off('mousemove', `shapes-0`, mouseOver)
+				.off('mouseleave', `shapes-0`, mouseLeave)
+				.off('click', `shapes-0`, mouseClick)
+				.off('mousemove', `centroids-layer`, mouseOver)
+				.off('mouseleave', `centroids-layer`, mouseLeave)
+				.off('click', `centroids-layer`, mouseClick);
 		}
 	})
 
@@ -153,22 +243,18 @@ export default function({
 		click(selected)
 	}
 
-
 	function mouseOver(e) {
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
 		let selected = e.features[0].properties.ISO3;
-		let value = mapType === 'country' 	
-			? getPopupInfo(data, selected, unit, decimal)
-			: parseFloat(e.features[0].properties.val.toFixed(2));
+		let value = getPopupInfo(data, selected, unit, decimal)
 		
-			map.getCanvas().style.cursor = 'pointer';
+		map.getCanvas().style.cursor = 'pointer';
 		popUp.addClassName('weather');
 		popUp
 			.setLngLat(mousePos)
 			.setHTML(value)
 			.addTo(map);
 	}
-
 
 	function mouseLeave() {
 		map.getCanvas().style.cursor = ''
