@@ -164,136 +164,6 @@
       "group": "Solar radiation"
     }
    ],
-  "grid": [
-    {
-      "id": "Temperaturedailybypop",
-      "info": "2 meter mean temperature (population weighted average)",
-      "name": "Temperature (2m, population)",
-      "unit": "°C",
-      "decimal": 1,
-      "group": "Temperature"
-    },
-    {
-      "id": "Temperaturemaxdailybypop",
-      "info": "2 meter maximum temperature (population weighted average)",
-      "name": "Temperature max (2m, population)",
-      "unit": "°C",
-      "decimal": 1,
-      "group": "Temperature"
-    },
-    {
-      "id": "Temperaturemindailybypop",
-      "info": "2 meter minimum temperature (population weighted average)",
-      "name": "Temperature min (2m, population)",
-      "unit": "°C",
-      "decimal": 1,
-      "group": "Temperature"
-    },
-    {
-      "id": "CDDdailybypop18",
-      "info": "Cooling degree days (population weighted average, reference temperature 18 C)",
-      "name": "CDD (18 °C, population)",
-      "unit": "°C days",
-      "decimal": 1,
-      "group": "CDD"
-    },
-    {
-      "id": "CDDHIdailybypop18",
-      "info": "Cooling degree days from temperature corrected by humidity (population weighted average, reference temperature 18 C)",
-      "name": "CDD (18 °C, humidity, population)",
-      "unit": "°C days",
-      "decimal": 1,
-      "group": "CDD"
-    },
-    {
-      "id": "HDDdailybypop18",
-      "info": "Heating degree days (population weighted average, reference temperature 18 C)",
-      "name": "HDD (18 °C, population)",
-      "unit": "°C days",
-      "decimal": 1,
-      "group": "HDD"
-    },
-    {
-      "id": "Precdaily",
-      "info": "Total precipitation (surface weighted average)",
-      "name": "Total precipitation (surface)",
-      "unit": "mm/h",
-      "decimal": 3,
-      "group": "Precipitation"
-    },
-    {
-      "id": "Snowfalldaily",
-      "info": "Snowfall (surface weighted average)",
-      "name": "Snowfall (surface)",
-      "unit": "mm/h",
-      "decimal": 3,
-      "group": "Precipitation"
-    },
-    {
-      "id": "Runoffdaily",
-      "info": "Runoff (surface weighted average)",
-      "name": "Runoff (surface)",
-      "unit": "mm/h",
-      "decimal": 2,
-      "group": "Precipitation"
-    },
-    {
-      "id": "Evapdaily",
-      "info": "Evaporation (surface weighted average)",
-      "name": "Evaporation (surface)",
-      "unit": "mm/h",
-      "decimal": 3,
-      "group": "Precipitation"
-    },
-    {
-      "id": "Clouddaily",
-      "info": "Cloud coverage (surface weighted average)",
-      "name": "Cloud coverage (surface)",
-      "unit": "%",
-      "decimal": 2,
-      "group": "Solar radiation"
-    },
-    {
-      "id": "Daylightdaily",
-      "info": "Minutes of sun light (surface weighted average)",
-      "name": "Sun light (surface)",
-      "unit": "minutes per day",
-      "decimal": 0,
-      "group": "Solar radiation"
-    },
-    {
-      "id": "DNIdaily",
-      "info": "Direct normal radiation (surface weighted average)",
-      "name": "Direct normal radiation (surface)",
-      "unit": "J/m²/h",
-      "decimal": 0,
-      "group": "Solar radiation"
-    },
-    { 
-      "id": "GHIdaily",
-      "info": "Global horizontal irradiance (surface weighted average)",
-      "name": "Global horizontal irradiance (surface)",
-      "unit": "J/m²/h",
-      "decimal": 0,
-      "group": "Solar radiation"
-    },
-    {
-      "id": "Wind100intdaily",
-      "info": "100 meter wind speed (surface weighted average)",
-      "name": "Wind speed (100-m , surface)",
-      "unit": "m/s",
-      "decimal": 1,
-      "group": "Wind"
-    },
-    {
-      "id": "Wind10intdaily",
-      "info": "10 meter wind speed (surface weighted average)",
-      "name": "Wind speed (10-m, surface)",
-      "unit": "m/s",
-      "decimal": 1,
-      "group": "Wind"
-    }
-  ],
   "newCountry": [
     {
       "id": "Temperaturedaily",
@@ -464,7 +334,23 @@
       "group": "Wind"
     }
   ],
-  "newGrid": [
+  "grid": [
+    {
+      "id": "CDD18dailybypop",
+      "info": "Cooling degree days (population weighted average, reference temperature 18 °C)",
+      "name": "CDD (18 °C, population)",
+      "unit": "°C days",
+      "decimal": 1,
+      "group": "CDD"
+    },
+    {
+      "id": "CDDhum18dailybypop",
+      "info": "Cooling degree days from temperature corrected by humidity (population weighted average, reference temperature 18 °C)",
+      "name": "CDD (18 °C, humidity, population)",
+      "unit": "°C days",
+      "decimal": 1,
+      "group": "CDD"
+    },
     {
       "id": "Temperaturedailybypop",
       "info": "2 meter mean temperature (population weighted average)",
@@ -488,22 +374,6 @@
       "unit": "°C",
       "decimal": 1,
       "group": "Temperature"
-    },
-    {
-      "id": "CDD18dailybypop",
-      "info": "Cooling degree days (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, population)",
-      "unit": "°C days",
-      "decimal": 1,
-      "group": "CDD"
-    },
-    {
-      "id": "CDDhum18dailybypop",
-      "info": "Cooling degree days from temperature corrected by humidity (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, humidity, population)",
-      "unit": "°C days",
-      "decimal": 1,
-      "group": "CDD"
     },
     {
       "id": "HDD18dailybypop",

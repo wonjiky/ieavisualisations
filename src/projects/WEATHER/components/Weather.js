@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react'
-import { colorsByVariables, getPopupInfo, getCentroidLabelByISO } from './util'
-// import Image from '../../../assets/t2m_inlll_CDD_HI_monthly_EU18.tif'
-import Image from '../../../assets/grid_02.png'
-// import { GRID_LAYERS, setGridColor } from './util'
+import { colorsByVariables, getPopupInfo, getCentroidLabelByISO, disputedRegionsID, disputedRegionsISO } from './util'
 import { useMap } from '../../../components/customHooks'
 
 export default function({ 
@@ -12,6 +9,8 @@ export default function({
 	decimal,
 	colType,
 	unit,
+	variable,
+	month,
 	gridURL,
  }) {
 	
@@ -31,87 +30,11 @@ export default function({
 	const { map, mapContainerRef, popUp } = useMap(config);
 
 	useEffect(setDefaultStyle, [map]);
-	// useEffect(addGridData, [map, mapType, variable]);
-
-
-	// useEffect(() => {
-	// 	if (!map || mapType === 'country') return;
-
-	// 	return () => {
-	// 		console.log('return')
-	// 		map
-	// 			.removeLayer('raster-tile')
-	// 			.removeSource('grid-tile')
-	// 	}
-	// },[map, mapType, variable])
-
-	useEffect(() => {
-		if (!map || mapType === 'country') return;
-		map
-		.addSource('grid-tile', {
-			'type': 'image',
-			'url': gridURL,
-			'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]
-		})
-		.addLayer({
-			'id': 'raster-tile',
-			'type': 'raster',
-			'source': 'grid-tile',
-			'minzoom': 0,
-			'maxzoom': 22,
-			"paint": {
-				'raster-opacity': 1
-			}
-		}, 'shapes-0');	
-		return () => {
-			map
-				.removeLayer('raster-tile')
-				.removeSource('grid-tile')
-		}
-	}, [map, mapType, gridURL])
-	// function addGridData() {
-	// 	if (!map || mapType === 'country') return;
-	// 	let types = {
-	// 		"Temperaturedailybypop":"T_monthly_from_daily",
-  //     "Temperaturemaxdailybypop":"Tmax_monthly_from_daily",
-  //     "Temperaturemindailybypop":"Tmin_monthly_from_daily",
-  //     "CDDdailybypop18":"CDD_monthly18",
-  //     "CDDHIdailybypop18":"CDD_HI_monthly18",
-  //     "HDDdailybypop18":"HDD_monthly18",
-  //     "Precdaily":"Prec_monthly",
-  //     "Snowfalldaily":"Snow_monthly",
-  //     "Runoffdaily":"Runoff_monthly",
-  //     "Evapdaily":"Evap_monthly",
-  //     "Daylightdaily":"Daylight_monthly",
-  //     "DNIdaily":"DNI_monthly",
-  //     "GHIdaily":"GHI_monthly",
-  //     "Wind100intdaily":"Wind_100_int_monthly",
-	// 		"Wind10intdaily": "Wind_10_int_monthly"
-	// 	}
-
-	// 	map
-	// 		.addSource('raster_tiles', {
-	// 			'type': 'image',
-	// 			'url': `./weather/grid/2020/01/${types[variable]}.png`,
-	// 			'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]
-	// 		})
-	// 		.addLayer({
-	// 			'id': 'raster-tile',
-	// 			'type': 'raster',
-	// 			'source': 'raster_tiles',
-	// 			'minzoom': 0,
-	// 			'maxzoom': 22,
-	// 			"paint": {
-	// 				'raster-opacity': 1
-	// 			}
-	// 		}, 'shapes-0');
-	// }
-	
 	function setDefaultStyle() {
 		if (!map) return;
-		const borders = ['solid', 'dotted'];
-
-		// Set border line color and width
+		const borders = ['solid', 'dotted'], layers = ['centroids-layer', 'label-layer'];
+		
+		// Set default border line color and width
 		for ( let i in borders){
 			let idx = parseInt(i) + 1;
 			map
@@ -126,34 +49,45 @@ export default function({
 		}
 
 		// Remove all centroids for disputed regions
-		map
-			.setFilter('centroids-layer', [
-				"all",
-				[
-					"match", ["get", "ISO3"],
-					["ABCDE", "ABCD-ESH", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"],
-					false, true
-				],
-				[
-					"match", ["id"],
-					[61, 255, 253, 87, 233, 86],
-					false,true
-				]
+		for (let layer in layers) {
+			map.setFilter(layers[layer], [ "all", 
+				["match", ["get", "ISO3"], disputedRegionsISO, false, true],
+				["match", ["id"], disputedRegionsID, false,true]
 			])
-			.setFilter('label-layer', [
-				"all",
-				[
-					"match", ["get", "ISO3"],
-					["ABCDE", "ABCD-ESH", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"],
-					false, true
-				],
-				[
-					"match", ["id"],
-					[61, 255, 253, 87, 233, 86],
-					false,true
-				]
-			])
+		}
 	}
+
+	const addGridLayers = React.useCallback(e => {
+		if (!map || mapType === 'country') return;
+			map
+				.addSource(`grid-tiles`, {
+					'type': 'image',
+					'url': gridURL,
+					'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]	
+				})
+				.addLayer({
+					'id': `grid-layer`,
+					'type': 'raster',
+					'source': `grid-tiles`,
+					'paint':{'raster-fade-duration': 0},
+				}, 'shapes-0')
+
+		return () => {
+				map
+					.removeLayer(`grid-layer`)
+					.removeSource(`grid-tiles`)
+		}
+	},[map, mapType, gridURL])
+	
+	useEffect(addGridLayers, [map, mapType])
+	
+	useEffect(() => {
+		if (!map || mapType === 'country') return;
+		map.getSource('grid-tiles').updateImage({
+			'url': gridURL
+		})
+	},[map, mapType, gridURL, month, variable])
+
 
 	// Toggle between Grid and Country view.
 	useEffect (() => {
@@ -164,8 +98,6 @@ export default function({
 			.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
 			.setLayoutProperty("centroids-layer", "visibility", setVisibility(type))
 			.setLayoutProperty("label-layer", "visibility", setVisibility(type))
-
-		if( !type ) map.setLayoutProperty("raster-tile", "visibility", setVisibility(!type));
 	}, [map, mapType]);
 
 

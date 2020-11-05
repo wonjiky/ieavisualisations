@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { MapContainer } from '../../../components/container'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
-import { getCountryNameByISO, getMonthString, uppercase, withIntervalLogic, colorArray } from './util'
+import { getCountryNameByISO, getMonthString, uppercase, useIntervalLogic, colorArray, gridColorArray, GRID_LAYERS } from './util'
 import { Modal } from '../../../components/modal'
 import { Legends } from '../../../components/legends'
 import { Icon } from '../../../components/icons'
@@ -10,10 +10,10 @@ import variables from './assets/variables.json'
 import Weather from './Weather'
 import classes from './css/Weather.module.css'
 import CountryInfo from './CountryInfo'
-import { mapBox } from '../../../components/customHooks/components/util/util'
 
 export default function({ baseURL }) {
 
+	
 	const initialVariable = variables.country.sort((a,b) => a.group.localeCompare(b.group))[0]
 	const [data, setData] = useState(null);
 	const [index, setIndex] = useState(true);
@@ -22,7 +22,7 @@ export default function({ baseURL }) {
 	const [date, setDate] = useState({ day: 1, month: 9, year: 2020});
 	const [mapType, setMapType] = useState('country');
 	const [variable, setVariable] = useState({id: initialVariable.id, name: initialVariable.name});
-	const [interval, setInterval] = useState('day');
+	const [viewInterval, setViewInterval] = useState('day');
 	const [valueType, setValueType] = useState('Value')
 	const [active, setActive] = useState({ open: false, target: null });
 	const [openInfo, setOpenInfo] = useState(false);
@@ -33,28 +33,29 @@ export default function({ baseURL }) {
 	// Produce query for choropleth data
 	const getQuery = query => Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
 	let joinedDate = `${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
-	let query = withIntervalLogic([{ year, variable: variable.id }, { month, year, variable: variable.id, valueType }, { date: joinedDate, variable: variable.id }], interval)
+	let query = useIntervalLogic([{ year, variable: variable.id }, { month, year, variable: variable.id, valueType }, { date: joinedDate, variable: variable.id }], viewInterval)
 	let mapQueryString = getQuery(query);
 	
 	// Produce query for country data
 	let maxDay = new Date(year, month, 0).getDate();
-	let startDate = withIntervalLogic(['20100101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], interval);
-	let endDate = withIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], interval);
+	let startDate = useIntervalLogic(['20100101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], viewInterval);
+	let endDate = useIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], viewInterval);
 	let countryQuery = valueType === 'Value' 
 		? `/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}&valueType=${valueType}`
-		: `/?year=${year}&variable=${variable.id}&valueType=${valueType}`;
-	
+		: `/?year=${year}&variable=${variable.id}&valueType=${valueType}`;	
 
 	// Produce download link and query
-	let downloadQuery = withIntervalLogic([{ variable: variable.id, daily: true, year}, { variable: variable.id, year, valueType}, { variable: variable.id, daily: true, year, month}], interval);
+	let downloadQuery = useIntervalLogic([{ variable: variable.id, daily: true, year}, { variable: variable.id, year, valueType}, { variable: variable.id, daily: true, year, month}], viewInterval);
 	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
-	let downloadButtonLabel = withIntervalLogic([
+	let downloadButtonLabel = useIntervalLogic([
 		`Daily ${variable.name} values for ${year}`,
 		`Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} for ${year}`,
 		`Daily ${variable.name} values for ${getMonthString(month)} ${year}`
-	], interval);
+	], viewInterval);
 
-	const { unit, decimal, group, color} = variables[mapType].find(d => d.id === variable.id);
+	// Retrieve attributes for each variable
+	const { decimal, unit, group, color } = variables[mapType].find(d => d.id === variable.id);
+
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
@@ -65,13 +66,13 @@ export default function({ baseURL }) {
     document.addEventListener('click', hide)
 	},[ active.open, openInfo,  hide ])
 	
+	// Assign selected countries to variable
 	function getSelectedCountries(value, index) {
+		
 		if (!getCountryNameByISO(value)) return;
-
 		let currArr = [ ...selectedCountries ];
 		let idx = index ? 'firstCountry' : 'secondCountry';
 		let pos = currArr.findIndex(d => d.id === idx);
-
 		let countries = {
 			firstCountry: { id: 'firstCountry', color: '#727272', setData: e => setFirstCountry(e) },
 			secondCountry: { id: 'secondCountry', color: '#e6e6e6', setData: e => setSecondCountry(e) }
@@ -81,9 +82,11 @@ export default function({ baseURL }) {
 			currArr.splice(pos, 1)
 			currArr.push({ ...countries[idx], ISO: value })
 		} else currArr.push({ ...countries[idx], ISO: value })
+		
 		setSelectedCountries(currArr);
 	}
 
+	// Fetch selected country's data
 	const fetchCountryData = useCallback(() => {
 		for (let country in selectedCountries) {
 			let selected = selectedCountries[country];
@@ -93,15 +96,21 @@ export default function({ baseURL }) {
 						ISO: selected.ISO,
 						color: selected.color,
 						data: response.data,
-						interval: interval === 'day' 
-							? 86400000 : interval === 'month' 
+						viewInterval: viewInterval === 'day' 
+							? 86400000 : viewInterval === 'month' 
 							? 2592000000 : 31104000000	
 					});
 			})		
 		}
-	}, [selectedCountries, countryQuery, interval]);
+	}, [selectedCountries, countryQuery, viewInterval]);
 
+	// Push selected countries data to an array to series
+	let countryData = [];
+	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
+	
 	useEffect(fetchCountryData, [selectedCountries, countryQuery]);
+
+	// Fetch choropleth data
 	useEffect(() => {
 		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
 		.then(response => {
@@ -114,9 +123,7 @@ export default function({ baseURL }) {
 		})
 	}, [mapQueryString, variable, decimal]);
 
-	let countryData = [];
-	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
-
+	
 	const controls = {
 		topleft: [
 			{ 
@@ -125,36 +132,43 @@ export default function({ baseURL }) {
 				selected: uppercase(mapType),
 				flow: 'row',
 				click: value => {
+					if (value.toLowerCase() === mapType) return;
+					let map = mapType === 'country' ? 'grid' : 'country'
 					setMapType(value.toLowerCase());
+					setVariable({id: variables[map][0].id, name: variables[map][0].name})
 					setFirstCountry(null);
 					setSecondCountry(null);
 					setIndex(true);
+					setViewInterval('month');
+					setDate({ day: 1, month: 1, year: 2019});
 					setSelectedCountries([]);
-					setVariable({id: variables[mapType][0].id, name: variables[mapType][0].name})
 				}
 			},
 			{ 
 				type: 'slider',
-				selected: uppercase(interval),
-				label: withIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`], interval),
-				value: withIntervalLogic([year, month, day], interval),
-				min: withIntervalLogic([2000, 1, 1], interval),
-				max: withIntervalLogic([ 2020, year === 2020 ? 9 : 12, maxDay ], interval),
+				selected: uppercase(viewInterval),
+				label: mapType === 'country' 
+					? useIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`], viewInterval)
+					: `${getMonthString(month)}, 2019`,
+				value: mapType === 'country' 
+					? useIntervalLogic([year, month, day], viewInterval) 
+					: month,
+				min: useIntervalLogic([2000, 1, 1], viewInterval),
+				max: useIntervalLogic([ 2020, year === 2020 ? 9 : 12, maxDay ], viewInterval),
 				step: 1,
-				change: e => setDate(interval !== 'day' 
-					? { ...date, [interval] : Number(e.target.value), day: 1 }
-					: { ...date, [interval] : Number(e.target.value) 
+				change: e => setDate(viewInterval !== 'day' 
+					? { ...date, [viewInterval] : Number(e.target.value), day: 1 }
+					: { ...date, [viewInterval] : Number(e.target.value) 
 				})
 			},
 			{ 
-				type: 'buttonGroup',
-				// type: mapType === 'country' ? 'buttonGroup' : null,
+				type: mapType === 'country' ? 'buttonGroup' : '',
 				options: ['Year', 'Month', 'Day'],
-				selected: uppercase(interval),
+				selected: uppercase(viewInterval),
 				flow: 'row',
 				click: value => {
 					setValueType('Value')
-					setInterval(value.toLowerCase())
+					setViewInterval(value.toLowerCase())
 				}
 			},
 			{
@@ -165,7 +179,7 @@ export default function({ baseURL }) {
 					{ label: 'Climatology', value: 'Value Climatologies' }
 				],
 				flow: 'column',
-				disabled: interval === 'month' ? false : true,
+				disabled: viewInterval === 'month' ? false : true,
 				name: 'valueOption',
 				selected: valueType,
 				change: e => setValueType(e),
@@ -187,46 +201,32 @@ export default function({ baseURL }) {
 		]
 	};
 
-	
-	const legends = [
-		{
-			type: 'continuous',
-			header: 'legend',
-			subInHeader: false,
-			labels: data 
-				? [parseFloat(Math.min(...data.map(d => d.value))).toFixed(decimal), 
-					`${Math.max(...data.map(d => parseFloat(d.value).toFixed(decimal)))} ${unit}`] : [],
-			colors: !colorArray[color||group] 
-				? colorArray.default : colorArray[color||group],
-			round: false
-		}
-	];
+	const findMinMax = type => 
+		Math[type](...data.map(d => 
+			parseFloat(d.value).toFixed(decimal)));
 
-	let gridTypes = {
-		"Temperaturedailybypop":"T_monthly_from_daily",
-		"Temperaturemaxdailybypop":"Tmax_monthly_from_daily",
-		"Temperaturemindailybypop":"Tmin_monthly_from_daily",
-		"CDDdailybypop18":"CDD_monthly18",
-		"CDDHIdailybypop18":"CDD_HI_monthly18",
-		"HDDdailybypop18":"HDD_monthly18",
-		"Precdaily":"Prec_monthly",
-		"Snowfalldaily":"Snow_monthly",
-		"Runoffdaily":"Runoff_monthly",
-		"Evapdaily":"Evap_monthly",
-		"Daylightdaily":"Daylight_monthly",
-		"DNIdaily":"DNI_monthly",
-		"GHIdaily":"GHI_monthly",
-		"Wind100intdaily":"Wind_100_int_monthly",
-		"Wind10intdaily": "Wind_10_int_monthly"
-	}
+	const legends = [{
+		type: 'continuous',
+		header: 'legend',
+		subInHeader: false,
+		round: false,
+		labels: data 
+			? [findMinMax('min'), `${findMinMax('max')} ${unit}`] 
+			: [],
+		colors: mapType === 'country' 
+		? (!colorArray[color||group]  ? colorArray.default : colorArray[color||group])
+		: gridColorArray[GRID_LAYERS[variable.id]]
+	}];
 
 	return (
 		<MapContainer selector={'Weather_Map'} loaded={data}>
 			<Weather 
 				data={data} 
+				month={month}
 				mapType={mapType} 
 				selectedCountries={selectedCountries}
-				gridURL={`${baseURL}weather/grid/2020/01/${gridTypes[variable.id]}.png`}
+				variable={variable.id}
+				gridURL={`${baseURL}weather/grid/2019/${month < 10 ? `0${month}` : month}/${GRID_LAYERS[variable.id]}.png`}
 				unit={unit}
 				decimal={decimal}
 				colType={color || group}
