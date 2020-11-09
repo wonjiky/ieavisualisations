@@ -13,7 +13,7 @@ function CDD({
 
   const config = {
     map: 'custom',
-    style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
+    style: "mapbox://styles/iea/ckh4xd5wp0tzs19qt9ixaidvb",
     center: [0.729,15.359],
     minZoom: 1.01,
     maxZoom: 4,

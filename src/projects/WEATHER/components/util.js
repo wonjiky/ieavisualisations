@@ -7,8 +7,8 @@ export const getCountryNameByISO = iso => !countries.find(d => d.ISO3 === iso) ?
 export const getCentroidLabelByISO = _ => ["to-string", ["get", "region"]];
 export const getMonthString = date => new Date(1, date - 1, 1).toLocaleString('default', { month: 'long' });
 export const useIntervalLogic = (entries, interval) => entries[['year', 'month', 'day'].findIndex(d => d === interval)];
-export const disputedRegionsISO = ["ABCDE", "ABCD-ESH", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"];
-export const disputedRegionsID = [61, 255, 253, 87, 233, 86];
+export const disputedRegionsISO = ["ABCDE", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"];
+export const disputedRegionsID = [61, 255, 253, 87, 233, 86, 228];
 
 export const colorArray = {
 	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
@@ -24,7 +24,8 @@ const gridColors = {
   "CDD": ["#008712", "#61ac1b", "#cac522", "#e7d939", "#dd9328", "#b93326"],
   "HDD": ["#ffffe0", "#ccd7d0", "#9eb3c2", "#698ab1", "#3561a1", "#003790"],
   "Wind": ["#ffffff", "#d9d9d9", "#b5b5b5", "#8a8a8a", "#606060", "#393939"],
-  "Snow": ["#b6a969", "#c2b784","#cec59f","#dad4bb","#e5e2d4","#f0f0f0"],
+  "Snow": ["#ddbd79", "#e3ca92","#ead6ac","#f1e3c7","#f7efdf","#f0f0f0"],
+  "Daylight": ["#424139","#676647","#878653","#aaa961","#cdcc6e","#fcfc80"],
   "Precipitation": ["#ffffff","#cedbcd","#a4bca2","#759a73","#477744","#165312"],
   "Humidity": ["#ffe470","#c9c077","#9ba17d","#6b8083","#3d6189","#003790"]
 }
@@ -39,7 +40,7 @@ export const gridColorArray = {
   "IEA_Wind100intmonthly": gridColors["Wind"],
   "IEA_CDDhum18monthly": gridColors["CDD"],
   "IEA_CDD18monthly": gridColors["CDD"],
-  "IEA_Daylightmonthly": gridColors["default"],
+  "IEA_Daylightmonthly": gridColors["Daylight"],
   "IEA_DNImonthly": gridColors["default"],
   "IEA_GHImonthly": gridColors["default"],
   "IEA_Runoffmonthly": gridColors["default"],
@@ -75,7 +76,6 @@ export function colorsByVariables(countries, colType, selector) {
 
 	for (let i = 0; i < tempColors.length; i++ ) finalColors.splice(i * 2, 0, ["match", ["get", selector], [], true, false ]);
 	let scale = scaleQuantile( countries.map(d => d.value), tempColors );
-
 	tempCountries.forEach(c => {
 		let { value, country } = c; 
 		let colorScale = e => !!e ? scale(e) : tempColors[0];

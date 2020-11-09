@@ -3,19 +3,20 @@
   height: 200px;
   padding: 10px 20px;
   box-sizing: border-box;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
-  z-index: 2;
-  background: linear-gradient(0deg, rgba(54,54,54,1) 10%, rgba(54,54,54, .8) 50%, rgba(54,54,54, .4) 75%, rgba(54,54,54, 0) 100%);
+  z-index: 1;
   display: flex;
-  /* align-items: center; */
-  /* justify-content: center; */
   flex-flow: column;
+  opacity: 1;
+  background: linear-gradient(0deg, rgba(54,54,54,1) 10%, rgba(54,54,54, .8) 50%, rgba(54,54,54, .4) 75%, rgba(54,54,54, 0) 100%);
+  transition: opacity .2s;
 }
 
 .hide {
-  display: none;
+  opacity: 0;
+  transition: opacity .2s;
 }
 
 .Wrapper > span {
@@ -93,5 +94,3 @@
 .CountryLegendItem:hover .Close {
   display: block;
 }
-
-

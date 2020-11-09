@@ -119,14 +119,25 @@ th {
     padding: 0 20px;
 }
 
-.Test{ 
+.LegendWrapper { 
     background: transparent !important;
     box-shadow: none;
     bottom: 100px;
+    transition: 0.3s;
+}
+
+.GridView {
+    transform: translateY(100px);
+    transition: 0.3s;
 }
 
 @media screen and (max-width: 729px) {
 	.ButtonWrapper {
 		display: none;
-	}
+    }
+    
+    .GridView {
+        transform: translateY(0);
+        transition: 0.3s;
+    }
 }

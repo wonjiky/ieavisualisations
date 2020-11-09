@@ -8,7 +8,7 @@ export const oecd = {
   sources: [
     {
       id: 'shapes',
-      url: 'mapbox://iea.9hcvrm4u'
+      url: 'mapbox://iea.2y7t2nbd'
     },
     {
       id: 'solid',
@@ -19,7 +19,7 @@ export const oecd = {
     {
       id: 'shapes',
       source: 'shapes',
-      sourceLayer: 'countries_shape-9wm8sd',
+      sourceLayer: 'countries_shape-d9t091',
       layout: { visibility: 'visible' },
       paint: {}
     },
@@ -68,12 +68,12 @@ export const oecd = {
 export const centroids = {
   sources: {
     id: 'centroids',
-    url: 'mapbox://iea.c1xbumlk',
+    url: 'mapbox://iea.4ci5bfkj',
   },
   layers: {
     id: 'centroids-layer',
     source: 'centroids',
-    sourceLayer: "countries_centroids-cwa8cx",
+    sourceLayer: "countries_centroids-5ecuvr",
     layout: { visibility: 'visible' }
   }
 }

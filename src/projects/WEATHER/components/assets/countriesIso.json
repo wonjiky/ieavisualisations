@@ -552,7 +552,7 @@
     "ISO3": "MHL"
   },
   {
-    "region": "Former Yugoslav Republic of Macedonia",
+    "region": "North Macedonia",
     "ISO3": "MKD"
   },
   {
@@ -942,6 +942,10 @@
   {
     "region": "Wallis and Futuna",
     "ISO3": "WLF"
+  },
+  {
+    "region": "Western Sahara",
+    "ISO3": "ESH"
   },
   {
     "region": "Samoa",

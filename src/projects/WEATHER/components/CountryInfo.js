@@ -18,9 +18,9 @@ export default ({ data, countries, decimal, mapType, unit, click }) => {
   }));
 
   return (
-    <div className={mapType === 'country' ? classes.Wrapper : classes.hide}>
+    <div className={mapType === 'territory' ? classes.Wrapper : [classes.Wrapper, classes.hide].join(' ')}>
       {countries.length === 0
-        ? <span>Select up to 2 countries by clicking on the map</span>
+        ? <span>Select up to 2 territories by clicking on the map</span>
         : <>
             <div className={classes.CountryWrapper}>
               <div className={classes.CountryLegendWrapper}>

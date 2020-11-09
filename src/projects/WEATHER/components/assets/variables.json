@@ -9,7 +9,7 @@
       "info": "Anomaly is the difference between the monthly value and the climatology. A positive anomaly indicates that the monthly value was higher than the climatology, while a negative anomaly indicates the observed temperature was cooler than the climatology."
     }
   ],
-  "country": [
+  "territory": [
     {
       "id": "Temperaturedaily",
       "info": "2-meter mean temperature (surface)",
@@ -338,7 +338,7 @@
     {
       "id": "CDD18dailybypop",
       "info": "Cooling degree days (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, population)",
+      "name": "CDD (18 °C)",
       "unit": "°C days",
       "decimal": 1,
       "group": "CDD"
@@ -346,7 +346,7 @@
     {
       "id": "CDDhum18dailybypop",
       "info": "Cooling degree days from temperature corrected by humidity (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, humidity, population)",
+      "name": "CDD (18 °C, humidity)",
       "unit": "°C days",
       "decimal": 1,
       "group": "CDD"
@@ -378,7 +378,7 @@
     {
       "id": "HDD18dailybypop",
       "info": "Heating degree days (population weighted average, reference temperature 18 °C)",
-      "name": "HDD (18 °C, population)",
+      "name": "HDD (18 °C)",
       "unit": "°C days",
       "decimal": 1,
       "group": "HDD"
@@ -386,7 +386,7 @@
     {
       "id": "Precipitationdaily",
       "info": "Total precipitation (surface weighted average)",
-      "name": "Total precipitation (surface)",
+      "name": "Total precipitation",
       "unit": "mm/h",
       "decimal": 3,
       "group": "Precipitation"
@@ -394,7 +394,7 @@
     {
       "id": "Snowfalldaily",
       "info": "Snowfall (surface weighted average)",
-      "name": "Snowfall (surface)",
+      "name": "Snowfall",
       "unit": "mm/h",
       "decimal": 3,
       "group": "Precipitation"
@@ -402,7 +402,7 @@
     {
       "id": "Runoffdaily",
       "info": "Runoff (surface weighted average)",
-      "name": "Runoff (surface)",
+      "name": "Runoff",
       "unit": "mm/h",
       "decimal": 2,
       "group": "Precipitation"
@@ -410,7 +410,7 @@
     {
       "id": "Evaporationdaily",
       "info": "Evaporation (surface weighted average)",
-      "name": "Evaporation (surface)",
+      "name": "Evaporation",
       "unit": "mm/h",
       "decimal": 3,
       "group": "Precipitation"
@@ -418,7 +418,7 @@
     {
       "id": "Clouddaily",
       "info": "Cloud coverage (surface weighted average)",
-      "name": "Cloud coverage (surface)",
+      "name": "Cloud coverage",
       "unit": "%",
       "decimal": 2,
       "group": "Solar radiation"
@@ -426,7 +426,7 @@
     {
       "id": "Daylightdaily",
       "info": "Minutes of sun light (surface weighted average)",
-      "name": "Sun light (surface)",
+      "name": "Sun light",
       "unit": "minutes per day",
       "decimal": 0,
       "group": "Solar radiation"
@@ -434,7 +434,7 @@
     {
       "id": "DNIdaily",
       "info": "Direct normal radiation (surface weighted average)",
-      "name": "Direct normal radiation (surface)",
+      "name": "Direct normal radiation",
       "unit": "J/m2/h",
       "decimal": 0,
       "group": "Solar radiation"
@@ -442,7 +442,7 @@
     {
       "id": "GHIdaily",
       "info": "Global horizontal irradiance (surface weighted average)",
-      "name": "Global horizontal irradiance (surface)",
+      "name": "Global horizontal irradiance",
       "unit": "J/m2/h",
       "decimal": 0,
       "group": "Solar radiation"
@@ -450,7 +450,7 @@
     {
       "id": "Wind100intdaily",
       "info": "100 meter wind speed (surface weighted average)",
-      "name": "Wind speed (100-m , surface)",
+      "name": "Wind speed (100-m)",
       "unit": "m/s",
       "decimal": 1,
       "group": "Wind"
@@ -458,7 +458,7 @@
     {
       "id": "Wind10intdaily",
       "info": "10 meter wind speed (surface weighted average)",
-      "name": "Wind speed (10-m, surface)",
+      "name": "Wind speed (10-m)",
       "unit": "m/s",
       "decimal": 1,
       "group": "Wind"

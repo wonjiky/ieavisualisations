@@ -16,7 +16,8 @@ export default () => {
     
 	const config = {
 			map:'oecd',
-			style: "mapbox://styles/iea/ck9jt8mxx028m1ip9gih9yod6",
+			// style: "mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6",
+			style: "mapbox://styles/iea/ckas69pof1o2c1ioys10kqej6",
 			center: [0, 0],
 			minZoom: 4.1,
 			maxZoom: 7,

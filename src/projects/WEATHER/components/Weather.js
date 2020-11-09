@@ -17,7 +17,7 @@ export default function({
 	const config = { 
 		map: 'oecd',
 		centroids: true,
-		style: "mapbox://styles/iea/ckdh6yknk0x0g1imq28egpctx",
+		style: "mapbox://styles/iea/ckh4xd5wp0tzs19qt9ixaidvb",
 		center: [0,30], 
 		minZoom: 1.3,
 		maxZoom: 5.5,
@@ -58,7 +58,7 @@ export default function({
 	}
 
 	const addGridLayers = React.useCallback(e => {
-		if (!map || mapType === 'country') return;
+		if (!map || mapType === 'territory') return;
 			map
 				.addSource(`grid-tiles`, {
 					'type': 'image',
@@ -82,7 +82,7 @@ export default function({
 	useEffect(addGridLayers, [map, mapType])
 	
 	useEffect(() => {
-		if (!map || mapType === 'country') return;
+		if (!map || mapType === 'territory') return;
 		map.getSource('grid-tiles').updateImage({
 			'url': gridURL
 		})
@@ -92,7 +92,7 @@ export default function({
 	// Toggle between Grid and Country view.
 	useEffect (() => {
 		if(!map) return ;
-		let type = mapType === 'country';
+		let type = mapType === 'territory';
 		let setVisibility = view => view  ? 'visible' : 'none';
 		map
 			.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
@@ -108,7 +108,7 @@ export default function({
 			.setPaintProperty( "shapes-0", "fill-color", [
 				'interpolate', ['exponential', 0.5], ['zoom'],
 				2.4, colorsByVariables(data, colType, 'ISO3'),
-				4, '#fff',
+				3, '#fff',
 			])
 			.setPaintProperty('centroids-layer', 'circle-radius', [
 				'interpolate', ['exponential', 0.5], ['zoom'],
@@ -179,7 +179,9 @@ export default function({
 		let mousePos = [e.lngLat.lng, e.lngLat.lat];
 		let selected = e.features[0].properties.ISO3;
 		let value = getPopupInfo(data, selected, unit, decimal)
-		
+		let noPopup = ['ABCD', 'ABCDE', 'ABCD-PSE'];
+		for (let i in noPopup) if (selected === noPopup[i]) return;
+
 		map.getCanvas().style.cursor = 'pointer';
 		popUp.addClassName('weather');
 		popUp
