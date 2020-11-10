@@ -1,12 +1,12 @@
 {
   "valueTypes" :[
     { 
-      "id": "Climatology",
-      "info": "Climatology is the monthly average of historical weather parameters over the reference period (2000-2019)." 
-    },
-    { 
       "id": "Anomaly",
       "info": "Anomaly is the difference between the monthly value and the climatology. A positive anomaly indicates that the monthly value was higher than the climatology, while a negative anomaly indicates the observed temperature was cooler than the climatology."
+    },
+    { 
+      "id": "Climatology",
+      "info": "Climatology is the monthly average of historical weather parameters over the reference period (2000-2019)." 
     }
   ],
   "territory": [
@@ -305,7 +305,7 @@
       "id": "DNIdaily",
       "info": "Direct normal radiation (surface weighted average)",
       "name": "Direct normal radiation (surface)",
-      "unit": "J/m2/h",
+      "unit": "J/m²/h",
       "decimal": 0,
       "group": "Solar radiation"
     },
@@ -313,7 +313,7 @@
       "id": "GHIdaily",
       "info": "Global horizontal irradiance (surface weighted average)",
       "name": "Global horizontal irradiance (surface)",
-      "unit": "J/m2/h",
+      "unit": "J/m²/h",
       "decimal": 0,
       "group": "Solar radiation"
     },
@@ -435,7 +435,7 @@
       "id": "DNIdaily",
       "info": "Direct normal radiation (surface weighted average)",
       "name": "Direct normal radiation",
-      "unit": "J/m2/h",
+      "unit": "J/m²/h",
       "decimal": 0,
       "group": "Solar radiation"
     },
@@ -443,7 +443,7 @@
       "id": "GHIdaily",
       "info": "Global horizontal irradiance (surface weighted average)",
       "name": "Global horizontal irradiance",
-      "unit": "J/m2/h",
+      "unit": "J/m²/h",
       "decimal": 0,
       "group": "Solar radiation"
     },

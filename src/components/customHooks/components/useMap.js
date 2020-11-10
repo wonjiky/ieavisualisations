@@ -32,23 +32,21 @@ export default config => {
 
 	function addCentroids(map) {
 		if (!config.centroids) return;
-		if (config.centroids) {
-			const { layers, sources } = centroids;
-			map
-				.addSource('centroids', { type: 'vector', url: sources.url})
-				.addLayer({
-					'id': layers.id,
-					'source': layers.source,
-					'source-layer': layers.sourceLayer,
-					'type': 'circle',
-				})
-				.addLayer({
-					'id': 'label-layer',
-					'source': layers.source,
-					'source-layer': layers.sourceLayer,
-					'type': 'symbol',
-				})
-		}
+		const { layers, sources } = centroids;
+		map
+			.addSource('centroids', { type: 'vector', url: sources.url})
+			.addLayer({
+				'id': layers.id,
+				'source': layers.source,
+				'source-layer': layers.sourceLayer,
+				'type': 'circle',
+			})
+			.addLayer({
+				'id': 'label-layer',
+				'source': layers.source,
+				'source-layer': layers.sourceLayer,
+				'type': 'symbol',
+			})
 	}
 
 	function fetchOecdMap () {
@@ -66,13 +64,11 @@ export default config => {
 			}
 
 			for ( let i in oecd.layers ) {
-				
 				let layer = oecd.layers[i];
 				let shapes = layer.id === 'shapes';
 				let meta = !shapes ? { filter: layer.filter } : ''
-				
 				map.addLayer({ 
-					'id': `${layer.id}-${i}`,
+					'id': `${layer.id}-layer`,
 					'source': layer.source,
 					'source-layer': layer.sourceLayer,
 					'layout': layer.layout,
@@ -81,9 +77,7 @@ export default config => {
 					...meta
 				});
 			}
-
 			addCentroids(map);
-
 		});
 	}
 	
@@ -100,9 +94,7 @@ export default config => {
 				let source = mapBox.sources[i];
 				map.addSource(`${source.id}-borders`, { type: 'vector', url: source.url});
 			}
-			
 			for (let i in mapBox.layers) {
-				
 				let { paint } = config;
 				let layer = mapBox.layers[i];
 				let solid = layer.id === 'solid';
@@ -110,7 +102,6 @@ export default config => {
 				let lineStyle = paint 
 					? { 'line-width': paint.lineWidth, 'line-color': solid ? paint.lineColor : paint.dottedLineColor}
 					: { 'line-width': 1, 'line-color': solid ? 'black' : 'white'};
-
 				map.addLayer({
 					'id': `dotted-${i}`,
 					'source': layer.source,
@@ -124,9 +115,7 @@ export default config => {
 					'layout': layer.layout,
 				})
 			}
-
 			addCentroids(map);
-
 		})
 	}
 

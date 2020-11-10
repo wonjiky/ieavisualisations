@@ -11,7 +11,7 @@ export const oecd = {
       url: 'mapbox://iea.2y7t2nbd'
     },
     {
-      id: 'solid',
+      id: 'borders',
       url: 'mapbox://iea.5n5i3sum'
     }
   ],
@@ -24,8 +24,8 @@ export const oecd = {
       paint: {}
     },
     {
-      id: 'solid',
-      source: 'solid',
+      id: 'solid-border',
+      source: 'borders',
       sourceLayer: 'countries_border-blqedw',
       layout: { visibility: 'visible' },
       filter: [
@@ -41,8 +41,8 @@ export const oecd = {
       paint: {}
     },
     {
-      id: 'dotted',
-      source: 'solid',
+      id: 'dotted-border',
+      source: 'borders',
       sourceLayer: 'countries_border-blqedw',
       layout: { visibility: 'visible' },
       filter: [

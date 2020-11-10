@@ -129,6 +129,7 @@ th {
 .GridView {
     transform: translateY(100px);
     transition: 0.3s;
+    background: rgba(43,43,43,.5) !important;
 }
 
 @media screen and (max-width: 729px) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import countries from './assets/countriesIso.json'
+import countries from '../assets/countriesIso.json'
 import { scaleQuantile } from 'd3-scale'
 
 export const uppercase = str => str.charAt(0).toUpperCase() + str.slice(1);

@@ -6,19 +6,25 @@ import { getCountryNameByISO, getMonthString, uppercase, useIntervalLogic, color
 import { Modal } from '../../../components/modal'
 import { Legends } from '../../../components/legends'
 import { Icon } from '../../../components/icons'
-import variables from './assets/variables.json'
+import variables from '../assets/variables.json'
+import gridMinMax from '../assets/gridMinMax.json'
 import Weather from './Weather'
 import classes from './css/Weather.module.css'
 import CountryInfo from './CountryInfo'
 
 export default function({ baseURL }) {
 	
+	// Grid level image time range
+	let minYear = 2014, maxYear = 2019;
+	let yearRange = (maxYear - minYear) + 1;
+	let minMonth = 1, maxMonth = yearRange * 12;
+
 	let initialVariable = variables.territory.sort((a,b) => a.group.localeCompare(b.group))[0]
 	const [data, setData] = useState(null);
 	const [index, setIndex] = useState(true);
 	const [firstCountry, setFirstCountry] = useState(null);
 	const [secondCountry, setSecondCountry] = useState(null);
-	const [date, setDate] = useState({ day: 1, month: 9, year: 2020});
+	const [date, setDate] = useState({ day: 1, month: 9, year: 2019});
 	const [mapType, setMapType] = useState('territory');
 	const [variable, setVariable] = useState({id: initialVariable.id, name: initialVariable.name});
 	const [viewInterval, setViewInterval] = useState('day');
@@ -26,45 +32,34 @@ export default function({ baseURL }) {
 	const [active, setActive] = useState({ open: false, target: null });
 	const [openInfo, setOpenInfo] = useState(false);
 	const [selectedCountries, setSelectedCountries] = useState([]);
-	const [gridMonth, setGridMonth] = useState(48);
+	const [currGridMonth, setCurrGridMonth] = useState(maxMonth);
+	const [gridTime, setGridTime] = useState({month: 12, year: maxYear})
 	const { day, month, year } = date;
+	let dayToStr = num => `${num < 10 ? '0' : ''}${num}`; 
 
-	let minYear = 2014, maxYear = 2019;
-	let yearRange = (maxYear - minYear) + 1
-	let minMonth = 1, maxMonth = yearRange * 12;
+	// Retrieve attributes for each variable
+	const { decimal, unit, group, color } = variables[mapType].find(d => d.id === variable.id);
 
-	let grid = {};
-	let i = Number(gridMonth);
-	let tempMonth = i % 12 === 0 ? 12 : i % 12;
-	let ranges = [];
-	let yearCounter;
-	
-	for (let t = 1; t <= maxMonth; t += 12 ) {
-		ranges.push([t, t + 11])
-	}
-	
-	for (let range in ranges) {
-		if (ranges[range][0] <= i && i <= ranges[range][1]) {
-			yearCounter = Number(range)
-		}
-	}
-
-	grid.month = tempMonth < 10 ? `0${tempMonth}` : String(tempMonth); 
-	grid.year = minYear + yearCounter; 
 	// Produce query for choropleth data
 	const getQuery = query => Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
-	let joinedDate = `${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`;
-	let query = useIntervalLogic([{ year, variable: variable.id }, { month, year, variable: variable.id, valueType }, { date: joinedDate, variable: variable.id }], viewInterval)
+	let joinedDate = `${year}${dayToStr(month)}${dayToStr(day)}`;
+	let query = useIntervalLogic([
+		{ year, variable: variable.id }, 
+		{ year, month, variable: variable.id, valueType }, 
+		{ date: joinedDate, variable: variable.id }], viewInterval);
 	let mapQueryString = getQuery(query);
 	
 	// Produce query for country data
 	let maxDay = new Date(year, month, 0).getDate();
-	let startDate = useIntervalLogic(['20100101', `${year}0101`, `${year}${month < 10 ? '0' : ''}${month}01` ], viewInterval);
-	let endDate = useIntervalLogic(['20200831', `${year}1231`, `${year}${month < 10 ? '0' : ''}${month}${maxDay}` ], viewInterval);
-	let countryQuery = valueType === 'Value' 
-		? `/?startDate=${startDate}&endDate=${endDate}&variable=${variable.id}&valueType=${valueType}`
-		: `/?year=${year}&variable=${variable.id}&valueType=${valueType}`;	
-
+	let startDate = useIntervalLogic(['20100101', `${year}0101`, `${year}${dayToStr(month)}01` ], viewInterval);
+	let endDate = useIntervalLogic(['20200831', `${year}1231`, `${year}${dayToStr(month)}${maxDay}` ], viewInterval);
+	let timeByValueType = valueType === 'Value' ? {startDate, endDate} : {year, month};
+	let countryQuery = useIntervalLogic([
+		{ startDate, endDate, variable: variable.id, valueType }, 
+		{ ...timeByValueType, variable: variable.id, valueType }, 
+		{ startDate, endDate, variable: variable.id, valueType }], viewInterval);
+	let countrQueryString = getQuery(countryQuery);
+	
 	// Produce download link and query
 	let downloadQuery = useIntervalLogic([{ variable: variable.id, daily: true, year}, { variable: variable.id, year, valueType}, { variable: variable.id, daily: true, year, month}], viewInterval);
 	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
@@ -74,22 +69,18 @@ export default function({ baseURL }) {
 		`Daily ${variable.name} values for ${getMonthString(month)} ${year}`
 	], viewInterval);
 
-	// Retrieve attributes for each variable
-	const { decimal, unit, group, color } = variables[mapType].find(d => d.id === variable.id);
-
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
     document.removeEventListener('click', hide)
 	}, [])
 
-	React.useEffect(() => {
+	useEffect(() => {
     if (!active.open && !openInfo) return;
     document.addEventListener('click', hide)
 	},[ active.open, openInfo,  hide ])
 	
 	// Assign selected countries to variable
 	function getSelectedCountries(value, index) {
-		
 		if (!getCountryNameByISO(value)) return;
 		let currArr = [ ...selectedCountries ];
 		let idx = index ? 'firstCountry' : 'secondCountry';
@@ -98,12 +89,10 @@ export default function({ baseURL }) {
 			firstCountry: { id: 'firstCountry', color: '#727272', setData: e => setFirstCountry(e) },
 			secondCountry: { id: 'secondCountry', color: '#e6e6e6', setData: e => setSecondCountry(e) }
 		}
-
 		if (currArr.length === 2) {
 			currArr.splice(pos, 1)
 			currArr.push({ ...countries[idx], ISO: value })
 		} else currArr.push({ ...countries[idx], ISO: value })
-		
 		setSelectedCountries(currArr);
 	}
 
@@ -111,8 +100,8 @@ export default function({ baseURL }) {
 	const fetchCountryData = useCallback(() => {
 		for (let country in selectedCountries) {
 			let selected = selectedCountries[country];
-			axios.get(`https://api.iea.org/weather/country/${selected.ISO}${countryQuery}`)
-				.then(response => {
+			axios.get(`https://api.iea.org/weather/country/${selected.ISO}/?${countrQueryString}`)
+				.then(response => {					
 					selected.setData({
 						ISO: selected.ISO,
 						color: selected.color,
@@ -123,13 +112,13 @@ export default function({ baseURL }) {
 					});
 			})		
 		}
-	}, [selectedCountries, countryQuery, viewInterval]);
+	}, [selectedCountries, countrQueryString, viewInterval]);
 
 	// Push selected countries data to an array to series
 	let countryData = [];
 	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
 	
-	useEffect(fetchCountryData, [selectedCountries, countryQuery]);
+	useEffect(fetchCountryData, [selectedCountries, countrQueryString]);
 
 	// Fetch choropleth data
 	useEffect(() => {
@@ -144,6 +133,26 @@ export default function({ baseURL }) {
 		})
 	}, [mapQueryString, variable, decimal]);
 
+	// Handle grid level query
+	useEffect(() => {
+		if (mapType === 'territory') return;
+		let ranges = [], yearCounter;
+		let i = Number(currGridMonth);
+		let tempMonth = i % 12 === 0 ? 12 : i % 12;
+
+		for (let t = 1; t <= maxMonth; t += 12 ) ranges.push([t, t + 11])
+		for (let range in ranges) {
+			if (ranges[range][0] <= i && i <= ranges[range][1]) {
+				yearCounter = Number(range)
+			}
+		}
+		setGridTime({
+			month: dayToStr(tempMonth),
+			year: minYear + yearCounter
+		})
+
+	},[mapType, minYear, maxMonth, currGridMonth])
+	
 	const controls = {
 		topleft: [
 			{ 
@@ -159,8 +168,9 @@ export default function({ baseURL }) {
 					setFirstCountry(null);
 					setSecondCountry(null);
 					setIndex(true);
+					setCurrGridMonth(map === 'territory' ? '' : ((year - minYear) * 12) + month);
 					setViewInterval(map === 'territory' ? 'day' : 'month');
-					setDate(map === 'territory' ? { day: 1, month: 9, year: 2020} : { day: 1, month: 12, year: 2019});
+					setDate(map === 'territory' ? { day: 1, month: 9, year: 2019} : { day: 1, month: 12, year: 2019});
 					setSelectedCountries([]);
 				}
 			},
@@ -169,10 +179,10 @@ export default function({ baseURL }) {
 				selected: uppercase(viewInterval),
 				label: mapType === 'territory' 
 					? useIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${getMonthString(month)} ${day}, ${year}`], viewInterval)
-					: `${getMonthString(grid.month)}, ${grid.year}`,
+					: `${getMonthString(gridTime.month)}, ${gridTime.year}`,
 				value: mapType === 'territory' 
 					? useIntervalLogic([year, month, day], viewInterval) 
-					: gridMonth,
+					: currGridMonth,
 				min: mapType === 'territory' 
 					? useIntervalLogic([2000, 1, 1], viewInterval)
 					: minMonth,
@@ -184,7 +194,7 @@ export default function({ baseURL }) {
 				? (setDate(viewInterval !== 'day' 
 					? { ...date, [viewInterval] : Number(e.target.value), day: 1 }
 					: { ...date, [viewInterval] : Number(e.target.value) }))
-				: setGridMonth(e.target.value)
+				: setCurrGridMonth(e.target.value)
 			},
 			{ 
 				type: mapType === 'territory' ? 'buttonGroup' : '',
@@ -227,8 +237,12 @@ export default function({ baseURL }) {
 	};
 
 	const findMinMax = type => 
-		Math[type](...data.map(d => 
-			parseFloat(d.value).toFixed(decimal)));
+		Math[type](...data.map(d => parseNumber(d.value)));
+	const parseNumber = num => parseFloat(num).toFixed(decimal);
+
+	let gridLegendLabel = mapType === 'territory'
+		? []
+		: gridMinMax[GRID_LAYERS[variable.id]][gridTime.year - minYear][Number(gridTime.month)-1][0]
 
 	const legends = [{
 		type: 'continuous',
@@ -238,7 +252,7 @@ export default function({ baseURL }) {
 		labels: mapType === 'territory' ? (data 
 			? [findMinMax('min'), `${findMinMax('max')} ${unit}`] 
 			: [])
-			: [],
+			: [parseNumber(gridLegendLabel[0]), `${parseNumber(gridLegendLabel[1])} ${unit}`],
 		colors: mapType === 'territory' 
 		? (!colorArray[color||group]  ? colorArray.default : colorArray[color||group])
 		: gridColorArray[GRID_LAYERS[variable.id]]
@@ -252,7 +266,7 @@ export default function({ baseURL }) {
 				mapType={mapType} 
 				selectedCountries={selectedCountries}
 				variable={variable.id}
-				gridURL={`${baseURL}weather/grid/${grid.year}/${grid.month}/${GRID_LAYERS[variable.id]}.png`}
+				gridURL={`${baseURL}weather/grid/${gridTime.year}/${gridTime.month}/${GRID_LAYERS[variable.id]}.png`}
 				unit={unit}
 				decimal={decimal}
 				colType={color || group}
@@ -272,7 +286,7 @@ export default function({ baseURL }) {
 				downloadLink={download}
 				downloadLabel={downloadButtonLabel}
 			>
-				<Controls position='bottomRight'  customClass={mapType==='grid' ? [classes.LegendWrapper, classes.GridView].join(' ') : classes.LegendWrapper}>
+				<Controls position='bottomRight' customClass={mapType==='grid' ? [classes.LegendWrapper, classes.GridView].join(' ') : classes.LegendWrapper}>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
         </Controls>
@@ -315,7 +329,7 @@ export default function({ baseURL }) {
   )
 };
 
-const ValueType = ({ body, head }) => (
+const ValueType = ({ body }) => (
 	<div className={classes.ModalText}>
 		<h5>Value types</h5>
 		{body.map(d => 

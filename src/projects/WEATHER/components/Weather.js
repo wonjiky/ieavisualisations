@@ -32,14 +32,12 @@ export default function({
 	useEffect(setDefaultStyle, [map]);
 	function setDefaultStyle() {
 		if (!map) return;
-		const borders = ['solid', 'dotted'], layers = ['centroids-layer', 'label-layer'];
-		
+		const borders = ['solid-border', 'dotted-border'], layers = ['centroids-layer', 'label-layer'];
 		// Set default border line color and width
 		for ( let i in borders){
-			let idx = parseInt(i) + 1;
 			map
-				.setPaintProperty( `${borders[i]}-${idx}`, "line-color",  '#404040')
-				.setPaintProperty( `${borders[i]}-${idx}`, "line-width", [
+				.setPaintProperty( `${borders[i]}-layer`, "line-color",  '#404040')
+				.setPaintProperty( `${borders[i]}-layer`, "line-width", [
 					'interpolate',
 					['exponential', 0.5],
 					['zoom'],
@@ -70,7 +68,7 @@ export default function({
 					'type': 'raster',
 					'source': `grid-tiles`,
 					'paint':{'raster-fade-duration': 0},
-				}, 'shapes-0')
+				}, 'shapes-layer')
 
 		return () => {
 				map
@@ -95,7 +93,7 @@ export default function({
 		let type = mapType === 'territory';
 		let setVisibility = view => view  ? 'visible' : 'none';
 		map
-			.setLayoutProperty("shapes-0", "visibility", setVisibility(type))
+			.setLayoutProperty("shapes-layer", "visibility", setVisibility(type))
 			.setLayoutProperty("centroids-layer", "visibility", setVisibility(type))
 			.setLayoutProperty("label-layer", "visibility", setVisibility(type))
 	}, [map, mapType]);
@@ -105,7 +103,7 @@ export default function({
 	useEffect (() => {
 		if (!map) return;
 		map
-			.setPaintProperty( "shapes-0", "fill-color", [
+			.setPaintProperty( "shapes-layer", "fill-color", [
 				'interpolate', ['exponential', 0.5], ['zoom'],
 				2.4, colorsByVariables(data, colType, 'ISO3'),
 				3, '#fff',
@@ -153,17 +151,17 @@ export default function({
 	useEffect (() => {
 		if ( !map ) return;
 		map
-			.on('mousemove', `shapes-0`, mouseOver)
-			.on('mouseleave', `shapes-0`, mouseLeave)
-			.on('click', `shapes-0`, mouseClick)
+			.on('mousemove', `shapes-layer`, mouseOver)
+			.on('mouseleave', `shapes-layer`, mouseLeave)
+			.on('click', `shapes-layer`, mouseClick)
 			.on('click', `centroids-layer`, mouseClick)
 			.on('mousemove', `centroids-layer`, mouseOver)
 			.on('mouseleave', `centroids-layer`, mouseLeave);
 		return () => {
 			map
-				.off('mousemove', `shapes-0`, mouseOver)
-				.off('mouseleave', `shapes-0`, mouseLeave)
-				.off('click', `shapes-0`, mouseClick)
+				.off('mousemove', `shapes-layer`, mouseOver)
+				.off('mouseleave', `shapes-layer`, mouseLeave)
+				.off('click', `shapes-layer`, mouseClick)
 				.off('mousemove', `centroids-layer`, mouseOver)
 				.off('mouseleave', `centroids-layer`, mouseLeave)
 				.off('click', `centroids-layer`, mouseClick);
