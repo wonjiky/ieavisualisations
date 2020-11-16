@@ -10,7 +10,10 @@ variables = [
   "IEA_Evaporationmonthly",
   "IEA_GHImonthly",
   "IEA_HDD18monthly",
+  "IEA_HeatIndexmonthly",
+  "IEA_Humidexmonthly",
   "IEA_Precipitationmonthly",
+  "IEA_RHmonhly",
   "IEA_Runoffmonthly",
   "IEA_Snowfallmonthly",
   "IEA_Temperaturemaxmonthly",
@@ -18,7 +21,33 @@ variables = [
   "IEA_Temperaturemonthly",
   "IEA_Wind10intmonthly",
   "IEA_Wind100intmonthly"
+  "IEA_Wind100powermonthly"
 ]
+
+test = [
+  "CDD18",
+  "CDDhum18",
+  "Cloud",
+  "Daylight",
+  "DNI",
+  "Evaporation",
+  "GHI",
+  "HDD18",
+  "HeatIndex",
+  "Humidex",
+  "Precipitation",
+  "RH",
+  "Runoff",
+  "Snowfall",
+  "Temperaturemax",
+  "Temperaturemin",
+  "Temperature",
+  "Wind10int",
+  "Wind100int",
+  "Wind100power",
+]
+
+print("IEA_"+test[0]+"monthly")
 
 color = {
   "default": ["#ffffcc", "#e3c7a7", "#ce9c8b", "#c77165", "#c1463f", "#b60000"],
@@ -179,4 +208,4 @@ def render(count):
   render.start()
 
 
-addNewLayers()
+# addNewLayers()

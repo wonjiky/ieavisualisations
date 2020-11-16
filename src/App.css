@@ -144,7 +144,6 @@ ul li {
 .tooltip {
 	display: none;
 	position: absolute;
-	/* bottom: 20px; */
 	min-width: 170px;
 	background: lightgreen;
 	border: 1px solid #000;
@@ -156,5 +155,6 @@ ul li {
 }
 
 .weather .mapboxgl-popup-content {
+	width: 100% !important;
 	padding: 10px !important;
 }

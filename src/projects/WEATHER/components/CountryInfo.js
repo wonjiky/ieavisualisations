@@ -28,9 +28,10 @@ export default ({ data, countries, decimal, mapType, unit, click }) => {
                   d.ISO && 
                     <div key={idx} className={classes.CountryLegendItem} onClick={_ => click(d.id)}>
                       {getCountryNameByISO(d.ISO)}
-                      {data.find(c => c.ISO === d.ISO)
+                      <div className={classes.Legend} style={{background: d.color}}/> 
+                      {/* {data.find(c => c.ISO === d.ISO)
                         ? <div className={classes.Legend} style={{background: d.color}}/> 
-                        : ' loading...'}
+                        : ' loading...'} */}
                       <Icon 
                         type='close' 
                         dark={true} 
@@ -89,7 +90,7 @@ const Chart = ({ series, unit, decimal }) => {
       valueSuffix: ` ${unit}`,
       borderWidth: 0,
       shared: true,
-      xDateFormat: '%Y-%m-%d',
+      xDateFormat: '%d-%m-%Y',
     },
     series: series
   };

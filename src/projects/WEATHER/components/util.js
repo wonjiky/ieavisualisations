@@ -1,6 +1,8 @@
 import React from 'react'
 import countries from '../assets/countriesIso.json'
-import { scaleQuantile } from 'd3-scale'
+import { scaleQuantile, scaleLinear, scaleSequentialQuantile, scaleSequential,  scaleQuantize } from 'd3-scale'
+import { hsl } from 'd3-color'
+import { extent } from 'd3-array'
 
 export const uppercase = str => str.charAt(0).toUpperCase() + str.slice(1);
 export const getCountryNameByISO = iso => !countries.find(d => d.ISO3 === iso) ? null : countries.find(d => d.ISO3 === iso).region;
@@ -11,92 +13,114 @@ export const disputedRegionsISO = ["ABCDE", "ABCD", "VAT", "SMR", "MAF", "VGB", 
 export const disputedRegionsID = [61, 255, 253, 87, 233, 86, 228];
 
 export const colorArray = {
-	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
-	CDD: ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'],
-	HDD: ['#ffffe0', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#4e72ad', '#3b5ea3', '#264a9a', '#003790'],
-	Cloud: ['#ffffff','#e6e6e6','#cbcbcb','#bdbdbd','#a3a3a3','#8f8f8f','#7b7b7b','#636363','#4a4a4a'],
+	// Temp: ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'],
+	Temp: ['#003b9c','#4eac32','#eff15b','#cc9642','#b93326'],
+	// Temp: ['#003790','#005560','#006d3b','#008712','#7fb81e','#fee929','#e9b328','#d27627','#b93326'],
+	// Temp: ['#003790','#133786','#25367b','#3f366c','#55355f','#6d3551','#8a3441','#a03434','#b93326'],
+	HDD: ['#b93326', '#c86031', '#df9b2e', '#f1c92b', '#fee929', '#dce029', '#96c11f', '#5aaa1a', '#008712'],
+	Daylight: ['#424139','#565541','#6d6c4a','#898854','#a5a45f','#bdbd68','#c8c86c','#d2d270','#fcfc80'],
 	Precipitation: ['#ffffff','#e3ece2','#cadcc8','#a4c3a2','#93b790','#6a9c66','#528c4e','#3c7e38','#165312'],
-	Humidity: ['#ffe470','#e8d473','#c8bf77','#a8a97b','#85917f','#657b83','#4a6987','#29538b','#003790']
+	Snow: ['#ddbd79','#dfc386','#e1c892','#e3cea1','#e6d5b2','#e9dcc2','#ece4d3','#ede8dc','#f0f0f0'],
+	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
+	// HDD: ['#003790', '#264a9a', '#3b5ea3', '#4e72ad', '#719cc0', '#83b2c8', '#98c7d1', '#afdcd8', '#ffffe0'],
 };
 
 const gridColors = {
-	"default": ["#ffffcc", "#e3c7a7", "#ce9c8b", "#c77165", "#c1463f", "#b60000"],
-  "CDD": ["#008712", "#61ac1b", "#cac522", "#e7d939", "#dd9328", "#b93326"],
-  "HDD": ["#ffffe0", "#ccd7d0", "#9eb3c2", "#698ab1", "#3561a1", "#003790"],
-  "Wind": ["#ffffff", "#d9d9d9", "#b5b5b5", "#8a8a8a", "#606060", "#393939"],
-  "Snow": ["#ddbd79", "#e3ca92","#ead6ac","#f1e3c7","#f7efdf","#f0f0f0"],
-  "Daylight": ["#424139","#676647","#878653","#aaa961","#cdcc6e","#fcfc80"],
-  "Precipitation": ["#ffffff","#cedbcd","#a4bca2","#759a73","#477744","#165312"],
-  "Humidity": ["#ffe470","#c9c077","#9ba17d","#6b8083","#3d6189","#003790"]
+  "Temp": ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'],
+  "HDD": ['#b93326', '#c86031', '#df9b2e', '#f1c92b', '#fee929', '#dce029', '#96c11f', '#5aaa1a', '#008712'],
+  "Daylight": ['#424139','#565541','#6d6c4a','#898854','#a5a45f','#bdbd68','#c8c86c','#d2d270','#fcfc80'],
+  "Precipitation": ['#ffffff','#e3ece2','#cadcc8','#a4c3a2','#93b790','#6a9c66','#528c4e','#3c7e38','#165312'],
+  "Snow": ['#ddbd79','#dfc386','#e1c892','#e3cea1','#e6d5b2','#e9dcc2','#ece4d3','#ede8dc','#f0f0f0'],
+  "Wind": ["#ffffff", "#e6e6e6", "#cfcfcf", "#b8b8b8", "#a0a0a0", "#898989", "#6e6e6e", "#555555", "#393939"],
+  "default": ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
 }
 
 export const gridColorArray = {
-  "IEA_HDD18monthly": gridColors["HDD"],
-  "IEA_Precipitationmonthly": gridColors["Precipitation"],
-  "IEA_Snowfallmonthly": gridColors["Snow"],
-  "IEA_Cloudmonthly": gridColors["Snow"],
-  "IEA_Evaporationmonthly": gridColors["Snow"],
-  "IEA_Wind10intmonthly": gridColors["Wind"],
-  "IEA_Wind100intmonthly": gridColors["Wind"],
-  "IEA_CDDhum18monthly": gridColors["CDD"],
-  "IEA_CDD18monthly": gridColors["CDD"],
-  "IEA_Daylightmonthly": gridColors["Daylight"],
-  "IEA_DNImonthly": gridColors["default"],
-  "IEA_GHImonthly": gridColors["default"],
-  "IEA_Runoffmonthly": gridColors["default"],
-  "IEA_Temperatureminmonthly": gridColors["default"],
-  "IEA_Temperaturemaxmonthly": gridColors["default"],
-  "IEA_Temperaturemonthly": gridColors["default"],
+  "Daylight": gridColors["Daylight"],
+  "HDD18": gridColors["HDD"],
+  "Precipitation": gridColors["Precipitation"],
+  "CDDhum18": gridColors["Temp"],
+  "CDD18": gridColors["Temp"],
+  "HeatIndex": gridColors["Temp"],
+  "Humidex": gridColors["Temp"],
+  "Temperaturemin": gridColors["Temp"],
+  "Temperaturemax": gridColors["Temp"],
+  "Temperature": gridColors["Temp"],
+  "Cloud": gridColors["Snow"],
+  "Evaporation": gridColors["Snow"],
+  "Snowfall": gridColors["Snow"],
+  "DNI": gridColors["default"],
+  "GHI": gridColors["default"],
+  "Runoff": gridColors["default"],
+  "RH": gridColors["default"],
+  "Wind10int": gridColors["Wind"],
+  "Wind100int": gridColors["Wind"],
+  "Wind100power": gridColors["Wind"],
 }
 
-export const GRID_LAYERS = {
-	"Temperaturedailybypop": "IEA_Temperaturemonthly",
-	"Temperaturemaxdailybypop": "IEA_Temperaturemaxmonthly",
-	"Temperaturemindailybypop": "IEA_Temperatureminmonthly",
-	"CDD18dailybypop": "IEA_CDD18monthly",
-	"CDDhum18dailybypop": "IEA_CDDhum18monthly",
-	"HDD18dailybypop": "IEA_HDD18monthly",
-	"Precipitationdaily": "IEA_Precipitationmonthly",
-	"Snowfalldaily": "IEA_Snowfallmonthly",
-	"Runoffdaily": "IEA_Runoffmonthly",
-	"Evaporationdaily": "IEA_Evaporationmonthly",
-	"Daylightdaily": "IEA_Daylightmonthly",
-	"DNIdaily": "IEA_DNImonthly",
-	"GHIdaily": "IEA_GHImonthly",
-	"Wind100intdaily": "IEA_Wind100intmonthly",
-	"Wind10intdaily": "IEA_Wind10intmonthly",
-	"Clouddaily": "IEA_Cloudmonthly"
-};
+export function colorsByVariables(countries, colType, selector, dataMinMax) {
 
-export function colorsByVariables(countries, colType, selector) {
 	let tempColors = !colorArray[colType] ? colorArray.default : colorArray[colType];
-	let tempCountries = [...countries];
-	let finalColors = [...tempColors];
-	let removeIndex = [];
+	let tempCountries = [...countries], nullColor = '#a3a3a3', colors = [];
 
-	for (let i = 0; i < tempColors.length; i++ ) finalColors.splice(i * 2, 0, ["match", ["get", selector], [], true, false ]);
-	let scale = scaleQuantile( countries.map(d => d.value), tempColors );
-	tempCountries.forEach(c => {
-		let { value, country } = c; 
-		let colorScale = e => !!e ? scale(e) : tempColors[0];
-		let idx = tempColors.findIndex(d => d === colorScale(value));
-		finalColors[idx * 2][2].push(country)
-	});
+	let findMinMax = (data, type) => Math[type](...data.map(d => d.value));
+	let hasMinMax = dataMinMax.length !== 0;
+	let minValue = hasMinMax ? dataMinMax[0] : findMinMax(tempCountries, 'min'), 
+	maxValue = hasMinMax ? dataMinMax[1] : findMinMax(tempCountries, 'max');
+	let pivotValue = (maxValue - minValue) / (tempColors.length - 1);
+	let valueRange = [];
 	
-	for (let i in finalColors) 
-	if (finalColors[i][2].length === 0 ) removeIndex.push(Number(i));
+	for (let i = 1; i < tempColors.length - 1; i++) valueRange.push((pivotValue * i) + minValue)
+	valueRange.splice(0, 0, minValue)
+	valueRange.splice((valueRange.length * 2) + 1, 0, maxValue)
+	
+	let contScale = scaleLinear()
+		.domain(valueRange)
+		.range(tempColors);
 
-	for (let i = removeIndex.length -1; i >= 0; i--)
-		finalColors.splice(removeIndex[i], 2);
+	tempCountries.forEach(countries => {
 
-	finalColors.splice(0,0, 'case');
-	finalColors.splice((finalColors.length * 2) + 1, 0, '#a3a3a3');
-	return finalColors;
+		let { value, country } = countries;
+		let assignedColor = contScale(value)
+		let unique = colors.indexOf(assignedColor) === -1;
+
+		if (unique) {
+			colors.push(["match", ["get", selector], [country], true, false ])
+			colors.push(assignedColor)
+		} else {
+			let idx = colors.findIndex(d => d === assignedColor) - 1;
+			colors[idx][2].push(country)
+		}
+
+	})
+
+	colors.splice(0,0, 'case');
+	colors.splice((colors.length * 2) + 1, 0, nullColor);
+	
+	return colors;
+	// const scale = scaleQuantile( countries.map(d => d.value), tempColors );
+	// let tempColors = !colorArray[colType] ? colorArray.default : colorArray[colType];
+	// let tempCountries = [...countries];
+	// let finalColors = [...tempColors];
+	// for (let i = 0; i < tempColors.length; i++ ) {
+	// 	finalColors.splice(i * 2, 0, ["match", ["get", selector], [], true, false ]);
+	// }
+	// tempCountries.forEach(c => {
+	// 	let { value, country } = c; 
+	// 	let colorScale = e => !!e ? scale(e) : tempColors[0];
+	// 	let idx = tempColors.findIndex(d => d === colorScale(value));
+	// 	finalColors[idx * 2][2].push(country)
+	// });
+	// for (let i in finalColors) if (finalColors[i][2].length === 0 ) removeIndex.push(Number(i));
+	// for (let i = removeIndex.length -1; i >= 0; i--) finalColors.splice(removeIndex[i], 2);
+	// finalColors.splice(0,0, 'case');
+	// finalColors.splice((finalColors.length * 2) + 1, 0, '#a3a3a3');
+	// return finalColors;
 }
 
 export function getPopupInfo(countries, selected, unit, decimal) {
 	const selectedCountry = countries.filter(country => country.country === selected)[0];
-	if ( selected && selectedCountry ) return `${selectedCountry.name} : <b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
+	if ( selected && selectedCountry ) return `${selectedCountry.name}</br><b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
 	return `<b>Value doe not exist for this country</b>`
 }
 

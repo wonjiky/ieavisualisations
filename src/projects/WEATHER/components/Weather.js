@@ -9,8 +9,7 @@ export default function({
 	decimal,
 	colType,
 	unit,
-	variable,
-	month,
+	dataMinMax,
 	gridURL,
  }) {
 	
@@ -19,12 +18,12 @@ export default function({
 		centroids: true,
 		style: "mapbox://styles/iea/ckh4xd5wp0tzs19qt9ixaidvb",
 		center: [0,30], 
-		minZoom: 1.3,
+		minZoom: 1.5,
 		maxZoom: 5.5,
-		maxBounds: [
-      [-180, -74],
-      [180, 84],
-    ]
+		// maxBounds: [
+    //   [-180, -84],
+    //   [180, 84],
+    // ]
 	};
 
 	const { map, mapContainerRef, popUp } = useMap(config);
@@ -33,16 +32,16 @@ export default function({
 	function setDefaultStyle() {
 		if (!map) return;
 		const borders = ['solid-border', 'dotted-border'], layers = ['centroids-layer', 'label-layer'];
+		
 		// Set default border line color and width
 		for ( let i in borders){
 			map
-				.setPaintProperty( `${borders[i]}-layer`, "line-color",  '#404040')
 				.setPaintProperty( `${borders[i]}-layer`, "line-width", [
 					'interpolate',
 					['exponential', 0.5],
 					['zoom'],
-					config.minZoom, 0.3,
-					config.maxZoom, 0.4
+					config.minZoom, 0.5,
+					config.maxZoom, 0.3
 				]);
 		}
 
@@ -69,7 +68,6 @@ export default function({
 					'source': `grid-tiles`,
 					'paint':{'raster-fade-duration': 0},
 				}, 'shapes-layer')
-
 		return () => {
 				map
 					.removeLayer(`grid-layer`)
@@ -81,17 +79,22 @@ export default function({
 	
 	useEffect(() => {
 		if (!map || mapType === 'territory') return;
-		map.getSource('grid-tiles').updateImage({
-			'url': gridURL
-		})
-	},[map, mapType, gridURL, month, variable])
+		map.getSource('grid-tiles').updateImage({ 'url': gridURL })
+	},[map, mapType, gridURL])
 
 
 	// Toggle between Grid and Country view.
 	useEffect (() => {
 		if(!map) return ;
 		let type = mapType === 'territory';
+		let borders = ['solid-border', 'dotted-border'];
 		let setVisibility = view => view  ? 'visible' : 'none';
+		let borderColor = type ?  '#404040' : '#000'
+
+		for (let i in borders) {
+			map.setPaintProperty( `${borders[i]}-layer`, "line-color",  borderColor)
+		}
+
 		map
 			.setLayoutProperty("shapes-layer", "visibility", setVisibility(type))
 			.setLayoutProperty("centroids-layer", "visibility", setVisibility(type))
@@ -101,50 +104,51 @@ export default function({
 
 	// Change country fill based on new variable data or selectedCountries.
 	useEffect (() => {
-		if (!map) return;
+		if (!map || mapType === 'grid') return;
 		map
 			.setPaintProperty( "shapes-layer", "fill-color", [
 				'interpolate', ['exponential', 0.5], ['zoom'],
-				2.4, colorsByVariables(data, colType, 'ISO3'),
+				2.3, colorsByVariables(data, colType, 'ISO3', dataMinMax),
 				3, '#fff',
 			])
 			.setPaintProperty('centroids-layer', 'circle-radius', [
 				'interpolate', ['exponential', 0.5], ['zoom'],
-				2, 0,
-				3, 12
+				2.2, 0,
+				2.9, 16,
+				3.1, 12,
 			])
 			.setPaintProperty( "centroids-layer", "circle-opacity", [
 				'interpolate', ['exponential', 0.5], ['zoom'],
-				2, 0, 
+				2.3, 0, 
 				3, 1
 			])
 			.setPaintProperty( "centroids-layer", "circle-stroke-opacity", [
 				'interpolate', ['exponential', 0.5],
 				['zoom'],
-				2, 0,
+				2.3, 0,
 				3, 1
 			])
 			.setPaintProperty( 'label-layer', "text-opacity", [
 				'interpolate', ['exponential', 0.5],
 				['zoom'],
-				2, 0,
+				2.3, 0,
 				3, 1
 			])
 			.setLayoutProperty('label-layer', 'text-size', [
 				'interpolate', ['exponential', 0.5],
 				['zoom'],
-				2, 1,
-				3, 14
+				2.3, 1,
+				3, 16
 			])
 			.setPaintProperty('label-layer', "text-translate", [0,20])
 			.setPaintProperty('label-layer', 'text-halo-color', "hsl(0, 0%, 100%)")
 			.setPaintProperty('label-layer', 'text-halo-width', 1)
 			.setLayoutProperty('label-layer', 'text-field', getCentroidLabelByISO(data))
-			.setPaintProperty('centroids-layer', 'circle-color', colorsByVariables(data, colType, 'ISO3'))
+			.setPaintProperty('centroids-layer', 'circle-color', colorsByVariables(data, colType, 'ISO3', dataMinMax))
 			.setPaintProperty('centroids-layer', 'circle-stroke-color', '#000')
 			.setPaintProperty('centroids-layer', 'circle-stroke-width', 1);
 
-	}, [map, config.minZoom, config.maxZoom, data, colType])
+	}, [map, config.minZoom, config.maxZoom, mapType, data, colType, dataMinMax])
 	
 
 	// Mouse hover events

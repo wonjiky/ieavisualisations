@@ -23,6 +23,7 @@ export default config => {
 		container: mapContainerRef.current,
 		style: config.style,
 		center: config.center ? config.center : [0, 0],
+		zoom: config.zoom ? config.zoom : 0,
 		minZoom: config.minZoom ? config.minZoom : 0,
 		maxZoom: config.maxZoom ? config.maxZoom : 22,
 		maxBounds: config.maxBounds ? config.maxBounds : null,
