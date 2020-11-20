@@ -1,0 +1,15 @@
+
+
+.LogoWrapper {
+  display: flex;
+
+}
+
+.Logo {
+  height: 30px;
+  margin-left: 20px;
+}
+
+.Logo > img {
+  height: 100%;
+}

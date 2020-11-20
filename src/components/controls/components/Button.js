@@ -18,8 +18,8 @@ export default props => {
 			{label ?? <label className={global.ToggleLabel}> {label} </label>}
 			<div className={optionStyle}> 
 				{type === 'buttonGroup'
-					? options.map((option, idx) => <Button key={`${type}-${idx}`} {...props} option={option}/>)
-					: options.map((option, idx) => <Button key={`Toggle-${idx}`} {...props} {...option} />)}
+					? options.map((option, idx) => <Button key={`${type}-${idx}`} {...props} option={option} disabled={props.disabled} />)
+					: options.map((option, idx) => <Button key={`Toggle-${idx}`} {...props} {...option} disabled={props.disabled} />)}
 			</div>
 		</div>
 	)
@@ -27,8 +27,12 @@ export default props => {
 
 const Button = props => {
 
-	const {option, dark, type, selected, click } = props;
+	const {option, dark, type, selected, click, disabled } = props;
 	const selectedType = type === 'buttonGroup' ? selected === option : selected;
+
+	let isDisable = disabled && disabled.filter(d => d === option)[0];
+	let disable = isDisable === option ? true : false;
+
 	let optionStyle = selectedType && dark
 		? [classes.ToggleOption, classes.active, classes.dark].join(' ') 
 		: selectedType && !dark
@@ -36,9 +40,9 @@ const Button = props => {
 		: !selectedType && dark
 		? [classes.ToggleOption, classes.dark].join(' ')
 		: classes.ToggleOption;
-	
+
 	return (
-		<button onClick={ _=> click(option)} className={optionStyle}> 
+		<button onClick={ _=> click(option)} className={!disable ? optionStyle : [optionStyle, classes.disabled].join(' ') } disabled={disable}> 
 			{option}
 		</button>
 	)

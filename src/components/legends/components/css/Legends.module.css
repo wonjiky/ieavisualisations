@@ -48,6 +48,13 @@
   font-size: .7rem;
 }
 
+.UnitTop {
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: flex-end;
+  font-size: .7rem;
+}
+
 .Markers {
   height: 14px;
   width: 14px;

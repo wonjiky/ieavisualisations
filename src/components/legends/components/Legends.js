@@ -7,6 +7,8 @@ export default ({
   labels,
   round,
   selected,
+  symmetry,
+  unitTop,
   legendStyle,
   symbolColor,
   click,
@@ -20,11 +22,16 @@ export default ({
   function gradientBg(colors) {
     let colorArr = [];
     for ( let color in colors ) {
-      let idx = parseInt(color) + 1;
-      colorArr.push(`${colors[color]} ${(100/colors.length) * idx}%`)
+      let idx = parseInt(color);
+      colorArr.push(`${colors[color]} ${(100/(colors.length - 1)) * idx}%`)
     }
     return colorArr.join(',');
   }
+  
+  if (symmetry) {
+    labels.splice(1, 0, 0);
+  }
+  
   switch(type) {
     case 'category':
       legend = labels.map((d, i) => (
@@ -54,6 +61,7 @@ export default ({
     case 'continuous':
       legend = (
         <div className={classes.LegendItem__Continuous}>
+          {unitTop && <div className={classes.UnitTop}>{unitTop}</div>}
           <div className={classes.Marker__Continuous} style={{
             background: `linear-gradient(90deg, ${continuousBg})`
           }}/>

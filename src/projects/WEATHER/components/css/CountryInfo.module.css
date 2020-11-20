@@ -26,7 +26,7 @@
   align-self: center;
   border: 1px solid #fff;
   padding: 10px 20px;
-  color: white;
+  color: #fff;
 }
 
 .CountryWrapper {
@@ -45,7 +45,6 @@
 .CountryLegendWrapper {
   display: flex;
   flex-flow: row;
-  /* justify-content: flex-end; */
   font-size: 1rem;
 }
 
@@ -57,6 +56,8 @@
   margin-right: 10px;  
   border-radius: 15px;
   cursor: pointer;
+  color: #fff;
+  border: 1px solid rgba(43,43,43,.95);
   background: rgba(43,43,43,.95) !important;
 }
 
@@ -79,6 +80,7 @@
   border-radius: 50%;
   background: none;
   display: none;
+  box-shadow: none !important;
 }
 
 .Close:hover {
@@ -87,6 +89,12 @@
 
 .Close > svg {
   display: block;
+  fill: none;
+}
+
+.Close > svg > path{
+  /* fill: #000;
+  stroke: #000; */
   fill: none;
 }
 

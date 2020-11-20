@@ -9,7 +9,8 @@ export default function({
 	decimal,
 	colType,
 	unit,
-	dataMinMax,
+	territoryMinMax,
+	valueType,
 	gridURL,
  }) {
 	
@@ -89,7 +90,7 @@ export default function({
 		let type = mapType === 'territory';
 		let borders = ['solid-border', 'dotted-border'];
 		let setVisibility = view => view  ? 'visible' : 'none';
-		let borderColor = type ?  '#404040' : '#000'
+		let borderColor =  '#000'; // type ?  '#404040' : '#000'
 
 		for (let i in borders) {
 			map.setPaintProperty( `${borders[i]}-layer`, "line-color",  borderColor)
@@ -108,7 +109,7 @@ export default function({
 		map
 			.setPaintProperty( "shapes-layer", "fill-color", [
 				'interpolate', ['exponential', 0.5], ['zoom'],
-				2.3, colorsByVariables(data, colType, 'ISO3', dataMinMax),
+				2.3, colorsByVariables('ISO3', data, colType, valueType, territoryMinMax),
 				3, '#fff',
 			])
 			.setPaintProperty('centroids-layer', 'circle-radius', [
@@ -144,11 +145,11 @@ export default function({
 			.setPaintProperty('label-layer', 'text-halo-color', "hsl(0, 0%, 100%)")
 			.setPaintProperty('label-layer', 'text-halo-width', 1)
 			.setLayoutProperty('label-layer', 'text-field', getCentroidLabelByISO(data))
-			.setPaintProperty('centroids-layer', 'circle-color', colorsByVariables(data, colType, 'ISO3', dataMinMax))
+			.setPaintProperty('centroids-layer', 'circle-color', colorsByVariables('ISO3', data, colType, valueType, territoryMinMax))
 			.setPaintProperty('centroids-layer', 'circle-stroke-color', '#000')
 			.setPaintProperty('centroids-layer', 'circle-stroke-width', 1);
 
-	}, [map, config.minZoom, config.maxZoom, mapType, data, colType, dataMinMax])
+	}, [map, config.minZoom, config.maxZoom, mapType, data, colType, valueType, territoryMinMax])
 	
 
 	// Mouse hover events

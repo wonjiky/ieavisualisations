@@ -14,12 +14,12 @@
 }
 
 .Dropdown:hover .Icon > div {
-  background: #353333;
+  background: #ebebeb1d;
   transition: background .2s linear;
 }
 
-
 .Dropdown .Icon > div{
+  box-shadow: none !important;
   height: 100%;
   width: 100%;
 }

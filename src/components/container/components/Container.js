@@ -1,12 +1,14 @@
 import React from 'react'
 import { Icon } from '../../icons'
-import classes from './css/Contaner.module.css'
 import { Loader } from '../../loader'
+import { Disclaimer } from '../../disclaimer'
+import classes from './css/Contaner.module.css'
 
-export default ({ selector, children, loaded }) => (
+export default ({ selector, children, loaded, type, disclaimer}) => (
   !loaded 
   ? <Loader /> 
   : <div className='container' id={selector}>
+      {type === 'weather' ? <Disclaimer disclaimer={disclaimer} /> : null}
       <div className={classes.ExpandContainer}>
         <div className={classes.Expand}>
           <Icon 

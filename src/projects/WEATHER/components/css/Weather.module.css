@@ -70,16 +70,21 @@ table {
 td, th {
     height: 2rem;
     text-align: left;
-    padding: 7px;
+    padding: 12px 7px;
 }
 
 td {
     border-bottom: .5px solid #ccc;
+    line-height: 1.6rem;
 }
 
 td:last-child {
     font-size: .8rem;
-    text-align: center;
+    text-align: right;
+}
+
+th:last-child {
+    text-align: right;
 }
 
 th {
@@ -109,8 +114,21 @@ th {
     padding: 0 20px;
 }
 
+.CustomTable td:first-child {
+    width: 15%;
+}
+
+.CustomTable td:last-child {
+    text-align: left;
+    font-size: 1rem;
+}
+
+.CustomTable th:last-child {
+    text-align: left;
+}
+
 .ModalTextContent p {
-    width: 80%;
+    width: 40%;
 }
 
 .ModalTextContent{
@@ -135,6 +153,13 @@ th {
 .Bottom {
     transform: translateY(100px);
     transition: 0.3s;
+}
+
+.LogoCustomStyle {
+    margin-right: 50px !important;
+    background: transparent !important;
+    box-shadow: none;
+    padding: 0;
 }
 
 @media screen and (max-width: 729px) {

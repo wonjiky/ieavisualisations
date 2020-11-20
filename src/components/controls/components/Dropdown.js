@@ -36,7 +36,7 @@ export default ({
         <div className={dark 
           ? [classes.Icon, classes.dark].join(' ') 
           : classes.Icon}>
-            <Icon type='downArrow' dark={true} />
+            <Icon type='downArrow' dark={dark ? true : false} />
         </div>
       </button>     
       <div id='dropdown' style={bottom ? {top: 'unset', bottom: '0px'} : null} className={dropdownStyle}>

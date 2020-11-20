@@ -29,13 +29,11 @@ export default ({ data, countries, decimal, mapType, unit, click }) => {
                     <div key={idx} className={classes.CountryLegendItem} onClick={_ => click(d.id)}>
                       {getCountryNameByISO(d.ISO)}
                       <div className={classes.Legend} style={{background: d.color}}/> 
-                      {/* {data.find(c => c.ISO === d.ISO)
-                        ? <div className={classes.Legend} style={{background: d.color}}/> 
-                        : ' loading...'} */}
                       <Icon 
                         type='close' 
                         dark={true} 
-                        stroke='#fff' 
+                        stroke='#000' 
+                        fill='#000' 
                         styles={classes.Close} 
                         viewBox={'-4 -4 26 26'} 
                       />

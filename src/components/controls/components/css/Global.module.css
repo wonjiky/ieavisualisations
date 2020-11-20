@@ -29,6 +29,14 @@
   color: #fff !important;
 }
 
+.ControlContainer.dark > button:before {
+  border: 1px solid #949494;
+}
+
+.ControlContainer.dark > button:hover:before {
+  border: 1px solid #e6e6e6;
+}
+
 .ControlContainer > button:before {
   cursor: pointer;
   display: block;
@@ -38,13 +46,13 @@
   right: 0;
   left: 0;
   transition: border .2s linear;
-  border: 1px solid #949494;
+  border: 1px solid #e6e6e6;
   content: "";
 }
 
 .ControlContainer>button:hover:before {
   z-index:1;
-  border-color:  #e6e6e6;
+  border-color:  #949494;
 }
 
 .Slider {

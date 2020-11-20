@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { MapContainer } from '../../../components/container'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
-import { getCountryNameByISO, getMonthString, uppercase, useIntervalLogic, colorArray, gridColorArray } from './util'
+import { getCountryNameByISO, checkIfAnomaly, getAnomalyMinMax, getMonthString, uppercase, useIntervalLogic, colorArray, gridColorArray } from './util'
 import { Modal } from '../../../components/modal'
 import { Legends } from '../../../components/legends'
 import { Icon } from '../../../components/icons'
 import variables from '../assets/variables.json'
-import gridMinMax from '../assets/gridMinMax.json'
-import territoryMinMax from '../assets/territoryMinMax.json'
+import gridMinMaxRange from '../assets/gridminmax.json'
+import Logos from './Logos'
 import Weather from './Weather'
 import classes from './css/Weather.module.css'
 import CountryInfo from './CountryInfo'
@@ -16,8 +16,8 @@ import CountryInfo from './CountryInfo'
 export default function() {
 	
 	// Grid level image time range
-	let minYear = 2000, maxYear = 2020; //yearRange = (maxYear - minYear) + 1;
-	let months = 12, minMonth = 1, maxMonth = 10; //monthRange = (yearRange * months) - (months - maxMonth);
+	let minYear = 2000, maxYear = 2020;
+	let months = 12, minMonth = 1, maxMonth = 10;
 	let minDay = 1;
 
 	let initialVariable = variables.territory.sort((a,b) => a.group.localeCompare(b.group))[0]
@@ -36,18 +36,21 @@ export default function() {
 	const [gridTime, setGridTime] = useState({ month: date.month, year: date.year });
 	const { day, month, year } = date;
 	const dayToStr = num => `${num < 10 ? '0' : ''}${num}`; 
-	const dataMinMax = mapType === 'territory' 
-		? territoryMinMax[viewInterval][valueType][variable.id]
-		: []; 
+
 	
 	// Retrieve attributes for each variable
-	let { decimal, unit, group, color } = variables[mapType].find(d => d.id === variable.id);
-	let gridValueType = valueType === 'Value' ? 'monthly' : valueType === 'Anomalies' ? 'anomaly' : 'climatology';
-	let gridTimeByValueType = valueType === 'Value Climatologies' ? dayToStr(gridTime.month) : `${gridTime.year}/${dayToStr(gridTime.month)}`;
-	let currGridVariable = `IEA_${variable.id}${gridValueType}`;
-	let currGridLayer = `https://ieamaps.blob.core.windows.net/weather/grid/${gridValueType}/${gridTimeByValueType}/${currGridVariable}.png`;
+	let { decimal, unit, color } = variables[mapType].find(d => d.id === variable.id);
+	const valueTypes = {
+		"Value": "monthly",
+		"Anomalies": "anomaly",
+		"Value Climatologies": "climatology"
+	};
 
-	// Produce query for choropleth data
+	const currValueType = valueTypes[valueType];
+	let gridTimeByValueType = valueType === 'Value Climatologies' ? dayToStr(gridTime.month) : `${gridTime.year}/${dayToStr(gridTime.month)}`;
+	let currGridVariable = `IEA_${variable.id}`;
+	let currGridLayer = `https://ieamaps.blob.core.windows.net/weather/grid/${currValueType}/${gridTimeByValueType}/${currGridVariable}${currValueType}.png`;
+
 	const getQuery = query => Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
 	let joinedDate = `${year}${dayToStr(month)}${dayToStr(day)}`;
 	let query = useIntervalLogic([
@@ -55,7 +58,7 @@ export default function() {
 		{ year, month, variable: variable.id, valueType }, 
 		{ date: joinedDate, variable: variable.id }], viewInterval);
 	let mapQueryString = getQuery(query);
-	
+
 	// Produce query for country data
 	let maxDay = new Date(year, month, 0).getDate();
 	let startDate = useIntervalLogic(['20100101', `${year}0101`, `${year}${dayToStr(month)}01` ], viewInterval);
@@ -71,14 +74,32 @@ export default function() {
 	let downloadQuery = useIntervalLogic([{ variable: variable.id, daily: true, year}, { variable: variable.id, year, valueType}, { variable: variable.id, daily: true, year, month}], viewInterval);
 	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
 	let downloadButtonLabel = useIntervalLogic([
-		`Daily ${variable.name} values for ${year}`,
-		`Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} for ${year}`,
-		`Daily ${variable.name} values for ${getMonthString(month)} ${year}`
+		`Daily ${variable.name} values (csv) for ${year}`,
+		`Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} (csv) for ${year}`,
+		`Daily ${variable.name} values (csv) for ${getMonthString(month)} ${year}`
 	], viewInterval);
+	if( mapType === 'grid') {
+		downloadQuery = valueType === 'Value Climatologies' ? `Climatologies/${dayToStr(gridTime.month)}/` : `${gridTime.year}/${dayToStr(gridTime.month)}/`;
+		download = `http://weatherforenergydata.iea.org/${downloadQuery}IEA_${variable.id}
+		${valueType === 'Value' ? 'monthly' : valueType === 'Anomalies' ? 'anomaly' : 'climatology'}
+		${valueType === 'Value Climatologies' ? '' : '_'+gridTime.year}_${dayToStr(gridTime.month)}.nc`;
+		
+		downloadButtonLabel = `${variable.id} ${valueType === 'Value Climatologies' 
+			? 'climatology' : valueType === 'Anomalies' ? 'anomaly' : valueType.toLowerCase()} (NetCDF) for ${getMonthString(gridTime.month)} ${gridTime.year}`;
+	}
 
-	const findMinMax = type => 
-		Math[type](...data.data.map(d => parseNumber(d.value)));
-	const parseNumber = num => parseFloat(num).toFixed(decimal);
+	const floorNumber = num => Math.floor(parseFloat(num));
+	const ceilNumber = num  => Math.round(parseFloat(num));
+	
+	const territoryMinMax = data.minMax && (currValueType === 'anomaly' 
+			? getAnomalyMinMax([floorNumber(data.minMax[0]), ceilNumber(data.minMax[1])])
+			: [floorNumber(data.minMax[0]), ceilNumber(data.minMax[1])]);
+	const gridValues = mapType === 'grid' && (currValueType === 'climatology' 
+		? gridMinMaxRange[currValueType][currGridVariable]
+		: gridMinMaxRange[currValueType][currGridVariable][gridTime.year - minYear]);
+	const gridRoundedValues = [floorNumber(gridValues[0]), ceilNumber(gridValues[1])];
+	const gridMinMax = currValueType === 'anomaly' ?	getAnomalyMinMax(gridRoundedValues) : gridRoundedValues;
+	const legendLabel = mapType === 'territory' ? territoryMinMax : gridMinMax;
 
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
@@ -98,7 +119,7 @@ export default function() {
 		let pos = currArr.findIndex(d => d.id === idx);
 		let countries = {
 			firstCountry: { id: 'firstCountry', color: '#727272', setData: e => setFirstCountry(e) },
-			secondCountry: { id: 'secondCountry', color: '#e6e6e6', setData: e => setSecondCountry(e) }
+			secondCountry: { id: 'secondCountry', color: '#b8b8b8', setData: e => setSecondCountry(e) }
 		}
 		if (currArr.length === 2) {
 			currArr.splice(pos, 1)
@@ -134,24 +155,31 @@ export default function() {
 	// Fetch choropleth data
 	useEffect(() => {
 		if (mapType === 'grid') return;
-		axios.get(`https://api.iea.org/weather/?${mapQueryString}`)
-		.then(response => {
+		let currCall = [
+			axios.get(`https://api.iea.org/weather/?${mapQueryString}`),
+			axios.get(`https://api.iea.org/weather/extremes/?${mapQueryString}`)
+		];
+		axios.all(currCall)
+			.then(axios.spread((...responses) => {
+				const tempData = responses[0].data;
+				const minMax = responses[1].data[0];
+				
+				let filteredData = tempData.filter(d => getCountryNameByISO(d.country))
+				let currVariable = mapQueryString.split('&').map(d => d.split('=')).find(d => d[0] === 'variable')[1];
+				let tempVariable = variables.territory;
+				let isTemp = tempVariable.find(d => d.id === currVariable && d.group === 'Temperature');
+				let hasPop = currVariable.substring(currVariable.length - 5, currVariable.length) === 'bypop';
+				let tempResult = isTemp && hasPop ? filteredData.filter(d => d.value !== 0) : filteredData;
+				
+				let color = tempVariable.find(d => d.id === currVariable);
+				let result = tempResult.map(d => ({ 
+						...d, 
+						name: getCountryNameByISO(d.country), 
+						value: parseFloat(d.value.toFixed(decimal))
+				}));
 
-			let filteredData = response.data.filter(d => getCountryNameByISO(d.country))
-			let currVariable = mapQueryString.split('&').map(d => d.split('=')).find(d => d[0] === 'variable')[1];
-			let tempVariable = variables.territory;
-			let isTemp = tempVariable.find(d => d.id === currVariable && d.group === 'Temperature');
-			let hasPop = currVariable.substring(currVariable.length - 5, currVariable.length) === 'bypop';
-			let tempResult = isTemp && hasPop ? filteredData.filter(d => d.value !== 0) : filteredData;
-
-			let color = tempVariable.find(d => d.id === currVariable);
-			let result = tempResult.map(d => ({ 
-					...d, 
-					name: getCountryNameByISO(d.country), 
-					value: parseFloat(d.value.toFixed(decimal))
-			}));
-			if (response.data.length !== 0) setData({ data: result, color: color.color || color.group})
-		})
+				setData({ data: result, color: color.color, minMax: [minMax.min, minMax.max] })
+			}))
 	}, [mapType, mapQueryString, decimal]);
 
 	const controls = {
@@ -221,6 +249,7 @@ export default function() {
 				options: mapType === 'territory' ? ['Year', 'Month', 'Day'] : ['Year', 'Month'],
 				selected: uppercase(viewInterval),
 				flow: 'row',
+				disabled: mapType === 'grid' && valueType === 'Value Climatologies' ? ['Year'] : undefined,
 				click: value => {
 					mapType === 'territory' 
 						? setValueType('Value')
@@ -257,41 +286,32 @@ export default function() {
 			},
 		]
 	};
-
 	
-
-	const legendStyle = mapType === 'grid' && selectedCountries.length === 0 
-		? [classes.LegendWrapper, classes.GridView].join(' ') 
-		: mapType !== 'grid' && selectedCountries.length === 0 
-		? [classes.LegendWrapper, classes.Bottom].join(' ') 
-		: classes.LegendWrapper;
-
-	// const gridLegendLabel = mapType === 'grid'
-	// 	? (gridMinMax[currGridVariable] ? gridMinMax[currGridVariable][gridTime.year - minYear][Number(gridTime.month)-1][0] : [])
-	// 	: [];
-
 	const legends = [{
 		type: 'continuous',
 		header: 'legend',
 		subInHeader: false,
+		unitTop: unit,
 		round: false,
-		labels: dataMinMax.length !== 0 ? [dataMinMax[0], `${dataMinMax[1]} ${unit}`] : ['', 'Not available yet'],
-		//  mapType === 'territory' ? (data.data 
-		// 	? [Math.round(findMinMax('min')), `${Math.round(findMinMax('max'))} ${unit}`] 
-		// 	: [])
-		// 	: [],//[parseNumber(gridLegendLabel[0]), `${parseNumber(gridLegendLabel[1])} ${unit}`],
-		colors: mapType === 'territory' 
-		? (!colorArray[color||group]  ? colorArray.default : colorArray[color||group])
-		: gridColorArray[variable.id]
+		symmetry: valueType === 'Anomalies',
+		labels: legendLabel,
+		colors: checkIfAnomaly(valueType, mapType === 'grid' ? gridColorArray[variable.id] : colorArray[color], '#424242')
 	}];
+	const legendCustomStyle = mapType === 'grid' && selectedCountries.length === 0 
+		? [classes.LegendWrapper, classes.GridView].join(' ') 
+		: mapType !== 'grid' && selectedCountries.length === 0 
+		? [classes.LegendWrapper, classes.Bottom].join(' ') 
+		: classes.LegendWrapper;
+	const disclaimer = 'This map is without prejudice to the status of or sovereignty over any territory, to the delimitation of international frontiers and boundaries and to the name of any territory, city or area.';
 
 	return (
-		<MapContainer selector={'Weather_Map'} loaded={data.data}>
+		<MapContainer selector={'Weather_Map'} loaded={data.data} disclaimer={disclaimer} type='weather'>
 			<Weather 
 				data={data.data} 
+				territoryMinMax={data.minMax}
 				mapType={mapType} 
 				selectedCountries={selectedCountries}
-				dataMinMax={dataMinMax}
+				valueType={valueType}
 				gridURL={currGridLayer}
 				unit={unit}
 				decimal={decimal}
@@ -312,13 +332,16 @@ export default function() {
 				downloadLink={download}
 				downloadLabel={downloadButtonLabel}
 			>
-				<Controls position='bottomRight' customClass={legendStyle}>
+				<Controls position='bottomRight' customClass={legendCustomStyle}>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
         </Controls>
 				<Controls position='topLeft' style={{'width': '280px'}}> 
 					{controls.topleft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
+				</Controls>
+				<Controls position='topRight' customClass={classes.LogoCustomStyle}> 
+					<Logos />
 				</Controls>
 			</ControlContainer>
 			<div className={classes.ButtonWrapper} style={{"top": "412px", "zIndex": "2"}}>
@@ -332,9 +355,9 @@ export default function() {
 					</div>
 				</div>
 			</div>
-			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)} dark>
-				<ValueType body={variables.valueTypes} head={['Name', 'Description']} />
-				<Table body={variables[mapType]} head={['Name', 'Description', 'Unit']} />
+			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)}>
+				<Table title='Value types' body={variables.valueTypes} head={['Type', 'Description']} />
+				<Table title='Variables' body={variables.table} head={['Name', 'Description', 'Aggregation in territories', 'Unit']} />
 			</Modal>
 			<CountryInfo 
 				data={countryData}
@@ -355,22 +378,12 @@ export default function() {
   )
 };
 
-const ValueType = ({ body }) => (
-	<div className={classes.ModalText}>
-		<h5>Value types</h5>
-		{body.map(d => 
-			<div key={d.id} className={classes.ModalTextContent}>
-				<h6>{d.id}</h6>
-				<p>{d.info}</p>
-			</div>
-		)}
-	</div>
-)
-
-const Table = ({ body, head }) => (
+const Table = ({ title, body, head }) => (
 	<div className={classes.Table}>
-		<h5>Variables</h5>
-		<div className={classes.TableWrapper}>
+		<h5>{title}</h5>
+		<div className={title === 'Variables' 
+			? classes.TableWrapper 
+			: [classes.TableWrapper, classes.CustomTable].join(' ') }>
 			<table>
 				<thead>
 					<tr>
@@ -378,11 +391,9 @@ const Table = ({ body, head }) => (
 					</tr>
 				</thead>
 				<tbody>
-					{body.map((item, idx) => 
+					{body.map((item, idx) =>
 						<tr key={idx}>
-							<td>{item.name}</td>
-							<td>{item.info}</td>
-							<td>{item.unit}</td>
+							{Object.values(item).map((d,idx) => <td key={idx}>{d}</td> )}
 						</tr>
 					)}
 				</tbody>
@@ -390,3 +401,28 @@ const Table = ({ body, head }) => (
 		</div>
 	</div>
 )
+
+// const Table = ({ body, head }) => (
+// 	<div className={classes.Table}>
+// 		<h5>Variables</h5>
+// 		<div className={classes.TableWrapper}>
+// 			<table>
+// 				<thead>
+// 					<tr>
+// 						{head.map((item, idx) => <th key={idx}> {item} </th>)}				
+// 					</tr>
+// 				</thead>
+// 				<tbody>
+// 					{body.map((item, idx) => 
+// 						<tr key={idx}>
+// 							<td>{item.name}</td>
+// 							<td>{item.info}</td>
+// 							<td>{item.aggregation}</td>
+// 							<td>{item.unit}</td>
+// 						</tr>
+// 					)}
+// 				</tbody>
+// 			</table>
+// 		</div>
+// 	</div>
+// )

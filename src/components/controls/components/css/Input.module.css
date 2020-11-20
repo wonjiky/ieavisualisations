@@ -9,7 +9,7 @@
 }
 
 .disabled {
-  color: rgba(255, 255, 255, 0.3);
+  color: #949494;
   cursor: default;
 }
 

@@ -1,8 +1,6 @@
 import React from 'react'
 import countries from '../assets/countriesIso.json'
-import { scaleQuantile, scaleLinear, scaleSequentialQuantile, scaleSequential,  scaleQuantize } from 'd3-scale'
-import { hsl } from 'd3-color'
-import { extent } from 'd3-array'
+import { scaleLinear } from 'd3-scale'
 
 export const uppercase = str => str.charAt(0).toUpperCase() + str.slice(1);
 export const getCountryNameByISO = iso => !countries.find(d => d.ISO3 === iso) ? null : countries.find(d => d.ISO3 === iso).region;
@@ -12,86 +10,110 @@ export const useIntervalLogic = (entries, interval) => entries[['year', 'month',
 export const disputedRegionsISO = ["ABCDE", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"];
 export const disputedRegionsID = [61, 255, 253, 87, 233, 86, 228];
 
+// export const colorArray = {
+// 	Temp: ['#003b9c','#296e72','#4e9e4c','#a2c954','#eff15b','#e0bb4c','#d28a3e','#c55d32','#b93326'], 
+// 	Anomaly: ['#003b9c','#426db6','#7595ca','#bdcce6','#ffffff','#eececb','#d28a3e','#c55d32','#b93326'], 
+// 	// HDD: ['#003b9c','#296e72','#4e9e4c','#a2c954','#eff15b','#e0bb4c','#d28a3e','#c55d32','#b93326'], 
+// 	// Blue green yellow red 5:
+// 	// Temp: ['#003b9c','#4eac32','#eff15b','#cc9642','#b93326'],
+// 	// Green to Red:
+// 	// Temp: ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'], 
+// 	HDD: ['#b93326', '#c55d32', '#d28a3e', '#e0bb4c', '#eff15b', '#a2c954', '#4e9e4c', '#296e72', '#003b9c'],
+// 	// HDD: ['#b93326', '#c86031', '#df9b2e', '#f1c92b', '#fee929', '#dce029', '#96c11f', '#5aaa1a', '#008712'],
+// 	Daylight: ['#424139','#565541','#6d6c4a','#898854','#a5a45f','#bdbd68','#c8c86c','#d2d270','#fcfc80'],
+// 	Precipitation: ['#ffffff','#e3ece2','#cadcc8','#a4c3a2','#93b790','#6a9c66','#528c4e','#3c7e38','#165312'],
+// 	Snow: ['#ffffff','#faf6ec','#f6edda','#f1e4c8','#edddb9','#e9d5aa','#e5cd9b','#e1c58a','#ddbd79'],
+// 	// Snow: ['#ddbd79','#dfc386','#e1c892','#e3cea1','#e6d5b2','#e9dcc2','#ece4d3','#ede8dc','#ffffff'],
+// 	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
+// };
+
 export const colorArray = {
-	// Temp: ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'],
-	Temp: ['#003b9c','#4eac32','#eff15b','#cc9642','#b93326'],
-	// Temp: ['#003790','#005560','#006d3b','#008712','#7fb81e','#fee929','#e9b328','#d27627','#b93326'],
-	// Temp: ['#003790','#133786','#25367b','#3f366c','#55355f','#6d3551','#8a3441','#a03434','#b93326'],
-	HDD: ['#b93326', '#c86031', '#df9b2e', '#f1c92b', '#fee929', '#dce029', '#96c11f', '#5aaa1a', '#008712'],
-	Daylight: ['#424139','#565541','#6d6c4a','#898854','#a5a45f','#bdbd68','#c8c86c','#d2d270','#fcfc80'],
-	Precipitation: ['#ffffff','#e3ece2','#cadcc8','#a4c3a2','#93b790','#6a9c66','#528c4e','#3c7e38','#165312'],
-	Snow: ['#ddbd79','#dfc386','#e1c892','#e3cea1','#e6d5b2','#e9dcc2','#ece4d3','#ede8dc','#f0f0f0'],
-	default: ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
-	// HDD: ['#003790', '#264a9a', '#3b5ea3', '#4e72ad', '#719cc0', '#83b2c8', '#98c7d1', '#afdcd8', '#ffffe0'],
+	Temp: ['#003b9c','#4eac32','#eff15b', '#e7aa1f','#b93326'],
+	HDD: ['#b93326','#e7aa1f','#eff15b','#4eac32','#003b9c'],
+	Daylight: ['#001e63', '#fcfc80'],
+	Precipitation: ['#ffffcc', '#165312'],
+	Evap: ['#165312', '#ffffcc'],
+	Snow: ['#ffffcc', '#2147b1'],
+	default: ['#ffffcc', '#932012'],
 };
 
-const gridColors = {
-  "Temp": ['#008712','#5aaa1a','#96c11f','#dce029','#fee929','#f1c92b','#df9b2e','#c86031','#b93326'],
-  "HDD": ['#b93326', '#c86031', '#df9b2e', '#f1c92b', '#fee929', '#dce029', '#96c11f', '#5aaa1a', '#008712'],
-  "Daylight": ['#424139','#565541','#6d6c4a','#898854','#a5a45f','#bdbd68','#c8c86c','#d2d270','#fcfc80'],
-  "Precipitation": ['#ffffff','#e3ece2','#cadcc8','#a4c3a2','#93b790','#6a9c66','#528c4e','#3c7e38','#165312'],
-  "Snow": ['#ddbd79','#dfc386','#e1c892','#e3cea1','#e6d5b2','#e9dcc2','#ece4d3','#ede8dc','#f0f0f0'],
-  "Wind": ["#ffffff", "#e6e6e6", "#cfcfcf", "#b8b8b8", "#a0a0a0", "#898989", "#6e6e6e", "#555555", "#393939"],
-  "default": ['#ffffcc', '#ffeda0', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026'],
-}
-
 export const gridColorArray = {
-  "Daylight": gridColors["Daylight"],
-  "HDD18": gridColors["HDD"],
-  "Precipitation": gridColors["Precipitation"],
-  "CDDhum18": gridColors["Temp"],
-  "CDD18": gridColors["Temp"],
-  "HeatIndex": gridColors["Temp"],
-  "Humidex": gridColors["Temp"],
-  "Temperaturemin": gridColors["Temp"],
-  "Temperaturemax": gridColors["Temp"],
-  "Temperature": gridColors["Temp"],
-  "Cloud": gridColors["Snow"],
-  "Evaporation": gridColors["Snow"],
-  "Snowfall": gridColors["Snow"],
-  "DNI": gridColors["default"],
-  "GHI": gridColors["default"],
-  "Runoff": gridColors["default"],
-  "RH": gridColors["default"],
-  "Wind10int": gridColors["Wind"],
-  "Wind100int": gridColors["Wind"],
-  "Wind100power": gridColors["Wind"],
+  "Daylight": colorArray["Daylight"],
+  "HDD18": colorArray["HDD"],
+  "Precipitation": colorArray["Precipitation"],
+  "CDDhum18": colorArray["Temp"],
+  "CDD18": colorArray["Temp"],
+  "HeatIndex": colorArray["Temp"],
+  "Humidex": colorArray["Temp"],
+  "Temperaturemin": colorArray["Temp"],
+  "Temperaturemax": colorArray["Temp"],
+  "Temperature": colorArray["Temp"],
+  "Cloud": colorArray["Snow"],
+  "Evaporation": colorArray["Evap"],
+  "Snowfall": colorArray["Snow"],
+  "DNI": colorArray["default"],
+  "GHI": colorArray["default"],
+  "Runoff": colorArray["default"],
+  "RH": colorArray["Snow"],
+  "Wind10int": colorArray["Snow"],
+  "Wind100int": colorArray["Snow"],
+  "Wind100power": colorArray["Snow"],
 }
 
-export function colorsByVariables(countries, colType, selector, dataMinMax) {
+export function checkIfAnomaly(type, range, newValue) {
+	let tempRange = [...range];
+	if (type === 'Anomalies') {
+		if (range.length === 2) tempRange.splice(1, 0, newValue)
+		if (range.length > 4) tempRange.splice(2, 1, newValue)
+	}
+	return tempRange;
+}
+
+export function getAnomalyMinMax(minMax) {
+	let min = minMax[0], max = minMax[1];
+	let mi = min < 0 ? -min : min;
+	let ma = max < 0 ? -max : max;
+	return mi > ma ? [min, -min] : mi < ma ? [-max, max] : [min, max]
+}
+
+export function colorsByVariables(selector, countries, colType, valueType, territoryMinMax) {
 
 	let tempColors = !colorArray[colType] ? colorArray.default : colorArray[colType];
 	let tempCountries = [...countries], nullColor = '#a3a3a3', colors = [];
-
-	let findMinMax = (data, type) => Math[type](...data.map(d => d.value));
-	let hasMinMax = dataMinMax.length !== 0;
-	let minValue = hasMinMax ? dataMinMax[0] : findMinMax(tempCountries, 'min'), 
-	maxValue = hasMinMax ? dataMinMax[1] : findMinMax(tempCountries, 'max');
-	let pivotValue = (maxValue - minValue) / (tempColors.length - 1);
+	let minMax = valueType === 'Anomalies'
+		? getAnomalyMinMax(territoryMinMax)
+		: territoryMinMax;
+	let pivotValue = (minMax[1] - minMax[0]) / (tempColors.length - 1);
 	let valueRange = [];
-	
-	for (let i = 1; i < tempColors.length - 1; i++) valueRange.push((pivotValue * i) + minValue)
-	valueRange.splice(0, 0, minValue)
-	valueRange.splice((valueRange.length * 2) + 1, 0, maxValue)
-	
+
+	for (let i = 1; i < tempColors.length - 1; i++) valueRange.push((pivotValue * i) + minMax[0]);
+
+	valueRange.splice(0, 0, minMax[0]);
+	valueRange.splice((valueRange.length * 2) + 1, 0, minMax[1]);
+
+	let range = checkIfAnomaly(valueType, valueRange, 0);
+	let colorRange = checkIfAnomaly(valueType, tempColors, '#424242')
+
 	let contScale = scaleLinear()
-		.domain(valueRange)
-		.range(tempColors);
+		.domain(range)
+		.range(colorRange);
 
 	tempCountries.forEach(countries => {
-
 		let { value, country } = countries;
 		let assignedColor = contScale(value)
 		let unique = colors.indexOf(assignedColor) === -1;
 
 		if (unique) {
+
 			colors.push(["match", ["get", selector], [country], true, false ])
 			colors.push(assignedColor)
+
 		} else {
+
 			let idx = colors.findIndex(d => d === assignedColor) - 1;
 			colors[idx][2].push(country)
-		}
 
+		}
 	})
 
 	colors.splice(0,0, 'case');
