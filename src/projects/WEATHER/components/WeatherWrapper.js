@@ -88,16 +88,16 @@ export default function() {
 			? 'climatology' : valueType === 'Anomalies' ? 'anomaly' : valueType.toLowerCase()} (NetCDF) for ${getMonthString(gridTime.month)} ${gridTime.year}`;
 	}
 
-	const floorNumber = num => Math.floor(parseFloat(num));
-	const ceilNumber = num  => Math.round(parseFloat(num));
+	const floor = num => Math.floor(parseFloat(num));
+	const ceil = num  => Math.ceil(parseFloat(num));
 	
 	const territoryMinMax = data.minMax && (currValueType === 'anomaly' 
-			? getAnomalyMinMax([floorNumber(data.minMax[0]), ceilNumber(data.minMax[1])])
-			: [floorNumber(data.minMax[0]), ceilNumber(data.minMax[1])]);
+			? getAnomalyMinMax([ceil(data.minMax[0]), floor(data.minMax[1])])
+			: [ceil(data.minMax[0]), floor(data.minMax[1])]);
 	const gridValues = mapType === 'grid' && (currValueType === 'climatology' 
 		? gridMinMaxRange[currValueType][currGridVariable]
 		: gridMinMaxRange[currValueType][currGridVariable][gridTime.year - minYear]);
-	const gridRoundedValues = [floorNumber(gridValues[0]), ceilNumber(gridValues[1])];
+	const gridRoundedValues = [ceil(gridValues[0]), floor(gridValues[1])];
 	const gridMinMax = currValueType === 'anomaly' ?	getAnomalyMinMax(gridRoundedValues) : gridRoundedValues;
 	const legendLabel = mapType === 'territory' ? territoryMinMax : gridMinMax;
 
@@ -400,29 +400,4 @@ const Table = ({ title, body, head }) => (
 			</table>
 		</div>
 	</div>
-)
-
-// const Table = ({ body, head }) => (
-// 	<div className={classes.Table}>
-// 		<h5>Variables</h5>
-// 		<div className={classes.TableWrapper}>
-// 			<table>
-// 				<thead>
-// 					<tr>
-// 						{head.map((item, idx) => <th key={idx}> {item} </th>)}				
-// 					</tr>
-// 				</thead>
-// 				<tbody>
-// 					{body.map((item, idx) => 
-// 						<tr key={idx}>
-// 							<td>{item.name}</td>
-// 							<td>{item.info}</td>
-// 							<td>{item.aggregation}</td>
-// 							<td>{item.unit}</td>
-// 						</tr>
-// 					)}
-// 				</tbody>
-// 			</table>
-// 		</div>
-// 	</div>
-// )
+);
