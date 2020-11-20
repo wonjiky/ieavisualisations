@@ -97,7 +97,8 @@ export default function() {
 	const gridValues = mapType === 'grid' && (currValueType === 'climatology' 
 		? gridMinMaxRange[currValueType][currGridVariable]
 		: gridMinMaxRange[currValueType][currGridVariable][gridTime.year - minYear]);
-	const gridRoundedValues = [ceil(gridValues[0]), floor(gridValues[1])];
+
+	const gridRoundedValues = [ceil(gridValues[0]), currGridVariable === 'IEA_Evaporation' ? gridValues[1].toFixed(2) : floor(gridValues[1])];
 	const gridMinMax = currValueType === 'anomaly' ?	getAnomalyMinMax(gridRoundedValues) : gridRoundedValues;
 	const legendLabel = mapType === 'territory' ? territoryMinMax : gridMinMax;
 
