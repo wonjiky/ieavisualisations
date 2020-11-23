@@ -11,12 +11,8 @@ const Disclaimer = ({ disclaimer }) => {
   let content = (
     <div className={style}>
       <div className={c.DisclaimerContent}>
-        <h4>
-          Weather for energy tracker
-        </h4>
-        <p>
-          {disclaimer}
-        </p>
+        <h4> Weather for energy tracker </h4>
+        <p> {disclaimer} </p>
         <button onClick={() => setClick(!click)}>I understand</button>
       </div>
     </div>
@@ -26,7 +22,7 @@ const Disclaimer = ({ disclaimer }) => {
 
   window.onbeforeunload = () => localStorage.removeItem('hide');
   
-  return content;
+  return <div></div>;
 }
 
 export default Disclaimer

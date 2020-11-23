@@ -1,17 +1,31 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import axios from 'axios'
 import { MapContainer } from '../../../components/container'
 import { ControlContainer, Controls, Control } from '../../../components/controls'
-import { getCountryNameByISO, checkIfAnomaly, getAnomalyMinMax, getMonthString, uppercase, useIntervalLogic, colorArray, gridColorArray } from './util'
 import { Modal } from '../../../components/modal'
 import { Legends } from '../../../components/legends'
 import { Icon } from '../../../components/icons'
+import CountryInfo from './CountryInfo'
+import { 
+	getCountryNameByISO, 
+	isAnomaly, 
+	getAnomalyMinMax, 
+	getMonthString, 
+	uppercase, 
+	useIntervalLogic, 
+	colorArray, 
+	gridColorArray,
+	getTerritoryMinMax,
+	getGridMinMax,
+	floor, ceil
+
+} from './util'
+import axios from 'axios'
 import variables from '../assets/variables.json'
 import gridMinMaxRange from '../assets/gridminmax.json'
 import Logos from './Logos'
 import Weather from './Weather'
+
 import classes from './css/Weather.module.css'
-import CountryInfo from './CountryInfo'
 
 export default function() {
 	
@@ -39,15 +53,11 @@ export default function() {
 
 	
 	// Retrieve attributes for each variable
-	let { decimal, unit, color } = variables[mapType].find(d => d.id === variable.id);
-	const valueTypes = {
-		"Value": "monthly",
-		"Anomalies": "anomaly",
-		"Value Climatologies": "climatology"
-	};
+	let { decimal, id, unit, color, group } = variables[mapType].find(d => d.id === variable.id);
+	let valueTypes = { "Value": "monthly", "Anomalies": "anomaly", "Value Climatologies": "climatology"};
+	let currValueType = valueTypes[valueType];
 
-	const currValueType = valueTypes[valueType];
-	let gridTimeByValueType = valueType === 'Value Climatologies' ? dayToStr(gridTime.month) : `${gridTime.year}/${dayToStr(gridTime.month)}`;
+	let gridTimeByValueType = currValueType === 'climatology' ? dayToStr(gridTime.month) : `${gridTime.year}/${dayToStr(gridTime.month)}`;
 	let currGridVariable = `IEA_${variable.id}`;
 	let currGridLayer = `https://ieamaps.blob.core.windows.net/weather/grid/${currValueType}/${gridTimeByValueType}/${currGridVariable}${currValueType}.png`;
 
@@ -78,29 +88,19 @@ export default function() {
 		`Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} (csv) for ${year}`,
 		`Daily ${variable.name} values (csv) for ${getMonthString(month)} ${year}`
 	], viewInterval);
+
 	if( mapType === 'grid') {
 		downloadQuery = valueType === 'Value Climatologies' ? `Climatologies/${dayToStr(gridTime.month)}/` : `${gridTime.year}/${dayToStr(gridTime.month)}/`;
 		download = `http://weatherforenergydata.iea.org/${downloadQuery}IEA_${variable.id}
 		${valueType === 'Value' ? 'monthly' : valueType === 'Anomalies' ? 'anomaly' : 'climatology'}
 		${valueType === 'Value Climatologies' ? '' : '_'+gridTime.year}_${dayToStr(gridTime.month)}.nc`;
-		
 		downloadButtonLabel = `${variable.id} ${valueType === 'Value Climatologies' 
 			? 'climatology' : valueType === 'Anomalies' ? 'anomaly' : valueType.toLowerCase()} (NetCDF) for ${getMonthString(gridTime.month)} ${gridTime.year}`;
 	}
-
-	const floor = num => Math.floor(parseFloat(num));
-	const ceil = num  => Math.ceil(parseFloat(num));
 	
-	const territoryMinMax = data.minMax && (currValueType === 'anomaly' 
-			? getAnomalyMinMax([ceil(data.minMax[0]), floor(data.minMax[1])])
-			: [ceil(data.minMax[0]), floor(data.minMax[1])]);
-	const gridValues = mapType === 'grid' && (currValueType === 'climatology' 
-		? gridMinMaxRange[currValueType][currGridVariable]
-		: gridMinMaxRange[currValueType][currGridVariable][gridTime.year - minYear]);
-
-	const gridRoundedValues = [ceil(gridValues[0]), currGridVariable === 'IEA_Evaporation' ? gridValues[1].toFixed(2) : floor(gridValues[1])];
-	const gridMinMax = currValueType === 'anomaly' ?	getAnomalyMinMax(gridRoundedValues) : gridRoundedValues;
-	const legendLabel = mapType === 'territory' ? territoryMinMax : gridMinMax;
+	const legendLabel = mapType === 'territory' 
+		? getTerritoryMinMax(data.minMax, currValueType, group)
+		: getGridMinMax(gridMinMaxRange[currValueType][currGridVariable], currValueType, mapType, gridTime.year - minYear,  group, id);
 
 	const hide = React.useCallback((e) => {
 		setActive({ open: false, target: null })
@@ -156,14 +156,16 @@ export default function() {
 	// Fetch choropleth data
 	useEffect(() => {
 		if (mapType === 'grid') return;
-		let currCall = [
+		
+		let fetchData = [
 			axios.get(`https://api.iea.org/weather/?${mapQueryString}`),
 			axios.get(`https://api.iea.org/weather/extremes/?${mapQueryString}`)
 		];
-		axios.all(currCall)
+
+		axios.all(fetchData)
 			.then(axios.spread((...responses) => {
-				const tempData = responses[0].data;
-				const minMax = responses[1].data[0];
+				let tempData = responses[0].data;
+				let minMax = responses[1].data[0];
 				
 				let filteredData = tempData.filter(d => getCountryNameByISO(d.country))
 				let currVariable = mapQueryString.split('&').map(d => d.split('=')).find(d => d[0] === 'variable')[1];
@@ -178,10 +180,11 @@ export default function() {
 						name: getCountryNameByISO(d.country), 
 						value: parseFloat(d.value.toFixed(decimal))
 				}));
-
-				setData({ data: result, color: color.color, minMax: [minMax.min, minMax.max] })
+				let maxvalue = group === 'Precipitation' ? (minMax.max / 3) : minMax.max;
+				setData({ data: result, color: color.color, minMax: [minMax.min, maxvalue] })
 			}))
-	}, [mapType, mapQueryString, decimal]);
+
+	}, [mapType, mapQueryString, decimal, group]);
 
 	const controls = {
 		topleft: [
@@ -296,7 +299,7 @@ export default function() {
 		round: false,
 		symmetry: valueType === 'Anomalies',
 		labels: legendLabel,
-		colors: checkIfAnomaly(valueType, mapType === 'grid' ? gridColorArray[variable.id] : colorArray[color], '#424242')
+		colors: isAnomaly(valueType, mapType === 'grid' ? gridColorArray[variable.id] : colorArray[color], '#424242')
 	}];
 	const legendCustomStyle = mapType === 'grid' && selectedCountries.length === 0 
 		? [classes.LegendWrapper, classes.GridView].join(' ') 
