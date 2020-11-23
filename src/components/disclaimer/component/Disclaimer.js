@@ -20,9 +20,9 @@ const Disclaimer = ({ disclaimer }) => {
   
   if (localStorage.getItem('hide')) content = <div></div>;  
 
-  window.onbeforeunload = () => localStorage.removeItem('hide');
+  window.onunload = () => localStorage.removeItem('hide');
   
-  return <div></div>;
+  return content;
 }
 
 export default Disclaimer

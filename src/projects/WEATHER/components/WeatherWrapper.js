@@ -49,20 +49,21 @@ export default function() {
 	const [selectedCountries, setSelectedCountries] = useState([]);
 	const [gridTime, setGridTime] = useState({ month: date.month, year: date.year });
 	const { day, month, year } = date;
-	const dayToStr = num => `${num < 10 ? '0' : ''}${num}`; 
+	const numToStr = num => `${num < 10 ? '0' : ''}${num}`; 
 
-	
 	// Retrieve attributes for each variable
 	let { decimal, id, unit, color, group } = variables[mapType].find(d => d.id === variable.id);
 	let valueTypes = { "Value": "monthly", "Anomalies": "anomaly", "Value Climatologies": "climatology"};
 	let currValueType = valueTypes[valueType];
-
-	let gridTimeByValueType = currValueType === 'climatology' ? dayToStr(gridTime.month) : `${gridTime.year}/${dayToStr(gridTime.month)}`;
+	
+	// Set image URL for grid view
+	let gridTimeByValueType = currValueType === 'climatology' ? numToStr(gridTime.month) : `${gridTime.year}/${numToStr(gridTime.month)}`;
 	let currGridVariable = `IEA_${variable.id}`;
 	let currGridLayer = `https://ieamaps.blob.core.windows.net/weather/grid/${currValueType}/${gridTimeByValueType}/${currGridVariable}${currValueType}.png`;
 
+	// Set choropleth data query
 	const getQuery = query => Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
-	let joinedDate = `${year}${dayToStr(month)}${dayToStr(day)}`;
+	let joinedDate = `${year}${numToStr(month)}${numToStr(day)}`;
 	let query = useIntervalLogic([
 		{ year, variable: variable.id }, 
 		{ year, month, variable: variable.id, valueType }, 
@@ -71,9 +72,9 @@ export default function() {
 
 	// Produce query for country data
 	let maxDay = new Date(year, month, 0).getDate();
-	let startDate = useIntervalLogic(['20100101', `${year}0101`, `${year}${dayToStr(month)}01` ], viewInterval);
-	let endDate = useIntervalLogic(['20200831', `${year}1231`, `${year}${dayToStr(month)}${maxDay}` ], viewInterval);
-	let timeByValueType = valueType === 'Value' ? {startDate, endDate} : {year, month};
+	let startDate = useIntervalLogic([`${minYear}${numToStr(minMonth)}${numToStr(minDay)}`, `${year}${numToStr(minMonth)}${numToStr(minDay)}`, `${year}${numToStr(month)}${numToStr(minDay)}` ], viewInterval);
+	let endDate = useIntervalLogic([`${maxYear}${numToStr(maxMonth)}${maxDay}`, `${year}${numToStr(maxMonth)}${maxDay}`, `${year}${numToStr(month)}${maxDay}` ], viewInterval);
+	let timeByValueType = currValueType === 'monthly' ? {startDate, endDate} : {year, month};
 	let countryQuery = useIntervalLogic([
 		{ startDate, endDate, variable: variable.id, valueType }, 
 		{ ...timeByValueType, variable: variable.id, valueType }, 
@@ -81,23 +82,26 @@ export default function() {
 	let countrQueryString = getQuery(countryQuery);
 	
 	// Produce download link and query
-	let downloadQuery = useIntervalLogic([{ variable: variable.id, daily: true, year}, { variable: variable.id, year, valueType}, { variable: variable.id, daily: true, year, month}], viewInterval);
+	let downloadQuery = useIntervalLogic([
+		{ variable: variable.id, daily: true, year }, 
+		{ variable: variable.id, year, valueType }, 
+		{ variable: variable.id, daily: true, year, month }], viewInterval);
 	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
 	let downloadButtonLabel = useIntervalLogic([
 		`Daily ${variable.name} values (csv) for ${year}`,
-		`Monthly ${variable.name} ${valueType === 'Value Climatologies' ? 'climatologies' : valueType.toLowerCase()} (csv) for ${year}`,
+		`Monthly ${variable.name} ${currValueType === 'climatology' ? 'climatologies' : valueType.toLowerCase()} (csv) for ${year}`,
 		`Daily ${variable.name} values (csv) for ${getMonthString(month)} ${year}`
 	], viewInterval);
 
+	// Change download button popup hover text on grid view
 	if( mapType === 'grid') {
-		downloadQuery = valueType === 'Value Climatologies' ? `Climatologies/${dayToStr(gridTime.month)}/` : `${gridTime.year}/${dayToStr(gridTime.month)}/`;
-		download = `http://weatherforenergydata.iea.org/${downloadQuery}IEA_${variable.id}
-		${valueType === 'Value' ? 'monthly' : valueType === 'Anomalies' ? 'anomaly' : 'climatology'}
-		${valueType === 'Value Climatologies' ? '' : '_'+gridTime.year}_${dayToStr(gridTime.month)}.nc`;
-		downloadButtonLabel = `${variable.id} ${valueType === 'Value Climatologies' 
-			? 'climatology' : valueType === 'Anomalies' ? 'anomaly' : valueType.toLowerCase()} (NetCDF) for ${getMonthString(gridTime.month)} ${gridTime.year}`;
+		downloadQuery = currValueType === 'climatology' ? `Climatologies/${numToStr(gridTime.month)}/` : `${gridTime.year}/${numToStr(gridTime.month)}/`;
+		download = `http://weatherforenergydata.iea.org/${downloadQuery}IEA_${variable.id}${currValueType}
+		${currValueType === 'climatology' ? '' : '_' + gridTime.year}_${numToStr(gridTime.month)}.nc`;
+		downloadButtonLabel = `${variable.id} ${currValueType} (NetCDF) for ${getMonthString(gridTime.month)} ${gridTime.year}`;
 	}
 	
+	// Get legend minmax label
 	const legendLabel = mapType === 'territory' 
 		? getTerritoryMinMax(data.minMax, currValueType, group)
 		: getGridMinMax(gridMinMaxRange[currValueType][currGridVariable], currValueType, mapType, gridTime.year - minYear,  group, id);
@@ -146,12 +150,12 @@ export default function() {
 			})		
 		}
 	}, [selectedCountries, countrQueryString, viewInterval, decimal]);
-
+	useEffect(fetchCountryData, [selectedCountries, countrQueryString]);
+	
 	// Push selected countries data to an array to series
 	let countryData = [];
 	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
 	
-	useEffect(fetchCountryData, [selectedCountries, countrQueryString]);
 
 	// Fetch choropleth data
 	useEffect(() => {
@@ -225,7 +229,7 @@ export default function() {
 				selected: uppercase(viewInterval),
 				label: mapType === 'territory' 
 					? useIntervalLogic([year, `${getMonthString(month)}, ${year}`, `${day} ${getMonthString(month)}, ${year}`], viewInterval)
-					: (valueType === 'Value Climatologies' ? getMonthString(gridTime.month) : `${getMonthString(gridTime.month)}, ${gridTime.year}`),
+					: (currValueType === 'climatology' ? getMonthString(gridTime.month) : `${getMonthString(gridTime.month)}, ${gridTime.year}`),
 				value: mapType === 'territory' 
 					? useIntervalLogic([year, month, day], viewInterval) 
 					: viewInterval === 'month' ? gridTime.month : gridTime.year,
@@ -234,7 +238,7 @@ export default function() {
 					: viewInterval === 'month' ? minMonth : minYear,
 				max: mapType === 'territory' 
 					? useIntervalLogic([ maxYear, year === maxYear ? maxMonth : months, maxDay ], viewInterval)
-					: valueType === 'Value Climatologies' 
+					: currValueType === 'climatology' 
 						? months
 						: (viewInterval === 'month' 
 							? (gridTime.year === maxYear ? maxMonth : months) 
@@ -253,7 +257,7 @@ export default function() {
 				options: mapType === 'territory' ? ['Year', 'Month', 'Day'] : ['Year', 'Month'],
 				selected: uppercase(viewInterval),
 				flow: 'row',
-				disabled: mapType === 'grid' && valueType === 'Value Climatologies' ? ['Year'] : undefined,
+				disabled: mapType === 'grid' && currValueType === 'climatology' ? ['Year'] : undefined,
 				click: value => {
 					mapType === 'territory' 
 						? setValueType('Value')
@@ -297,15 +301,17 @@ export default function() {
 		subInHeader: false,
 		unitTop: unit,
 		round: false,
-		symmetry: valueType === 'Anomalies',
+		symmetry: currValueType === 'anomaly',
 		labels: legendLabel,
 		colors: isAnomaly(valueType, mapType === 'grid' ? gridColorArray[variable.id] : colorArray[color], '#424242')
 	}];
+
 	const legendCustomStyle = mapType === 'grid' && selectedCountries.length === 0 
 		? [classes.LegendWrapper, classes.GridView].join(' ') 
 		: mapType !== 'grid' && selectedCountries.length === 0 
 		? [classes.LegendWrapper, classes.Bottom].join(' ') 
 		: classes.LegendWrapper;
+		
 	const disclaimer = 'This map is without prejudice to the status of or sovereignty over any territory, to the delimitation of international frontiers and boundaries and to the name of any territory, city or area.';
 
 	return (

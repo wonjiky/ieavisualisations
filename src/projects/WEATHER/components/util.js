@@ -126,7 +126,7 @@ export function getGridMinMax(minmaxValues, type, mapType, idx, group, id) {
 	
 	if (mapType === 'territory') return;
 	
-	let minmax = minmaxValues[idx],  divide = 5;
+	let minmax = minmaxValues[idx];
 	let isPrecip = group === 'Precipitation', isEvap = id === 'Evaporation', isAnomaly = type === 'anomaly';
 	let fParseOne = e => parseFloat(Number(e).toFixed(1));
 	let fParseTwo = e => parseFloat(Number(e).toFixed(2));
@@ -134,12 +134,12 @@ export function getGridMinMax(minmaxValues, type, mapType, idx, group, id) {
 	if (type === 'climatology') minmax = minmaxValues;
 
 	if (isPrecip && isEvap) minmax = [minmax[0].toFixed(2), minmax[1].toFixed(2)];
-	else if (isPrecip && !isEvap) minmax = [minmax[0].toFixed(1), (minmax[1] / divide).toFixed(1)];
+	else if (isPrecip && !isEvap) minmax = [minmax[0].toFixed(1), (minmax[1]).toFixed(1)];
 	else minmax = [ceil(minmax[0]), floor(minmax[1])];
 
 	if (isAnomaly) {
 		if (isPrecip && isEvap) minmax = getAnomalyMinMax([fParseTwo(minmax[0]), fParseTwo(minmax[1])])
-		else if (isPrecip && !isEvap) minmax = getAnomalyMinMax([fParseOne(minmax[0]), fParseOne(minmax[1]/divide)])
+		else if (isPrecip && !isEvap) minmax = getAnomalyMinMax([fParseOne(minmax[0]), fParseOne(minmax[1])])
 		else minmax = getAnomalyMinMax(minmax)
 	}
 	
