@@ -112,9 +112,9 @@ export function getTerritoryMinMax(minmax, type, group) {
 	result = [ceil(minmax[0]), floor(minmax[1])];
 	
 	if (type === 'anomaly') {
-		isPrecip 
-			? result = getAnomalyMinMax([minmax[0].toFixed(1), minmax[1].toFixed(1)])
-			: result = getAnomalyMinMax([ceil(minmax[0]), floor(minmax[1])])
+		result = isPrecip 
+			? getAnomalyMinMax([minmax[0].toFixed(1), minmax[1].toFixed(1)])
+			: getAnomalyMinMax([ceil(minmax[0]), floor(minmax[1])])
 	}
 
 	if (isPrecip) result = [floor(minmax[0]), `> ${minmax[1].toFixed(1)}`]
@@ -142,7 +142,7 @@ export function getGridMinMax(minmaxValues, type, mapType, idx, group, id) {
 		else if (isPrecip && !isEvap) minmax = getAnomalyMinMax([fParseOne(minmax[0]), fParseOne(minmax[1])])
 		else minmax = getAnomalyMinMax(minmax)
 	}
-	
+	if (isPrecip && !isEvap) minmax = [minmax[0], `> ${minmax[1]}`]
 	return minmax 
 }
 
