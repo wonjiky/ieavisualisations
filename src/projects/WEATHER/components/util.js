@@ -35,8 +35,8 @@ export const gridColorArray = {
   "Wind100power": colorArray["Snow"],
 }
 
-export const floor = num => Math.floor(parseFloat(num));
-export const ceil = num  => Math.ceil(parseFloat(num));
+const floor = num => Math.floor(parseFloat(num));
+const ceil = num  => Math.ceil(parseFloat(num));
 export const uppercase = str => str.charAt(0).toUpperCase() + str.slice(1);
 export const getCountryNameByISO = iso => !countries.find(d => d.ISO3 === iso) ? null : countries.find(d => d.ISO3 === iso).region;
 export const getCentroidLabelByISO = _ => ["to-string", ["get", "region"]];
@@ -54,7 +54,7 @@ export function isAnomaly(type, range, newValue) {
 	return tempRange;
 }
 
-export function getAnomalyMinMax(minMax) {
+function getAnomalyMinMax(minMax) {
 	let min = Number(minMax[0]), max = Number(minMax[1]);
 	let mi = min < 0 ? -min : min;
 	let ma = max < 0 ? -max : max;
@@ -109,16 +109,18 @@ export function getTerritoryMinMax(minmax, type, group) {
 	let result = [0,0];
 	if (!minmax) return result;
 	let isPrecip = group === 'Precipitation';
-	result = [ceil(minmax[0]), floor(minmax[1])];
-	
+
 	if (type === 'anomaly') {
+		result = getAnomalyMinMax([ceil(minmax[0]), floor(minmax[1])]);
+		if (isPrecip) {
+			result = getAnomalyMinMax([minmax[0].toFixed(1), minmax[1].toFixed(1)]);
+			result = [`≤ ${result[0]}`,`≥ ${result[1]}`];
+		}
+	} else {
 		result = isPrecip 
-			? getAnomalyMinMax([minmax[0].toFixed(1), minmax[1].toFixed(1)])
-			: getAnomalyMinMax([ceil(minmax[0]), floor(minmax[1])])
+			? [minmax[0].toFixed(1), `≥ ${minmax[1].toFixed(1)}`]
+			: [ceil(minmax[0]), floor(minmax[1])];
 	}
-
-	if (isPrecip) result = [floor(minmax[0]), `> ${minmax[1].toFixed(1)}`]
-
 	return result;
 }
 
@@ -127,22 +129,32 @@ export function getGridMinMax(minmaxValues, type, mapType, idx, group, id) {
 	if (mapType === 'territory') return;
 	
 	let minmax = minmaxValues[idx];
-	let isPrecip = group === 'Precipitation', isEvap = id === 'Evaporation', isAnomaly = type === 'anomaly';
+	let isPrecip = group === 'Precipitation', 
+	isEvap = id === 'Evaporation', 
+	isAnomaly = type === 'anomaly',
+	isWind = group === 'Wind' && (id === 'Wind100int' || id === 'Wind10int');
+
 	let fParseOne = e => parseFloat(Number(e).toFixed(1));
 	let fParseTwo = e => parseFloat(Number(e).toFixed(2));
 	
 	if (type === 'climatology') minmax = minmaxValues;
-
-	if (isPrecip && isEvap) minmax = [minmax[0].toFixed(2), minmax[1].toFixed(2)];
-	else if (isPrecip && !isEvap) minmax = [minmax[0].toFixed(1), (minmax[1]).toFixed(1)];
-	else minmax = [ceil(minmax[0]), floor(minmax[1])];
-
+	
 	if (isAnomaly) {
-		if (isPrecip && isEvap) minmax = getAnomalyMinMax([fParseTwo(minmax[0]), fParseTwo(minmax[1])])
-		else if (isPrecip && !isEvap) minmax = getAnomalyMinMax([fParseOne(minmax[0]), fParseOne(minmax[1])])
-		else minmax = getAnomalyMinMax(minmax)
+		if (isPrecip && isEvap) minmax = getAnomalyMinMax([fParseTwo(minmax[0]), fParseTwo(minmax[1])]);
+		else if (isPrecip && !isEvap) {
+			minmax = getAnomalyMinMax([fParseOne(minmax[0]), fParseOne(minmax[1])]);
+			minmax = [`≤ ${minmax[0]}`, `≥ ${minmax[1]}`];
+		} else {
+			minmax = getAnomalyMinMax(minmax)
+			if (isWind) minmax = [`≤ ${ceil(minmax[0])}`, `≥ ${floor(minmax[1])}`];
+		}
+	} else {
+		if (isPrecip && isEvap) minmax = [minmax[0].toFixed(2), minmax[1].toFixed(2)];
+		else if (isPrecip && !isEvap) minmax = [minmax[0].toFixed(1), `≥ ${(minmax[1]).toFixed(1)}`];
+		else if (isWind) minmax = [ceil(minmax[0]), `≥ ${floor(minmax[1])}`];
+		else minmax = [ceil(minmax[0]), floor(minmax[1])];	
 	}
-	if (isPrecip && !isEvap) minmax = [minmax[0], `> ${minmax[1]}`]
+
 	return minmax 
 }
 

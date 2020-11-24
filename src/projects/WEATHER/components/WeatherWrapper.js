@@ -8,7 +8,6 @@ import CountryInfo from './CountryInfo'
 import { 
 	getCountryNameByISO, 
 	isAnomaly, 
-	getAnomalyMinMax, 
 	getMonthString, 
 	uppercase, 
 	useIntervalLogic, 
@@ -16,8 +15,6 @@ import {
 	gridColorArray,
 	getTerritoryMinMax,
 	getGridMinMax,
-	floor, ceil
-
 } from './util'
 import axios from 'axios'
 import variables from '../assets/variables.json'
@@ -35,6 +32,7 @@ export default function() {
 	let minDay = 1;
 
 	let initialVariable = variables.territory.sort((a,b) => a.group.localeCompare(b.group))[0]
+	const numToStr = num => `${num < 10 ? '0' : ''}${num}`; 
 	const [data, setData] = useState({ data: null });
 	const [index, setIndex] = useState(true);
 	const [firstCountry, setFirstCountry] = useState(null);
@@ -49,7 +47,6 @@ export default function() {
 	const [selectedCountries, setSelectedCountries] = useState([]);
 	const [gridTime, setGridTime] = useState({ month: date.month, year: date.year });
 	const { day, month, year } = date;
-	const numToStr = num => `${num < 10 ? '0' : ''}${num}`; 
 
 	// Retrieve attributes for each variable
 	let { decimal, id, unit, color, group } = variables[mapType].find(d => d.id === variable.id);
@@ -151,7 +148,7 @@ export default function() {
 		}
 	}, [selectedCountries, countrQueryString, viewInterval, decimal]);
 	useEffect(fetchCountryData, [selectedCountries, countrQueryString]);
-	
+
 	// Push selected countries data to an array to series
 	let countryData = [];
 	[firstCountry, secondCountry].forEach(d => d ? countryData.push(d) : '');
@@ -184,8 +181,11 @@ export default function() {
 						name: getCountryNameByISO(d.country), 
 						value: parseFloat(d.value.toFixed(decimal))
 				}));
+
 				let maxvalue = group === 'Precipitation' ? (minMax.max / 3) : minMax.max;
-				setData({ data: result, color: color.color, minMax: [minMax.min, maxvalue] })
+				let minvalue = group === 'Precipitation' ? (minMax.min / 3) : minMax.min;
+				
+				setData({ data: result, color: color.color, minMax: [minvalue, maxvalue] })
 			}))
 
 	}, [mapType, mapQueryString, decimal, group]);
