@@ -17,7 +17,7 @@
     {
       "id": "Temperaturedaily",
       "info": "2-meter mean temperature (surface)",
-      "name": "Temperature (2m, surface)",
+      "option": "Temperature (2m, surface)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -27,7 +27,7 @@
     {
       "id": "Temperaturedailybypop",
       "info": "2 meter mean temperature (population weighted average)",
-      "name": "Temperature (2m, population)",
+      "option": "Temperature (2m, population)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -37,7 +37,7 @@
     {
       "id": "Temperaturemaxdaily",
       "info": "2 meter maximum temperature (surface weighted average)",
-      "name": "Temperature max (2m, surface)",
+      "option": "Temperature max (2m, surface)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -47,7 +47,7 @@
     {
       "id": "Temperaturemaxdailybypop",
       "info": "2 meter maximum temperature (population weighted average)",
-      "name": "Temperature max (2m, population)",
+      "option": "Temperature max (2m, population)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -57,7 +57,7 @@
     {
       "id": "Temperaturemindaily",
       "info": "2 meter minimum temperature (surface weighted average)",
-      "name": "Temperature min (2m, surface)",
+      "option": "Temperature min (2m, surface)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -67,7 +67,7 @@
     {
       "id": "Temperaturemindailybypop",
       "info": "2 meter minimum temperature (population weighted average)",
-      "name": "Temperature min (2m, population)",
+      "option": "Temperature min (2m, population)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -77,7 +77,7 @@
     {
       "id": "HeatIndexdailybypop",
       "info": "Humidity-corrected 2 meter temperature (heat index), (population weighted average) ",
-      "name": "Heat index (2m, population)",
+      "option": "Heat index (2m, population)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -87,7 +87,7 @@
     {
       "id": "Humidexdailybypop",
       "info": "Humidity-corrected 2 meter temperature (humidex) (surface weighted average)",
-      "name": "Humidex (2m, population)",
+      "option": "Humidex (2m, population)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -97,7 +97,7 @@
     {
       "id": "CDD18dailybypop",
       "info": "Cooling degree days (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, population)",
+      "option": "CDD (18 °C, population)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -107,7 +107,7 @@
     {
       "id": "CDD21dailybypop",
       "info": "Cooling degree days (population weighted average, reference temperature 21 °C)",
-      "name": "CDD (21 °C, population)",
+      "option": "CDD (21 °C, population)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -117,7 +117,7 @@
     {
       "id": "CDDhum18dailybypop",
       "info": "Cooling degree days from temperature corrected by humidity (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, humidity, population)",
+      "option": "CDD (18 °C, humidity, population)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -127,7 +127,7 @@
     {
       "id": "HDD16dailybypop",
       "info": "Heating degree days (population weighted average, reference temperature 16 °C)",
-      "name": "HDD (16 °C, population)",
+      "option": "HDD (16 °C, population)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -137,7 +137,7 @@
     {
       "id": "HDD18dailybypop",
       "info": "Heating degree days (population weighted average, reference temperature 18 °C)",
-      "name": "HDD (18 °C, population)",
+      "option": "HDD (18 °C, population)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -147,7 +147,7 @@
     {
       "id": "RHdaily",
       "info": "2 meter relative humidity (surface weighted average)",
-      "name": "Relative humidity (surface)",
+      "option": "Relative humidity (surface)",
       "unit": "%",
       "decimal": 0,
       "aggregation": "Mean",
@@ -157,7 +157,7 @@
     {
       "id": "Precipitationdaily",
       "info": "Total precipitation (surface weighted average)",
-      "name": "Total precipitation (surface)",
+      "option": "Total precipitation (surface)",
       "unit": "mm/h",
       "decimal": 3,
       "aggregation": "Mean",
@@ -167,7 +167,7 @@
     {
       "id": "Clouddaily",
       "info": "Cloud coverage (surface weighted average)",
-      "name": "Cloud coverage (surface)",
+      "option": "Cloud coverage (surface)",
       "unit": "%",
       "decimal": 2,
       "aggregation": "Mean",
@@ -177,7 +177,7 @@
     {
       "id": "Daylightdaily",
       "info": "Minutes of sun light (surface weighted average)",
-      "name": "Sun light (surface)",
+      "option": "Sun light (surface)",
       "unit": "minutes per day",
       "decimal": 0,
       "aggregation": "Mean",
@@ -187,7 +187,7 @@
     {
       "id": "DNIdaily",
       "info": "Direct normal radiation (surface weighted average)",
-      "name": "Direct normal radiation (surface)",
+      "option": "Direct normal radiation (surface)",
       "unit": "J/m²/h",
       "decimal": 0,
       "aggregation": "Mean",
@@ -197,7 +197,7 @@
     {
       "id": "GHIdaily",
       "info": "Global horizontal irradiance (surface weighted average)",
-      "name": "Global horizontal irradiance (surface)",
+      "option": "Global horizontal irradiance (surface)",
       "unit": "J/m²/h",
       "decimal": 0,
       "aggregation": "Mean",
@@ -209,7 +209,7 @@
     {
       "id": "CDD18",
       "info": "Cooling degree days (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C)",
+      "option": "CDD (18 °C)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -218,7 +218,7 @@
     {
       "id": "CDDhum18",
       "info": "Cooling degree days from temperature corrected by humidity (population weighted average, reference temperature 18 °C)",
-      "name": "CDD (18 °C, humidity)",
+      "option": "CDD (18 °C, humidity)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -227,7 +227,7 @@
     {
       "id": "Cloud",
       "info": "Cloud coverage (surface weighted average)",
-      "name": "Cloud coverage ",
+      "option": "Cloud coverage ",
       "unit": "%",
       "decimal": 2,
       "aggregation": "Mean",
@@ -236,7 +236,7 @@
     {
       "id": "Daylight",
       "info": "Minutes of sun light (surface weighted average)",
-      "name": "Sun light ",
+      "option": "Sun light ",
       "unit": "minutes per day",
       "decimal": 0,
       "aggregation": "Mean",
@@ -245,7 +245,7 @@
     {
       "id": "DNI",
       "info": "Direct normal radiation (surface weighted average)",
-      "name": "Direct normal radiation ",
+      "option": "Direct normal radiation ",
       "unit": "J/m²/h",
       "decimal": 0,
       "aggregation": "Mean",
@@ -254,7 +254,7 @@
     {
       "id": "Evaporation",
       "info": "Evaporation (surface weighted average)",
-      "name": "Evaporation ",
+      "option": "Evaporation ",
       "unit": "mm/h",
       "decimal": 3,
       "aggregation": "Mean",
@@ -263,7 +263,7 @@
     {
       "id": "GHI",
       "info": "Global horizontal irradiance (surface weighted average)",
-      "name": "Global horizontal irradiance ",
+      "option": "Global horizontal irradiance ",
       "unit": "J/m²/h",
       "decimal": 0,
       "aggregation": "Mean",
@@ -272,7 +272,7 @@
     {
       "id": "HDD18",
       "info": "Heating degree days (population weighted average, reference temperature 18 °C)",
-      "name": "HDD (18 °C)",
+      "option": "HDD (18 °C)",
       "unit": "°C days",
       "decimal": 1,
       "aggregation": "Sum",
@@ -281,7 +281,7 @@
     {
       "id": "HeatIndex",
       "info": "Humidity-corrected 2 meter temperature (heat index), (population weighted average) ",
-      "name": "Heat index (2m)",
+      "option": "Heat index (2m)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -290,7 +290,7 @@
     {
       "id": "Humidex",
       "info": "Humidity-corrected 2 meter temperature (humidex) (surface weighted average)",
-      "name": "Humidex (2m)",
+      "option": "Humidex (2m)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -299,7 +299,7 @@
     {
       "id": "Precipitation",
       "info": "Total precipitation (surface weighted average)",
-      "name": "Total precipitation ",
+      "option": "Total precipitation ",
       "unit": "mm/h",
       "decimal": 3,
       "aggregation": "Mean",
@@ -308,7 +308,7 @@
     {
       "id": "RH",
       "info": "2 meter relative humidity (surface weighted average)",
-      "name": "Relative humidity ",
+      "option": "Relative humidity ",
       "unit": "%",
       "decimal": 0,
       "aggregation": "Mean",
@@ -317,7 +317,7 @@
     {
       "id": "Runoff",
       "info": "Runoff (surface weighted average)",
-      "name": "Runoff ",
+      "option": "Runoff ",
       "unit": "mm/h",
       "decimal": 2,
       "aggregation": "Mean",
@@ -326,7 +326,7 @@
     {
       "id": "Snowfall",
       "info": "Snowfall (surface weighted average)",
-      "name": "Snowfall ",
+      "option": "Snowfall ",
       "unit": "mm/h",
       "decimal": 3,
       "aggregation": "Mean",
@@ -335,7 +335,7 @@
     {
       "id": "Temperature",
       "info": "2 meter mean temperature (population weighted average)",
-      "name": "Temperature (2m)",
+      "option": "Temperature (2m)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -344,7 +344,7 @@
     {
       "id": "Temperaturemax",
       "info": "2 meter maximum temperature (population weighted average)",
-      "name": "Temperature max (2m)",
+      "option": "Temperature max (2m)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -353,7 +353,7 @@
     {
       "id": "Temperaturemin",
       "info": "2 meter minimum temperature (population weighted average)",
-      "name": "Temperature min (2m)",
+      "option": "Temperature min (2m)",
       "unit": "°C",
       "decimal": 1,
       "aggregation": "Mean",
@@ -362,7 +362,7 @@
     {
       "id": "Wind100int",
       "info": "100 meter wind speed (surface weighted average)",
-      "name": "Wind speed (100-m )",
+      "option": "Wind speed (100-m )",
       "unit": "m/s",
       "decimal": 1,
       "aggregation": "Mean",
@@ -371,7 +371,7 @@
     {
       "id": "Wind100power",
       "info": "100 meter wind capacity factor (surface weighted average)",
-      "name": "Wind capacity factor (100-m)",
+      "option": "Wind capacity factor (100-m)",
       "unit": "%",
       "decimal": 1,
       "aggregation": "Mean",
@@ -380,7 +380,7 @@
     {
       "id": "Wind10int",
       "info": "10 meter wind speed (surface weighted average)",
-      "name": "Wind speed (10-m)",
+      "option": "Wind speed (10-m)",
       "unit": "m/s",
       "decimal": 1,
       "aggregation": "Mean",
@@ -389,133 +389,133 @@
   ],
   "table": [
     {
-      "name": "CDD (18 °C, humidity)",
+      "option": "CDD (18 °C, humidity)",
       "info": "Cooling degree days from temperature corrected by humidity (reference temperature 18 °C)",
       "aggregation": "population weighted average",
       "unit": "°C days"
     },
     {
-      "name": "CDD (18 °C)",
+      "option": "CDD (18 °C)",
       "info": "Cooling degree days (reference temperature 18 °C)",
       "aggregation": "population weighted average",
       "unit": "°C days"
     },
     {
-      "name": "CDD (21 °C)",
+      "option": "CDD (21 °C)",
       "info": "Cooling degree days (reference temperature 21 °C)",
       "aggregation": "population weighted average",
       "unit": "°C days"
     },
     {
-      "name": "HDD (16 °C)",
+      "option": "HDD (16 °C)",
       "info": "Heating degree days (reference temperature 16 °C)",
       "aggregation": "population weighted average",
       "unit": "°C days"
     },
     {
-      "name": "HDD (18 °C)",
+      "option": "HDD (18 °C)",
       "info": "Heating degree days (reference temperature 18 °C)",
       "aggregation": "population weighted average",
       "unit": "°C days"
     },
     {
-      "name": "Relative humidity ",
+      "option": "Relative humidity ",
       "info": "2 meter relative humidity",
       "aggregation": "surface weighted average",
       "unit": "%"
     },
     {
-      "name": "Evaporation",
+      "option": "Evaporation",
       "info": "Evaporation",
       "aggregation": "-",
       "unit": "mm/h"
     },
     {
-      "name": "Total precipitation ",
+      "option": "Total precipitation ",
       "info": "Total precipitation",
       "aggregation": "surface weighted average",
       "unit": "mm/h"
     },
     {
-      "name": "Runoff ",
+      "option": "Runoff ",
       "info": "Runoff",
       "aggregation": "-",
       "unit": "mm/h"
     },
     {
-      "name": "Snowfall",
+      "option": "Snowfall",
       "info": "Snowfall",
       "aggregation": "-",
       "unit": "mm/h"
     },
     {
-      "name": "Cloud coverage ",
+      "option": "Cloud coverage ",
       "info": "Cloud coverage",
       "aggregation": "surface weighted average",
       "unit": "%"
     },
     {
-      "name": "Sun light ",
+      "option": "Sun light ",
       "info": "Minutes of sun light",
       "aggregation": "surface weighted average",
       "unit": "minutes per day"
     },
     {
-      "name": "Direct normal radiation ",
+      "option": "Direct normal radiation ",
       "info": "Direct normal radiation",
       "aggregation": "surface weighted average",
       "unit": "J/m²/h"
     },
     {
-      "name": "Global horizontal irradiance ",
+      "option": "Global horizontal irradiance ",
       "info": "Global horizontal irradiance",
       "aggregation": "surface weighted average",
       "unit": "J/m²/h"
     },
     {
-      "name": "Heat index (2m)",
+      "option": "Heat index (2m)",
       "info": "Humidity-corrected 2-meter temperature (heat index)",
       "aggregation": "population weighted average",
       "unit": "°C"
     },
     {
-      "name": "Humidex (2m)",
+      "option": "Humidex (2m)",
       "info": "Humidity-corrected 2-meter temperature (humidex)",
       "aggregation": "population weighted average",
       "unit": "°C"
     },
     {
-      "name": "Temperature (2m)",
+      "option": "Temperature (2m)",
       "info": "2-meter mean temperature",
       "aggregation": "population and surface weighted averages",
       "unit": "°C"
     },
     {
-      "name": "Temperature max (2m)",
+      "option": "Temperature max (2m)",
       "info": "2-meter maximum temperature",
       "aggregation": "population and surface weighted averages",
       "unit": "°C"
     },
     {
-      "name": "Temperature min (2m)",
+      "option": "Temperature min (2m)",
       "info": "2-meter minimum temperature",
       "aggregation": "population and surface weighted averages",
       "unit": "°C"
     },
     {
-      "name": "Wind capacity factor (100-m)",
+      "option": "Wind capacity factor (100-m)",
       "info": "100 meter wind capacity factor",
       "aggregation": "-",
       "unit": "%"
     },
     {
-      "name": "Wind speed (10-m)",
+      "option": "Wind speed (10-m)",
       "info": "10 meter wind speed",
       "aggregation": "-",
       "unit": "m/s"
     },
     {
-      "name": "Wind speed (100-m )",
+      "option": "Wind speed (100-m )",
       "info": "100 meter wind speed",
       "aggregation": "-",
       "unit": "m/s"

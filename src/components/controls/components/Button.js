@@ -34,15 +34,15 @@ const Button = props => {
 	let disable = isDisable === option ? true : false;
 
 	let optionStyle = selectedType && dark
-		? [classes.ToggleOption, classes.active, classes.dark].join(' ') 
+		? [classes.active, classes.dark].join(' ') 
 		: selectedType && !dark
-		? [classes.ToggleOption, classes.active].join(' ') 
+		? classes.active
 		: !selectedType && dark
-		? [classes.ToggleOption, classes.dark].join(' ')
+		? classes.dark
 		: classes.ToggleOption;
-
+		
 	return (
-		<button onClick={ _=> click(option)} className={!disable ? optionStyle : [optionStyle, classes.disabled].join(' ') } disabled={disable}> 
+		<button onClick={ _=> click(option)} disabled={disable} className={!disable ? optionStyle : [optionStyle, classes.disabled].join(' ') } > 
 			{option}
 		</button>
 	)

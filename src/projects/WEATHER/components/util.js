@@ -158,11 +158,9 @@ export function getGridMinMax(minmaxValues, type, mapType, idx, group, id) {
 	return minmax 
 }
 
-
-
 export function getPopupInfo(countries, selected, unit, decimal) {
 	const selectedCountry = countries.filter(country => country.country === selected)[0];
-	if ( selected && selectedCountry ) return `${selectedCountry.name}</br><b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
+	if ( selected && selectedCountry ) return `${selectedCountry.option}</br><b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
 	return `<b>Value doe not exist for this country</b>`
 }
 

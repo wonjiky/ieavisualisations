@@ -8,7 +8,6 @@ function CDD({
   layers,
   selectedRegion,
   needFor,
-  // selectedPop,
 }) {
 
   const config = {

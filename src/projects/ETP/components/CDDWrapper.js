@@ -2,37 +2,42 @@ import React from 'react'
 import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
+import variables from './assets/variables.json'
 import { MapContainer } from '../../../components/container'
 import { Bars } from '../../../components/bars'
 import { Legends } from '../../../components/legends'
 import { Controls, Control, ControlContainer } from '../../../components/controls'
-import { ETP_LAYERS } from './util/EtpLayers'
+import { ETP_LAYERS } from './assets/EtpLayers'
 
 function CDDWrapper(props) {
-  
-  const [hdd, setHdd] = React.useState('HDD');
-  const [year, setYear] = React.useState(2019);
-  const [indicators, setIndicators] = React.useState(null);
-  const [type, setType] = React.useState('SDS');
+
+  const { mapTypes, years, maps, serviceNeeds, scenarios } = variables;
+
   const [active, setActive] = React.useState({ open: false, target: null });
+  const [mapType, setMapType] = React.useState(mapTypes.service);
+  const [year, setYear] = React.useState(years[0]);
+  const [indicators, setIndicators] = React.useState(null);
+  const [scenario, setScenario] = React.useState(scenarios.sds);
   const [region, setRegion] = React.useState('World'); 
-  const [needFor, setNeedFor] = React.useState(false);
-  const [selectedPop, setPopulation] = React.useState(false);
+  const [map, setMap] = React.useState(Object.keys(maps)[0]);
+
+  const DEFAULT_SERVICE_NEED = { "cooling": 1, "heating": 1, "both": 0 };
+  const [serviceNeed, setServiceNeed] = React.useState(serviceNeeds[map][DEFAULT_SERVICE_NEED[map]]); 
   
   let data = [ ...ETP_LAYERS ];
-
-  let controls = [
+  
+  const controls = [
 		{ 
 			type: 'buttonGroup',
-			options: ['HDD','CDD'],
-      selected: hdd,
+			options: Object.values(mapTypes),
+      selected: mapType,
       dark: true,
       flow: 'row',
-      click: value => setHdd(value),
+      click: value => setMapType(value),
     },
     {
       type: 'buttonGroup',
-      options: [2019, 2030, 2070],
+      options: years,
       selected: year,
       dark: true,
       flow: 'row',
@@ -40,30 +45,30 @@ function CDDWrapper(props) {
     },
     {
       type: 'buttonGroup',
-      options: ['SDS', 'STEPS'],
-      selected: type,
+      options: Object.values(scenarios),
+      selected: scenario,
       dark: true,
       flow: 'row',
-      click: value => setType(value),
+      click: value => setScenario(value),
     },
     {
-      type: 'button',
+      type: 'radio',
+      options: Object.keys(maps).map(map => ({ label: maps[map], value: map })),
       flow: 'column',
-      selected: selectedPop,
-      dark: true,
-      options: [
-        {
-          option: 'Population',
-          click: _ => console.log('No population'),
-          // click: _ => setPopulation(!selectedPop),
-          
-        },
-        {
-          option: hdd === 'HDD' ? 'Need of heating' : 'Need of cooling',
-          click: _ => setNeedFor(!needFor),
-          selected: needFor,
-        },
-      ]
+      selected: map,
+      change: value => { 
+        setMap(value) 
+        setServiceNeed(serviceNeeds[value][DEFAULT_SERVICE_NEED[value]]) 
+      }    
+    },
+    {
+      type: 'dropdown',
+      label: 'Type of service needs',
+      options: serviceNeeds[map],
+      selected: serviceNeed,
+      active: active,
+      open: e => setActive({ open: true, target: e.target.value }),
+      click: value => setServiceNeed(value)
     }
   ];
 
@@ -95,10 +100,10 @@ function CDDWrapper(props) {
   let legends = [
     {
       type: 'continuous',
-      header: hdd === 'HDD' ? 'Heating degree days' : 'Cooling degree days',
+      header: mapType === 'HDD' ? 'Heating degree days' : 'Cooling degree days',
       subInHeader: false,
-      labels: hdd === 'HDD' ? [0, 12000] : [0, 6000],
-      colors: hdd === 'HDD' 
+      labels: mapType === 'HDD' ? [0, 12000] : [0, 6000],
+      colors: mapType === 'HDD' 
         ? ['#ffffe0', '#ccf0df', '#afdcd8', '#98c7d1', '#83b2c8', '#719cc0', '#5f87b7', '#4e72ad', '#3b5ea3', '#264a9a', '#003790']
         : ['#008712', '#99b95e', '#b3c661', '#ccd45f', '#e5e25a', '#ffe06d', '#ffc42a', '#f1ac32', '#e4932f', '#d67a29', '#c96122', '#bb461a', '#b93326'],
       round: false
@@ -114,18 +119,14 @@ function CDDWrapper(props) {
   ];
 
   const finalIndicators = {
-    CDD: {
+    SDS: {
      label: 'Population needing cooling',
      data: []
     },
-    HDD: {
+    STEPS: {
       label: 'Population needing heating',
       data: []
-    },
-    LIV: {
-      label: 'Population living within',
-      data: []
-    },
+    }
   };
 
   const open = e => {
@@ -147,7 +148,6 @@ function CDDWrapper(props) {
 
   React.useEffect(() => {
     if (!active.open) return;
-    console.log('hello')
     document.addEventListener('click', hide)
   },[ active.open, hide ])
   
@@ -157,8 +157,8 @@ function CDDWrapper(props) {
 
   for ( let i in tempIndicators ){
     if ( year === Number(i.substring(0,4)) 
-      && type.substring(0,3) === i.substring(5,8)) {
-        let labeltype = type === 'SDS' ? i.substring(9) : i.substring(11);
+      && scenario.substring(0,3) === i.substring(5,8)) {
+        let labeltype = scenario === 'SDS' ? i.substring(9) : i.substring(11);
         function setLabel(e) {
           return e === 'HDD_a' || e === 'CDD_a'
             ? 'All population'
@@ -168,18 +168,18 @@ function CDDWrapper(props) {
             ? 'District heating (from moderate-high to very high) potential'
             : 'Heat pumps cost effectiveness'  
         }
-        if ( type === 'SDS' ) {
+        if ( scenario === 'SDS' ) {
           let type = i.substring(9,12);
-          finalIndicators[type].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]) })
+          finalIndicators[scenario].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]) })
         } else {
           let type = i.substring(11,14)
-          finalIndicators[type].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]).toFixed(0) })
+          finalIndicators[scenario].data.push({ label: setLabel(labeltype), value: Number(tempIndicators[i]).toFixed(0) })
         }
     }
   }
   return (
     <MapContainer selector='CDD' loaded={data}>
-      <CDD
+      {/* <CDD
         years={year}
         selectedRegion={region}
         layers={data}
@@ -187,9 +187,9 @@ function CDDWrapper(props) {
         selectedPop={selectedPop}
         type={type}
         hdd={hdd}
-      />
+      /> */}
       <ControlContainer dark bg>
-        <Controls position='topLeft'> 
+        <Controls position='topLeft' style={{'width': '320px'}}> 
           {controls.map((control, idx) => 
             <Control key={idx} {...control} /> )}
         </Controls>

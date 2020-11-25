@@ -1,0 +1,38 @@
+{
+  "mapTypes": {
+    "service": "Service needs",
+    "heatpump": "Heat pump index"
+  },
+  "years": [2019, 2040, 2070],
+  "scenarios": {
+    "sds": "SDS",
+    "steps": "STEPS"
+  },
+  "maps": {
+    "cooling": "Need for cooling",
+    "heating": "Need for heating",
+    "both": "Need for heating and cooling"
+  },
+  "serviceNeeds": {
+    "cooling": [
+      "All cooling needs",
+      "Cooling degree days",
+      "High and very high cooling needs",
+      "Hot every single day of the year",
+      "Hot and humid every single day of the year",
+      "Very high cooling needs"
+    ],
+    "heating": [
+      "All heating needs",
+      "Heating degree days",
+      "High heating needs"
+    ],
+    "both": [
+      "Average yearly temperature",
+      "Heating and cooling needs",
+      "High heating and low cooling needs",
+      "Low heating and moderate cooling needs",
+      "Moderate heating and moderate cooling needs"
+    ]
+  }
+}

@@ -39,7 +39,7 @@ export default function() {
 	const [secondCountry, setSecondCountry] = useState(null);
 	const [date, setDate] = useState({ day: 1, month: maxMonth, year: maxYear});
 	const [mapType, setMapType] = useState('territory');
-	const [variable, setVariable] = useState({id: initialVariable.id, name: initialVariable.name});
+	const [variable, setVariable] = useState({id: initialVariable.id, option: initialVariable.option});
 	const [viewInterval, setViewInterval] = useState('day');
 	const [valueType, setValueType] = useState('Value')
 	const [active, setActive] = useState({ open: false, target: null });
@@ -85,9 +85,9 @@ export default function() {
 		{ variable: variable.id, daily: true, year, month }], viewInterval);
 	let download = `https://api.iea.org/weather/csv/?${getQuery(downloadQuery)}`;
 	let downloadButtonLabel = useIntervalLogic([
-		`Daily ${variable.name} values (csv) for ${year}`,
-		`Monthly ${variable.name} ${currValueType === 'climatology' ? 'climatologies' : valueType.toLowerCase()} (csv) for ${year}`,
-		`Daily ${variable.name} values (csv) for ${getMonthString(month)} ${year}`
+		`Daily ${variable.option} values (csv) for ${year}`,
+		`Monthly ${variable.option} ${currValueType === 'climatology' ? 'climatologies' : valueType.toLowerCase()} (csv) for ${year}`,
+		`Daily ${variable.option} values (csv) for ${getMonthString(month)} ${year}`
 	], viewInterval);
 
 	// Change download button popup hover text on grid view
@@ -189,7 +189,6 @@ export default function() {
 			}))
 
 	}, [mapType, mapQueryString, decimal, group]);
-
 	const controls = {
 		topleft: [
 			{ 
@@ -205,7 +204,7 @@ export default function() {
 						: setGridTime({ month: month, year: year });
 
 					setMapType(value.toLowerCase());
-					setVariable({id: variables[map][0].id, name: variables[map][0].name})
+					setVariable({id: variables[map][0].id, option: variables[map][0].option})
 					setFirstCountry(null);
 					setValueType('Value');
 					setSecondCountry(null);
@@ -217,12 +216,12 @@ export default function() {
 			{
 				type: 'dropdown',
 				label: 'Variables',
-				info: true,
+				group: true,
 				options: variables[mapType].sort((a,b) => a.group.localeCompare(b.group)),
-				selected: uppercase(variable.name),
+				selected: uppercase(variable.option),
 				active: active,
 				open: e => setActive({ open: true, target: e.target.value }),
-				click: e => setVariable({ id: e.id, name: e.name })
+				click: e => setVariable({ id: e.id, option: e.option })
 			},
 			{ 
 				type: 'slider',
@@ -276,7 +275,6 @@ export default function() {
 				disabled: mapType === 'territory' 
 					? (viewInterval === 'month' ? false : true) 
 					: false,
-				name: 'valueOption',
 				selected: valueType,
 				change: e => {
 					if (e === 'Value Climatologies') {

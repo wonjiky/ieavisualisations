@@ -13,19 +13,19 @@
   position: relative;
 }
 
-.CheckToggleOptions.column > .ToggleOption {
+.CheckToggleOptions.column > button {
   margin-bottom: 7px;
 }
 
-.CheckToggleOptions.column > .ToggleOption:last-child {
+.CheckToggleOptions.column > button:last-child {
   margin-bottom: 0px;
 }
 
-.CheckToggleOptions.row > .ToggleOption {
+.CheckToggleOptions.row > button {
   margin-right: 7px;
 }
 
-.CheckToggleOptions.row > .ToggleOption:last-child {
+.CheckToggleOptions.row > button:last-child {
   margin-right: 0px;
 }
 
@@ -45,7 +45,8 @@
   flex-flow: column;
 }
 
-.ToggleOption {
+.CheckToggleOptions > button,
+.RadioToggleOptions > button {
   flex: 1;
   box-sizing: border-box;
   cursor: pointer;
@@ -58,7 +59,7 @@
   transition: color .2s linear;
 }
 
-.ToggleOption:hover {
+button:hover {
   color: #000;
   transition: color .2s linear;
 }
