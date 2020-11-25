@@ -356,14 +356,15 @@ export default function() {
 			</ControlContainer>
 			<div className={classes.ButtonWrapper} style={{"top": "412px", "zIndex": "2"}}>
 				<Icon fill button type='help' dark='float' styles={classes.Help} click={_ => setOpenInfo(!openInfo)} title="Glossary of map terms"/>
-				<div className={classes.DownloadContainer}>
-					<a href={download} className={classes.DownloadButton}>
-						<Icon strokeWidth={1} stroke type='download' viewBox='-13 -11 50 50' dark='float' styles={classes.Download} />
-					</a>
-					<div className={classes.DownloadWrapper}>
-						{downloadButtonLabel}
-					</div>
-				</div>
+				{mapType === 'territory' && 
+					<div className={classes.DownloadContainer}>
+						<a href={download} className={classes.DownloadButton}>
+							<Icon strokeWidth={1} stroke type='download' viewBox='-13 -11 50 50' dark='float' styles={classes.Download} />
+						</a>
+						<div className={classes.DownloadWrapper}>
+							{downloadButtonLabel}
+						</div>
+					</div>}
 			</div>
 			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)}>
 				<Table title='Value types' body={variables.valueTypes} head={['Type', 'Description']} />
