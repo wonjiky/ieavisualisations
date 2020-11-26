@@ -3,6 +3,9 @@ export const lineDashArray = [
   ["literal", [3.25, 3.25]], 6, ["literal", [2.5, 2.5]], 7, ["literal", [2, 2.25]], 8, ["literal", [1.75, 2]]
 ]; 
 
+export const disputedRegionsISO = ["ABCDE", "ABCD", "VAT", "SMR", "MAF", "VGB", "AND", "BVT", "MCO", "CXR", "LIE", "ABCD-PSE"];
+export const disputedRegionsID = [61, 255, 253, 87, 233, 86, 228];
+
 
 export const oecd = {
   sources: [

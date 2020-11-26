@@ -28,22 +28,25 @@ export default props => {
 const Button = props => {
 
 	const {option, dark, type, selected, click, disabled } = props;
-	const selectedType = type === 'buttonGroup' ? selected === option : selected;
-
+	
+	let selectedType = type === 'buttonGroup' ? selected === (option.value || option) : selected;
 	let isDisable = disabled && disabled.filter(d => d === option)[0];
-	let disable = isDisable === option ? true : false;
+	let disable = isDisable === (option.value || option) ? true : false;
+
 
 	let optionStyle = selectedType && dark
 		? [classes.active, classes.dark].join(' ') 
-		: selectedType && !dark
-		? classes.active
-		: !selectedType && dark
-		? classes.dark
+		: selectedType && !dark ? classes.active
+		: !selectedType && dark ? classes.dark
 		: classes.ToggleOption;
-		
+
+	let buttonStyle = !disable 
+		? optionStyle 
+		: [optionStyle, classes.disabled].join(' ');
+
 	return (
-		<button onClick={ _=> click(option)} disabled={disable} className={!disable ? optionStyle : [optionStyle, classes.disabled].join(' ') } > 
-			{option}
+		<button onClick={ _=> click(option)} disabled={disable} className={buttonStyle} > 
+			{option.label || option}
 		</button>
 	)
 }

@@ -33,7 +33,6 @@ export default function({
 	function setDefaultStyle() {
 		if (!map) return;
 		const borders = ['solid-border', 'dotted-border'], layers = ['centroids-layer', 'label-layer'];
-		
 		// Set default border line color and width
 		for ( let i in borders){
 			map

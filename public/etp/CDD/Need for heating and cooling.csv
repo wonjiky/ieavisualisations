@@ -1,0 +1,241 @@
+variable,region,scenario,year,value
+Needing both heating and cooling,Asia Pacific,0,2019,33
+Needing both heating and cooling,Central & South America,0,2019,9
+Needing both heating and cooling,North America,0,2019,56
+Needing both heating and cooling,Eurasia,0,2019,57
+Needing both heating and cooling,Europe,0,2019,78
+Needing both heating and cooling,Middle East,0,2019,43
+Needing both heating and cooling,Africa,0,2019,4
+Needing both heating and cooling,World,0,2019,33
+Needing both heating and cooling,Asia Pacific,SDS,2040,30
+Needing both heating and cooling,Central & South America,SDS,2040,8
+Needing both heating and cooling,North America,SDS,2040,58
+Needing both heating and cooling,Eurasia,SDS,2040,66
+Needing both heating and cooling,Europe,SDS,2040,80
+Needing both heating and cooling,Middle East,SDS,2040,37
+Needing both heating and cooling,Africa,SDS,2040,3
+Needing both heating and cooling,World,SDS,2040,30
+Needing both heating and cooling,Asia Pacific,SDS,2070,26
+Needing both heating and cooling,Central & South America,SDS,2070,8
+Needing both heating and cooling,North America,SDS,2070,60
+Needing both heating and cooling,Eurasia,SDS,2070,67
+Needing both heating and cooling,Europe,SDS,2070,79
+Needing both heating and cooling,Middle East,SDS,2070,32
+Needing both heating and cooling,Africa,SDS,2070,2
+Needing both heating and cooling,World,SDS,2070,26
+Needing both heating and cooling,Asia Pacific,STEPS,2040,29
+Needing both heating and cooling,Central & South America,STEPS,2040,7
+Needing both heating and cooling,North America,STEPS,2040,57
+Needing both heating and cooling,Eurasia,STEPS,2040,71
+Needing both heating and cooling,Europe,STEPS,2040,82
+Needing both heating and cooling,Middle East,STEPS,2040,36
+Needing both heating and cooling,Africa,STEPS,2040,3
+Needing both heating and cooling,World,STEPS,2040,30
+Needing both heating and cooling,Asia Pacific,STEPS,2070,24
+Needing both heating and cooling,Central & South America,STEPS,2070,6
+Needing both heating and cooling,North America,STEPS,2070,56
+Needing both heating and cooling,Eurasia,STEPS,2070,81
+Needing both heating and cooling,Europe,STEPS,2070,81
+Needing both heating and cooling,Middle East,STEPS,2070,27
+Needing both heating and cooling,Africa,STEPS,2070,2
+Needing both heating and cooling,World,STEPS,2070,25
+Needing high heating and low cooling,Asia Pacific,0,2019,5
+Needing high heating and low cooling,Central & South America,0,2019,0
+Needing high heating and low cooling,North America,0,2019,19
+Needing high heating and low cooling,Eurasia,0,2019,25
+Needing high heating and low cooling,Europe,0,2019,15
+Needing high heating and low cooling,Middle East,0,2019,5
+Needing high heating and low cooling,Africa,0,2019,0
+Needing high heating and low cooling,World,0,2019,6
+Needing high heating and low cooling,Asia Pacific,SDS,2040,5
+Needing high heating and low cooling,Central & South America,SDS,2040,0
+Needing high heating and low cooling,North America,SDS,2040,19
+Needing high heating and low cooling,Eurasia,SDS,2040,33
+Needing high heating and low cooling,Europe,SDS,2040,11
+Needing high heating and low cooling,Middle East,SDS,2040,3
+Needing high heating and low cooling,Africa,SDS,2040,0
+Needing high heating and low cooling,World,SDS,2040,6
+Needing high heating and low cooling,Asia Pacific,SDS,2070,4
+Needing high heating and low cooling,Central & South America,SDS,2070,0
+Needing high heating and low cooling,North America,SDS,2070,21
+Needing high heating and low cooling,Eurasia,SDS,2070,34
+Needing high heating and low cooling,Europe,SDS,2070,10
+Needing high heating and low cooling,Middle East,SDS,2070,3
+Needing high heating and low cooling,Africa,SDS,2070,0
+Needing high heating and low cooling,World,SDS,2070,5
+Needing high heating and low cooling,Asia Pacific,STEPS,2040,4
+Needing high heating and low cooling,Central & South America,STEPS,2040,0
+Needing high heating and low cooling,North America,STEPS,2040,18
+Needing high heating and low cooling,Eurasia,STEPS,2040,37
+Needing high heating and low cooling,Europe,STEPS,2040,9
+Needing high heating and low cooling,Middle East,STEPS,2040,3
+Needing high heating and low cooling,Africa,STEPS,2040,0
+Needing high heating and low cooling,World,STEPS,2040,5
+Needing high heating and low cooling,Asia Pacific,STEPS,2070,3
+Needing high heating and low cooling,Central & South America,STEPS,2070,0
+Needing high heating and low cooling,North America,STEPS,2070,17
+Needing high heating and low cooling,Eurasia,STEPS,2070,45
+Needing high heating and low cooling,Europe,STEPS,2070,5
+Needing high heating and low cooling,Middle East,STEPS,2070,1
+Needing high heating and low cooling,Africa,STEPS,2070,0
+Needing high heating and low cooling,World,STEPS,2070,4
+Needing moderate heating and moderate cooling,Asia Pacific,0,2019,8
+Needing moderate heating and moderate cooling,Central & South America,0,2019,0
+Needing moderate heating and moderate cooling,North America,0,2019,13
+Needing moderate heating and moderate cooling,Eurasia,0,2019,11
+Needing moderate heating and moderate cooling,Europe,0,2019,3
+Needing moderate heating and moderate cooling,Middle East,0,2019,12
+Needing moderate heating and moderate cooling,Africa,0,2019,0
+Needing moderate heating and moderate cooling,World,0,2019,6
+Needing moderate heating and moderate cooling,Asia Pacific,SDS,2040,6
+Needing moderate heating and moderate cooling,Central & South America,SDS,2040,0
+Needing moderate heating and moderate cooling,North America,SDS,2040,15
+Needing moderate heating and moderate cooling,Eurasia,SDS,2040,13
+Needing moderate heating and moderate cooling,Europe,SDS,2040,4
+Needing moderate heating and moderate cooling,Middle East,SDS,2040,10
+Needing moderate heating and moderate cooling,Africa,SDS,2040,0
+Needing moderate heating and moderate cooling,World,SDS,2040,5
+Needing moderate heating and moderate cooling,Asia Pacific,SDS,2070,5
+Needing moderate heating and moderate cooling,Central & South America,SDS,2070,0
+Needing moderate heating and moderate cooling,North America,SDS,2070,15
+Needing moderate heating and moderate cooling,Eurasia,SDS,2070,12
+Needing moderate heating and moderate cooling,Europe,SDS,2070,4
+Needing moderate heating and moderate cooling,Middle East,SDS,2070,8
+Needing moderate heating and moderate cooling,Africa,SDS,2070,0
+Needing moderate heating and moderate cooling,World,SDS,2070,4
+Needing moderate heating and moderate cooling,Asia Pacific,STEPS,2040,6
+Needing moderate heating and moderate cooling,Central & South America,STEPS,2040,0
+Needing moderate heating and moderate cooling,North America,STEPS,2040,16
+Needing moderate heating and moderate cooling,Eurasia,STEPS,2040,13
+Needing moderate heating and moderate cooling,Europe,STEPS,2040,5
+Needing moderate heating and moderate cooling,Middle East,STEPS,2040,10
+Needing moderate heating and moderate cooling,Africa,STEPS,2040,0
+Needing moderate heating and moderate cooling,World,STEPS,2040,5
+Needing moderate heating and moderate cooling,Asia Pacific,STEPS,2070,4
+Needing moderate heating and moderate cooling,Central & South America,STEPS,2070,0
+Needing moderate heating and moderate cooling,North America,STEPS,2070,17
+Needing moderate heating and moderate cooling,Eurasia,STEPS,2070,10
+Needing moderate heating and moderate cooling,Europe,STEPS,2070,6
+Needing moderate heating and moderate cooling,Middle East,STEPS,2070,7
+Needing moderate heating and moderate cooling,Africa,STEPS,2070,0
+Needing moderate heating and moderate cooling,World,STEPS,2070,4
+Needing low heating and moderate cooling,Asia Pacific,0,2019,7
+Needing low heating and moderate cooling,Central & South America,0,2019,3
+Needing low heating and moderate cooling,North America,0,2019,7
+Needing low heating and moderate cooling,Eurasia,0,2019,6
+Needing low heating and moderate cooling,Europe,0,2019,15
+Needing low heating and moderate cooling,Middle East,0,2019,6
+Needing low heating and moderate cooling,Africa,0,2019,2
+Needing low heating and moderate cooling,World,0,2019,7
+Needing low heating and moderate cooling,Asia Pacific,SDS,2040,6
+Needing low heating and moderate cooling,Central & South America,SDS,2040,2
+Needing low heating and moderate cooling,North America,SDS,2040,7
+Needing low heating and moderate cooling,Eurasia,SDS,2040,6
+Needing low heating and moderate cooling,Europe,SDS,2040,17
+Needing low heating and moderate cooling,Middle East,SDS,2040,4
+Needing low heating and moderate cooling,Africa,SDS,2040,2
+Needing low heating and moderate cooling,World,SDS,2040,6
+Needing low heating and moderate cooling,Asia Pacific,SDS,2070,5
+Needing low heating and moderate cooling,Central & South America,SDS,2070,2
+Needing low heating and moderate cooling,North America,SDS,2070,6
+Needing low heating and moderate cooling,Eurasia,SDS,2070,7
+Needing low heating and moderate cooling,Europe,SDS,2070,17
+Needing low heating and moderate cooling,Middle East,SDS,2070,4
+Needing low heating and moderate cooling,Africa,SDS,2070,1
+Needing low heating and moderate cooling,World,SDS,2070,5
+Needing low heating and moderate cooling,Asia Pacific,STEPS,2040,5
+Needing low heating and moderate cooling,Central & South America,STEPS,2040,2
+Needing low heating and moderate cooling,North America,STEPS,2040,5
+Needing low heating and moderate cooling,Eurasia,STEPS,2040,6
+Needing low heating and moderate cooling,Europe,STEPS,2040,17
+Needing low heating and moderate cooling,Middle East,STEPS,2040,4
+Needing low heating and moderate cooling,Africa,STEPS,2040,2
+Needing low heating and moderate cooling,World,STEPS,2040,5
+Needing low heating and moderate cooling,Asia Pacific,STEPS,2070,4
+Needing low heating and moderate cooling,Central & South America,STEPS,2070,2
+Needing low heating and moderate cooling,North America,STEPS,2070,5
+Needing low heating and moderate cooling,Eurasia,STEPS,2070,8
+Needing low heating and moderate cooling,Europe,STEPS,2070,18
+Needing low heating and moderate cooling,Middle East,STEPS,2070,2
+Needing low heating and moderate cooling,Africa,STEPS,2070,1
+Needing low heating and moderate cooling,World,STEPS,2070,4
+Living in high heating and cooling density areas,Asia Pacific,0,2019,3
+Living in high heating and cooling density areas,Central & South America,0,2019,0
+Living in high heating and cooling density areas,North America,0,2019,6
+Living in high heating and cooling density areas,Eurasia,0,2019,2
+Living in high heating and cooling density areas,Europe,0,2019,1
+Living in high heating and cooling density areas,Middle East,0,2019,1
+Living in high heating and cooling density areas,Africa,0,2019,0
+Living in high heating and cooling density areas,World,0,2019,2
+Living in high heating and cooling density areas,Asia Pacific,SDS,2040,2
+Living in high heating and cooling density areas,Central & South America,SDS,2040,0
+Living in high heating and cooling density areas,North America,SDS,2040,8
+Living in high heating and cooling density areas,Eurasia,SDS,2040,3
+Living in high heating and cooling density areas,Europe,SDS,2040,1
+Living in high heating and cooling density areas,Middle East,SDS,2040,1
+Living in high heating and cooling density areas,Africa,SDS,2040,0
+Living in high heating and cooling density areas,World,SDS,2040,2
+Living in high heating and cooling density areas,Asia Pacific,SDS,2070,2
+Living in high heating and cooling density areas,Central & South America,SDS,2070,0
+Living in high heating and cooling density areas,North America,SDS,2070,9
+Living in high heating and cooling density areas,Eurasia,SDS,2070,3
+Living in high heating and cooling density areas,Europe,SDS,2070,1
+Living in high heating and cooling density areas,Middle East,SDS,2070,1
+Living in high heating and cooling density areas,Africa,SDS,2070,0
+Living in high heating and cooling density areas,World,SDS,2070,2
+Living in high heating and cooling density areas,Asia Pacific,STEPS,2040,3
+Living in high heating and cooling density areas,Central & South America,STEPS,2040,0
+Living in high heating and cooling density areas,North America,STEPS,2040,10
+Living in high heating and cooling density areas,Eurasia,STEPS,2040,3
+Living in high heating and cooling density areas,Europe,STEPS,2040,1
+Living in high heating and cooling density areas,Middle East,STEPS,2040,1
+Living in high heating and cooling density areas,Africa,STEPS,2040,0
+Living in high heating and cooling density areas,World,STEPS,2040,2
+Living in high heating and cooling density areas,Asia Pacific,STEPS,2070,1
+Living in high heating and cooling density areas,Central & South America,STEPS,2070,0
+Living in high heating and cooling density areas,North America,STEPS,2070,12
+Living in high heating and cooling density areas,Eurasia,STEPS,2070,3
+Living in high heating and cooling density areas,Europe,STEPS,2070,1
+Living in high heating and cooling density areas,Middle East,STEPS,2070,2
+Living in high heating and cooling density areas,Africa,STEPS,2070,0
+Living in high heating and cooling density areas,World,STEPS,2070,2
+Heat pump potential,Asia Pacific,0,2019,35
+Heat pump potential,Central & South America,0,2019,31
+Heat pump potential,North America,0,2019,37
+Heat pump potential,Eurasia,0,2019,20
+Heat pump potential,Europe,0,2019,25
+Heat pump potential,Middle East,0,2019,46
+Heat pump potential,Africa,0,2019,11
+Heat pump potential,World,0,2019,33
+Heat pump potential,Asia Pacific,SDS,2040,35
+Heat pump potential,Central & South America,SDS,2040,31
+Heat pump potential,North America,SDS,2040,37
+Heat pump potential,Eurasia,SDS,2040,20
+Heat pump potential,Europe,SDS,2040,25
+Heat pump potential,Middle East,SDS,2040,46
+Heat pump potential,Africa,SDS,2040,11
+Heat pump potential,World,SDS,2040,33
+Heat pump potential,Asia Pacific,SDS,2070,47
+Heat pump potential,Central & South America,SDS,2070,63
+Heat pump potential,North America,SDS,2070,63
+Heat pump potential,Eurasia,SDS,2070,45
+Heat pump potential,Europe,SDS,2070,47
+Heat pump potential,Middle East,SDS,2070,65
+Heat pump potential,Africa,SDS,2070,30
+Heat pump potential,World,SDS,2070,52
+Heat pump potential,Asia Pacific,STEPS,2040,55
+Heat pump potential,Central & South America,STEPS,2040,75
+Heat pump potential,North America,STEPS,2040,72
+Heat pump potential,Eurasia,STEPS,2040,57
+Heat pump potential,Europe,STEPS,2040,60
+Heat pump potential,Middle East,STEPS,2040,68
+Heat pump potential,World,STEPS,2040,66
+Heat pump potential,Africa,STEPS,2040,62
+Heat pump potential,Asia Pacific,STEPS,2070,46
+Heat pump potential,Central & South America,STEPS,2070,54
+Heat pump potential,North America,STEPS,2070,55
+Heat pump potential,Eurasia,STEPS,2070,36
+Heat pump potential,Europe,STEPS,2070,40
+Heat pump potential,Middle East,STEPS,2070,61
+Heat pump potential,Africa,STEPS,2070,22
+Heat pump potential,World,STEPS,2070,46

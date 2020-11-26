@@ -3,7 +3,7 @@ import axios from 'axios'
 import Papa from 'papaparse'
 import CCUSContainer from './CCUSContainer'
 import { MapContainer } from '../../../components/container'
-import { Controls, ControlContainer } from '../../../components/controls'
+import { ControlWrapper, ControlContainer } from '../../../components/controls'
 import { Legends } from '../../../components/legends'
 import classes from './css/Index.module.css'
 
@@ -211,8 +211,8 @@ export default ({ baseURL, match }) => {
         toggle={legendToggle}
         regions={{ region: currRegion, bounds: bounds[currRegion]}}
       />
-      <ControlContainer bg={true}>
-        <Controls position='bottomLeft'>
+      <ControlWrapper bg={true}>
+        <ControlContainer position='bottomLeft'>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
           <div className={classes.Introduction}>
@@ -222,8 +222,8 @@ export default ({ baseURL, match }) => {
               {currRegion === 'US' ? '* Includes 50 US States and Puerto Rico': null}
             </p>
           </div>
-        </Controls>
-      </ControlContainer>
+        </ControlContainer>
+      </ControlWrapper>
     </MapContainer>
   )
 }

@@ -34,5 +34,39 @@
       "Low heating and moderate cooling needs",
       "Moderate heating and moderate cooling needs"
     ]
-  }
+  },
+  "indicators": {
+    "cooling": [
+      "Needing cooling (all)",
+      "Needing cooling (hot climates)",
+      "Needing cooling and dehumidification (all year)",
+      "Needing cooling (all year)",
+      "Living in high cooling density areas"
+    ],
+    "heating": [
+      "Needing heating (all)",
+      "Needing heating (very cold climate)",
+      "Heat pump potential",
+      "Living in high heat density areas"
+
+    ],
+    "both": [
+      "Needing both heating and cooling",
+      "Needing high heating and low cooling",
+      "Needing moderate heating and moderate cooling",
+      "Needing low heating and moderate cooling",
+      "Living in high heating and cooling density areas",
+      "Heat pump potential"
+    ]
+  },
+  "regions": [
+    "World",
+    "Africa",
+    "Asia Pacific",
+    "Central & South America",
+    "Eurasia",
+    "Europe",
+    "Middle East",
+    "North America"
+  ]
 }

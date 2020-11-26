@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { MapContainer } from '../../../components/container'
-import { ControlContainer, Controls, Control } from '../../../components/controls'
+import { ControlContainer, ControlWrapper, Control } from '../../../components/controls'
 import { Modal } from '../../../components/modal'
 import { Legends } from '../../../components/legends'
 import { Icon } from '../../../components/icons'
@@ -330,7 +330,7 @@ export default function() {
 					getSelectedCountries(e, index);	
 				}}
 			/>
-			<ControlContainer 
+			<ControlWrapper 
 			 	bg
 				dark={true} 
 				help={true}
@@ -340,18 +340,18 @@ export default function() {
 				downloadLink={download}
 				downloadLabel={downloadButtonLabel}
 			>
-				<Controls position='bottomRight' customClass={legendCustomStyle}>
+				<ControlContainer position='bottomRight' customClass={legendCustomStyle}>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
-        </Controls>
-				<Controls position='topLeft' style={{'width': '280px'}}> 
+        </ControlContainer>
+				<ControlContainer position='topLeft' style={{'width': '280px'}}> 
 					{controls.topleft.map((control, idx) => 
             <Control key={idx} {...control} /> )}
-				</Controls>
-				<Controls position='topRight' customClass={classes.LogoCustomStyle}> 
+				</ControlContainer>
+				<ControlContainer position='topRight' customClass={classes.LogoCustomStyle}> 
 					<Logos />
-				</Controls>
-			</ControlContainer>
+				</ControlContainer>
+			</ControlWrapper>
 			<div className={classes.ButtonWrapper} style={{"top": "412px", "zIndex": "2"}}>
 				<Icon fill button type='help' dark='float' styles={classes.Help} click={_ => setOpenInfo(!openInfo)} title="Glossary of map terms"/>
 				{mapType === 'territory' && 

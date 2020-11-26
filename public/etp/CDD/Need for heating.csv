@@ -1,0 +1,169 @@
+variable,region,scenario,year,value
+Needing heating (all),Asia Pacific,0,2019,34
+Needing heating (all),Central & South America,0,2019,14
+Needing heating (all),North America,0,2019,60
+Needing heating (all),Eurasia,0,2019,100
+Needing heating (all),Europe,0,2019,95
+Needing heating (all),Middle East,0,2019,44
+Needing heating (all),Africa,0,2019,4
+Needing heating (all),World,0,2019,37
+Needing heating (all),Asia Pacific,SDS,2040,31
+Needing heating (all),Central & South America,SDS,2040,12
+Needing heating (all),North America,SDS,2040,62
+Needing heating (all),Eurasia,SDS,2040,100
+Needing heating (all),Europe,SDS,2040,94
+Needing heating (all),Middle East,SDS,2040,37
+Needing heating (all),Africa,SDS,2040,3
+Needing heating (all),World,SDS,2040,33
+Needing heating (all),Asia Pacific,SDS,2070,27
+Needing heating (all),Central & South America,SDS,2070,12
+Needing heating (all),North America,SDS,2070,64
+Needing heating (all),Eurasia,SDS,2070,100
+Needing heating (all),Europe,SDS,2070,93
+Needing heating (all),Middle East,SDS,2070,32
+Needing heating (all),Africa,SDS,2070,2
+Needing heating (all),World,SDS,2070,29
+Needing heating (all),Asia Pacific,STEPS,2040,30
+Needing heating (all),Central & South America,STEPS,2040,11
+Needing heating (all),North America,STEPS,2040,61
+Needing heating (all),Eurasia,STEPS,2040,100
+Needing heating (all),Europe,STEPS,2040,94
+Needing heating (all),Middle East,STEPS,2040,36
+Needing heating (all),World,STEPS,2040,33
+Needing heating (all),Africa,STEPS,2040,3
+Needing heating (all),Asia Pacific,STEPS,2070,25
+Needing heating (all),Central & South America,STEPS,2070,10
+Needing heating (all),North America,STEPS,2070,59
+Needing heating (all),Eurasia,STEPS,2070,100
+Needing heating (all),Europe,STEPS,2070,92
+Needing heating (all),Middle East,STEPS,2070,27
+Needing heating (all),Africa,STEPS,2070,2
+Needing heating (all),World,STEPS,2070,28
+Needing heating (very cold climate),Asia Pacific,0,2019,7
+Needing heating (very cold climate),Central & South America,0,2019,3
+Needing heating (very cold climate),North America,0,2019,23
+Needing heating (very cold climate),Eurasia,0,2019,69
+Needing heating (very cold climate),Europe,0,2019,24
+Needing heating (very cold climate),Middle East,0,2019,6
+Needing heating (very cold climate),Africa,0,2019,0
+Needing heating (very cold climate),World,0,2019,10
+Needing heating (very cold climate),Asia Pacific,SDS,2040,7
+Needing heating (very cold climate),Central & South America,SDS,2040,2
+Needing heating (very cold climate),North America,SDS,2040,23
+Needing heating (very cold climate),Eurasia,SDS,2040,68
+Needing heating (very cold climate),Europe,SDS,2040,18
+Needing heating (very cold climate),Middle East,SDS,2040,4
+Needing heating (very cold climate),Africa,SDS,2040,0
+Needing heating (very cold climate),World,SDS,2040,9
+Needing heating (very cold climate),Asia Pacific,SDS,2070,6
+Needing heating (very cold climate),Central & South America,SDS,2070,2
+Needing heating (very cold climate),North America,SDS,2070,25
+Needing heating (very cold climate),Eurasia,SDS,2070,68
+Needing heating (very cold climate),Europe,SDS,2070,17
+Needing heating (very cold climate),Middle East,SDS,2070,4
+Needing heating (very cold climate),Africa,SDS,2070,0
+Needing heating (very cold climate),World,SDS,2070,8
+Needing heating (very cold climate),Asia Pacific,STEPS,2040,6
+Needing heating (very cold climate),Central & South America,STEPS,2040,2
+Needing heating (very cold climate),North America,STEPS,2040,22
+Needing heating (very cold climate),Eurasia,STEPS,2040,67
+Needing heating (very cold climate),Europe,STEPS,2040,15
+Needing heating (very cold climate),Middle East,STEPS,2040,4
+Needing heating (very cold climate),Africa,STEPS,2040,0
+Needing heating (very cold climate),World,STEPS,2040,8
+Needing heating (very cold climate),Asia Pacific,STEPS,2070,5
+Needing heating (very cold climate),Central & South America,STEPS,2070,1
+Needing heating (very cold climate),North America,STEPS,2070,21
+Needing heating (very cold climate),Eurasia,STEPS,2070,66
+Needing heating (very cold climate),Europe,STEPS,2070,9
+Needing heating (very cold climate),Middle East,STEPS,2070,2
+Needing heating (very cold climate),Africa,STEPS,2070,0
+Needing heating (very cold climate),World,STEPS,2070,6
+Heat pump potential,Asia Pacific,0,2019,35
+Heat pump potential,Central & South America,0,2019,31
+Heat pump potential,North America,0,2019,37
+Heat pump potential,Eurasia,0,2019,20
+Heat pump potential,Europe,0,2019,25
+Heat pump potential,Middle East,0,2019,46
+Heat pump potential,Africa,0,2019,11
+Heat pump potential,World,0,2019,33
+Heat pump potential,Asia Pacific,SDS,2040,47
+Heat pump potential,Central & South America,SDS,2040,63
+Heat pump potential,North America,SDS,2040,63
+Heat pump potential,Eurasia,SDS,2040,45
+Heat pump potential,Europe,SDS,2040,47
+Heat pump potential,Middle East,SDS,2040,65
+Heat pump potential,Africa,SDS,2040,30
+Heat pump potential,World,SDS,2040,52
+Heat pump potential,Asia Pacific,SDS,2070,55
+Heat pump potential,Central & South America,SDS,2070,75
+Heat pump potential,North America,SDS,2070,72
+Heat pump potential,Eurasia,SDS,2070,57
+Heat pump potential,Europe,SDS,2070,60
+Heat pump potential,Middle East,SDS,2070,68
+Heat pump potential,Africa,SDS,2070,66
+Heat pump potential,World,SDS,2070,62
+Heat pump potential,Asia Pacific,STEPS,2040,46
+Heat pump potential,Central & South America,STEPS,2040,54
+Heat pump potential,North America,STEPS,2040,55
+Heat pump potential,Eurasia,STEPS,2040,36
+Heat pump potential,Europe,STEPS,2040,40
+Heat pump potential,Middle East,STEPS,2040,61
+Heat pump potential,World,STEPS,2040,22
+Heat pump potential,Africa,STEPS,2040,46
+Heat pump potential,Asia Pacific,STEPS,2070,48
+Heat pump potential,Central & South America,STEPS,2070,72
+Heat pump potential,North America,STEPS,2070,66
+Heat pump potential,Eurasia,STEPS,2070,51
+Heat pump potential,Europe,STEPS,2070,50
+Heat pump potential,Middle East,STEPS,2070,62
+Heat pump potential,Africa,STEPS,2070,60
+Heat pump potential,World,STEPS,2070,55
+Living in high heat density areas,Asia Pacific,0,2019,4
+Living in high heat density areas,Central & South America,0,2019,1
+Living in high heat density areas,North America,0,2019,18
+Living in high heat density areas,Eurasia,0,2019,32
+Living in high heat density areas,Europe,0,2019,21
+Living in high heat density areas,Middle East,0,2019,6
+Living in high heat density areas,Africa,0,2019,0
+Living in high heat density areas,World,0,2019,6
+Living in high heat density areas,Asia Pacific,SDS,2040,4
+Living in high heat density areas,Central & South America,SDS,2040,1
+Living in high heat density areas,North America,SDS,2040,21
+Living in high heat density areas,Eurasia,SDS,2040,34
+Living in high heat density areas,Europe,0,2040,22
+Living in high heat density areas,Middle East,0,2040,5
+Living in high heat density areas,Africa,0,2040,0
+Living in high heat density areas,World,0,2040,6
+Living in high heat density areas,Asia Pacific,0,2070,3
+Living in high heat density areas,Central & South America,0,2070,1
+Living in high heat density areas,North America,0,2070,24
+Living in high heat density areas,Eurasia,0,2070,37
+Living in high heat density areas,Europe,SDS,2070,24
+Living in high heat density areas,Middle East,SDS,2070,4
+Living in high heat density areas,Africa,SDS,2070,0
+Living in high heat density areas,World,SDS,2070,6
+Living in high heat density areas,Asia Pacific,0,2040,4
+Living in high heat density areas,Central & South America,0,2040,1
+Living in high heat density areas,North America,0,2040,21
+Living in high heat density areas,Eurasia,0,2040,34
+Living in high heat density areas,Europe,0,2040,22
+Living in high heat density areas,Middle East,0,2040,5
+Living in high heat density areas,Africa,0,2040,0
+Living in high heat density areas,World,0,2040,6
+Living in high heat density areas,Asia Pacific,SDS,2070,3
+Living in high heat density areas,Central & South America,SDS,2070,1
+Living in high heat density areas,North America,SDS,2070,24
+Living in high heat density areas,Eurasia,SDS,2070,35
+Living in high heat density areas,Europe,0,2070,23
+Living in high heat density areas,Middle East,0,2070,4
+Living in high heat density areas,Africa,0,2070,0
+Living in high heat density areas,World,0,2070,6
+,,0,,
+,,0,,
+,,0,,
+,,0,,
+,,SDS,,
+,,SDS,,
+,,SDS,,
+,,SDS,,
