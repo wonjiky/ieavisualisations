@@ -62,7 +62,6 @@ function getAnomalyMinMax(minMax) {
 }
 
 export function colorsByVariables(selector, countries, colType, valueType, territoryMinMax) {
-
 	let tempColors = !colorArray[colType] ? colorArray.default : colorArray[colType];
 	let tempCountries = [...countries], nullColor = '#a3a3a3', colors = [];
 	let minMax = valueType === 'Anomalies'
@@ -160,7 +159,7 @@ export function getGridMinMax(minmaxValues, type, mapType, idx, group, id) {
 
 export function getPopupInfo(countries, selected, unit, decimal) {
 	const selectedCountry = countries.filter(country => country.country === selected)[0];
-	if ( selected && selectedCountry ) return `${selectedCountry.option}</br><b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
+	if ( selected && selectedCountry ) return `${selectedCountry.name}</br><b>${selectedCountry.value.toFixed(decimal)} ${unit}</b>`
 	return `<b>Value doe not exist for this country</b>`
 }
 

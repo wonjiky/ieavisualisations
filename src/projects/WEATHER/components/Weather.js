@@ -148,7 +148,7 @@ export default function({
 			.setPaintProperty('centroids-layer', 'circle-stroke-color', '#000')
 			.setPaintProperty('centroids-layer', 'circle-stroke-width', 1);
 
-	}, [map, config.minZoom, config.maxZoom, mapType, data, colType, valueType, territoryMinMax])
+	}, [map, mapType, data, colType, valueType, territoryMinMax])
 	
 
 	// Mouse hover events

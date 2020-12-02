@@ -138,10 +138,13 @@ th {
 }
 
 .LegendWrapper { 
-    background: transparent !important;
-    box-shadow: none;
     bottom: 100px;
     transition: 0.3s;
+}
+
+.LegendWrapper > div {
+    background: transparent !important;
+    box-shadow: none;
 }
 
 .GridView {

@@ -7,7 +7,7 @@
   box-shadow: none;
 }
 
-.ControlWrapper > div:not(:last-child) {
+.ControlContainer > div:not(:last-child) {
   margin-bottom: 14px;
 }
 
@@ -63,13 +63,16 @@
     background: none;
     box-shadow: none;
     margin: auto;
-    margin-bottom: 16px;
     padding: unset !important;
     width: unset !important;
     bottom: unset !important;
     top: unset !important;
     left: unset !important;
     right: unset !important;
+  }
+
+  .background {
+    box-shadow: none !important;
   }
   
   .dark {

@@ -4,7 +4,7 @@ export const ETP_LAYERS = [
     year: '',
     type: 'line',
     layers: [
-      { url: "mapbox://iea.6etmm149", sourceLayer: "World_map_by_Region-6plcrh" }
+      { url: "mapbox://iea.093dj1ha", sourceLayer: "etp_regions-c2o3ye" }
     ],      
   },
 ];

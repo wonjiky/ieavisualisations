@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './css/Controls.module.css';
+import classes from './css/Controls.module.css'
 
 export default ({ children, dark, bg, position, style, customClass }) => {
 
@@ -8,9 +8,13 @@ export default ({ children, dark, bg, position, style, customClass }) => {
     : '';
 
   return (
-    <div className={[classes.ControlWrapper, classes[position], customClass, theme].join(' ')} style={style}>
-      {React.Children.map(children, child => 
-        { if (child) return React.cloneElement(child, { dark: dark }) })}
+    <div className={[classes.ControlWrapper, classes[position], customClass].join(' ')} style={style}>
+      <div className={[classes.ControlContainer, theme].join(' ')}>
+        {React.Children.map(children, child =>
+          child && child.props.type !== 'popup' &&  React.cloneElement(child, { dark: dark }))}
+      </div>
+      {React.Children.map(children, child =>
+        child && child.props.type === 'popup' && React.cloneElement(child, { dark: dark }))}
     </div>
   )
 }

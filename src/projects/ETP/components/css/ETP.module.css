@@ -1,30 +1,58 @@
-.Legend {
-  margin-top: 20px;
-  min-width: 200px;
-  width: 100%;
+.Legend > div {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-.LegendItem {
-  margin: 10px 0;
-  display: flex;
+.Help {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: 10px !important;
 }
 
-.LegendItem > div {
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-  border-radius: 25px; 
+.Help > svg{
+    height: 100%;
+    margin-top: 0;
 }
 
-.Introduction > p {
-  font-size: .65rem;
-  margin-top: 10px;
-  line-height: .9rem;
+.ContentSection > h3 {
+  font-size: 2rem;
 }
 
-.Introduction::before {
-  display: block;
-  content: '';
-  background: black;
-  height: 1px;
+.ContentSection {
+  margin-bottom: 50px;
+}
+
+.Content {
+  padding-left: 20px;
+}
+
+.Content > p {
+  line-height: 1.5rem;
+  font-size: 1rem;
+}
+
+.Table {
+  margin-bottom: 20px;
+}
+
+.Table > h5 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.TableHeader th {
+  text-align: left !important;
+  padding-top: 5px;
+}
+
+.Table td {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: left;
+}
+
+.Table td:first-child{
+  width: 30%;
 }

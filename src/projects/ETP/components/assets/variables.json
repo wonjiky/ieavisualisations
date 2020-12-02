@@ -68,5 +68,121 @@
     "Europe",
     "Middle East",
     "North America"
-  ]
+  ],
+  "serviceNeedsImages": {
+    "cooling": [
+      {"option": "All cooling needs", "value": "Cooling_All"},
+      {"option": "Cooling degree days", "value": "none"},
+      {"option": "High and very high cooling needs", "value": "Cooling_High&veryHigh"},
+      {"option": "Hot every single day of the year", "value": "HotEveryDay"},
+      {"option": "Hot and humid every single day of the year", "value": "HotEveryDay&Humid"},
+      {"option": "Very high cooling needs", "value": "Cooling_veryHigh"}
+    ],
+    "heating": [
+      {"option": "All heating needs","value": "Heating_All"},
+      {"option": "Heating degree days","value": "none"},
+      {"option": "High heating needs","value": "Heating_High&veryHigh"}
+    ],
+    "both": [
+      {"option": "Average yearly temperature","value": "none"},
+      {"option": "Heating and cooling needs","value": "All_both"},
+      {"option": "High heating and low cooling needs","value": "HighHeating_LowCooling"},
+      {"option": "Low heating and moderate cooling needs","value": "LowHeating_ModCooling"},
+      {"option": "Moderate heating and moderate cooling needs", "value": "ModHeating_ModCooling"}
+    ]
+  },
+  "table": {
+    "heating": {
+      "service": [
+        {
+          "type": "Very high heating needs",
+          "info": "Assume HDD18 greater or equal than 5000"
+        },
+        {
+          "type": "High heating needs",
+          "info": "assume HDD18 greater or equal than 3000"
+        },
+        {
+          "type": "Moderate heating needs",
+          "info": "Assume HDD18 between 2000 and 3000, no heating needs are assumed for HDD18 lower than 1000"
+        }
+      ],
+      "indicators":[
+        {
+          "type": "Living in high heat density areas",
+          "info": "Refers to population densities greater or equal than 1000 inhabitants per km2 and HDD18 greater or equal than 2000"
+        },
+        {
+          "type": "Heat pump potential",
+          "info": "Assesses the sale share across all space and water heating technologies that heat pumps could strategically aim at, accounting for economic, buildings stock, energy and resources constraints"
+        }
+      ]
+    },
+    "cooling": {
+      "service": [
+        {
+          "type": "Very high cooling needs",
+          "info": "Assume CDD10 (base temperature 10°C) greater or equal than 5000"
+        },
+        {
+          "type": "High cooling needs",
+          "info": "Assume CDD10 greater or equal than 3000 and lower than 5000"
+        },
+        {
+          "type": "Moderate cooling needs",
+          "info": "Assume HDD10 between 2000 and 3000"
+        },
+        {
+          "type": "No cooling needs",
+          "info": "Assumed for CDD10 lower than 1000"
+        }
+      ],
+      "indicators":[
+        {
+          "type": "Needing cooling (all year)",
+          "info": "Refers to population living in areas where the average yearly temperature is greater than 25°C"
+        },
+        {
+          "type": "Needing cooling and dehumidification (all year)",
+          "info": "Refers to population living in areas where the average yearly temperature is greater than 25°C and average relative humidity greater than 50%"
+        },
+        {
+          "type": "Hot climates",
+          "info": "Refer to very high cooling needs"
+        },
+        {
+          "type": "Living in high cooling density areas",
+          "info": "refers to population densities greater or equal than 1000 inhabitants per km2 and CDD10 greater or equal than 3000"
+        }
+      ]
+    },
+    "both" : {
+      "indicators": [
+        {
+          "type": "Needing both heating and cooling”",
+          "info": "Refers to population living in areas where Heating Degree Days calculated with base temperature 18°C (HDD18) are greater or equal than 1000 and Cooling Degree Days calculated with base temperature 10°C (CDD10) are greater or equal than 1000"
+        },
+        {
+          "type": "Needing high heating and low cooling",
+          "info": "Refers to areas with HDD18 greater or equal than 3000 and CDD10 values between 1000 and 2000"
+        },
+        {
+          "type": "“Needing moderate heating and moderate cooling",
+          "info": "Refers to areas with HDD18 greater or equal than 3000 and CDD10 values between 2000 and 3000"
+        },
+        {
+          "type": "Needing low heating and moderate cooling",
+          "info": "Refers to areas with HDD18 values between 1000 and 2000 and CDD10 values between 2000 and 3000"
+        },
+        {
+          "type": "Living in high heating and cooling density areas (%)",
+          "info": "Refers to population densities greater or equal than 1000 inhabitants per km2 and HDD18 greater or equal than 3000 and CDD10 values between 2000 and 3000"
+        },
+        {
+          "type": "Heat pump potential",
+          "info": "Assesses the sale share across all space and water heating technologies that heat pumps could strategically aim at, accounting for economic, buildings stock, energy and resources constraints"
+        }
+      ]
+    }
+  }
 }
