@@ -43,10 +43,40 @@ const Button = props => {
 	let buttonStyle = !disable 
 		? optionStyle 
 		: [optionStyle, classes.disabled].join(' ');
-
+	let label = option.label || option;
+	let finalLabel = findSubpowerFromText(String(label), 'CO2', '2');
 	return (
 		<button onClick={ _=> click(option)} disabled={disable} className={buttonStyle} > 
-			{option.label || option}
+			{finalLabel}
 		</button>
 	)
 }
+
+
+const findSubpowerFromText = (text, key, sub) => {
+	if(text === undefined) return text;
+	let tempLowestIndex = Number.MAX_SAFE_INTEGER;
+	let tempLowestWord;
+	let found = false;
+	let tempIndex = text.search(sub);
+	let hasKey = text.search(key);
+	if (tempIndex < tempLowestIndex && tempIndex !== -1 && hasKey === 0) {
+		tempLowestIndex = tempIndex;
+		tempLowestWord = sub;
+		found = true;
+	}
+
+	if (found) {
+		let t = [
+			text.substring(0, tempLowestIndex),
+			text.substring(
+				tempLowestIndex,
+				tempLowestIndex + tempLowestWord.length
+			),
+			text.substring(tempLowestIndex + tempLowestWord.length)
+		];
+		return <>{t[0]}<sub>{t[1]}</sub>{t[2]}</> 
+	} else {
+		return text;
+	}
+};

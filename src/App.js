@@ -3,8 +3,9 @@ import { Weather } from './projects/WEATHER';
 import { GTF_Flow, GTF_Vector } from './projects/GTF';
 import { Electricity } from './projects/Electricity';
 import { CCUS } from './projects/CCUS';
-import { Test } from './projects/Test';
-import { CDDMap } from './projects/ETP';
+// import { Test } from './projects/Test';
+import { CCUSProject } from './projects/CCUSProject';
+import { CDDMap, ETPBubbleChart } from './projects/ETP';
 import { Auth } from './components/fakeAuth';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import './App.css';
@@ -28,7 +29,9 @@ function App() {
 		{ id: 5, item: 'ETP CCUS - Europe', url: '/etp-ccus-europe', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
 		{ id: 6, item: 'ETP CCUS - China', url: '/etp-ccus-china', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
 		{ id: 7, item: 'ETP2020 - CDD', url: '/ETP2020-cdd', component: CDDMap, exact: true, pw: password[3], title: 'ETP2020 - CDD Map' },
+		{ id: 7, item: 'ETP2020 - Ownership bubble chart', url: '/ETP2020-ownership', component: ETPBubbleChart, exact: true, pw: password[3], title: 'ETP2020 - Ownership bubble chart' },
 		{ id: 8, item: 'COVID impact on electricity', url: '/electricity-project', component: Electricity, exact: true, pw: password[3], title: 'Electricity-project' },
+		{ id: 9, item: 'CCUS projects', url: '/ccus-projects', component: CCUSProject, exact: true, pw: password[3], title: 'CCUS projects' },
 		// { id: 9, item: 'Test', url: '/test', component: Test, exact: true, pw: password[3], title: 'test' },
 	];
 

@@ -45,14 +45,14 @@
   display: flex;
   margin-top: 5px;
   justify-content: space-between;
-  font-size: .7rem;
+  font-size: .8rem;
 }
 
 .UnitTop {
   display: flex;
   margin-bottom: 5px;
   justify-content: flex-end;
-  font-size: .7rem;
+  font-size: .8rem;
 }
 
 .Markers {

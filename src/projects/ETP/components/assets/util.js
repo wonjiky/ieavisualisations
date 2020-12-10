@@ -17,8 +17,8 @@ export const legend = {
 		}
 	},
   heatpump: {
-			color: ["#b93326", "#d38e3f", "#eff15b", "#4eac32"],
-			minmax: [-50, 100],
+			color: ["#356028", "#4eac32", "#eff15b", "#d38e3f", "#b93326"],
+			minmax: [-100, 100],
 	}
 };
 
@@ -39,7 +39,6 @@ export function colorsByVariables(countries, minmax, colorRange) {
 	
 	valueRange.splice(0, 0, min);
 	valueRange.splice((valueRange.length * 2) + 1, 0, max);
-
 	let contScale = scaleLinear()
 		.domain(valueRange)
 		.range(tempColors);
@@ -71,5 +70,31 @@ export function getPopupInfo(countries, selected) {
 		if (value === '100') return '<b>No or very low heating needs</b>'
 		return `${label.region}</br><b>${value.value} %</b>`
 	}
-	return `<b>Value doe not exist for this territory</b>`
+	return `<b>Value does not exist for this territory</b>`
 }
+
+export const findSubpowerFromText = (text, sub) => {
+	let tempLowestIndex = Number.MAX_SAFE_INTEGER;
+	let tempLowestWord;
+	let found = false;
+	let tempIndex = text.search(sub);
+	if (tempIndex < tempLowestIndex && tempIndex !== -1) {
+		tempLowestIndex = tempIndex;
+		tempLowestWord = sub;
+		found = true;
+	}
+
+	if (found) {
+		let t = [
+			text.substring(0, tempLowestIndex),
+			text.substring(
+				tempLowestIndex,
+				tempLowestIndex + tempLowestWord.length
+			),
+			text.substring(tempLowestIndex + tempLowestWord.length)
+		];
+		return t
+	} else {
+		return false;
+	}
+};

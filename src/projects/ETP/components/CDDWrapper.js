@@ -3,7 +3,7 @@ import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
 import variables from './assets/variables.json'
-import { legend, heatpumpDataMap, serviceDataMap, getCountryNameByISO } from './assets/util'
+import { legend, heatpumpDataMap, serviceDataMap, getCountryNameByISO, findSubpowerFromText } from './assets/util'
 import { MapContainer } from '../../../components/container'
 import { Bars } from '../../../components/bars'
 import { Icon } from '../../../components/icons'
@@ -21,12 +21,13 @@ function CDDWrapper({ baseURL }) {
   const [indicators, setIndicators] = useState(null);
   const [heatpumpData, setHeatpumpData] = useState([]);
   const [country, setCountry] = useState(null);
-  const [scenario, setScenario] = useState(scenarios.sds);
+  const [scenario, setScenario] = useState(scenarios.steps);
   const [region, setRegion] = useState('World'); 
   const [map, setMap] = useState(Object.keys(maps)[0]);
   const [openModal, setOpenModal] = useState(true);
+  
 
-  const DEFAULT_SERVICE_NEED = { "cooling": 1, "heating": 1, "both": 0 };
+  const DEFAULT_SERVICE_NEED = { "cooling": 0, "heating": 0, "both": 1 };
   const [serviceNeed, setServiceNeed] = React.useState(serviceNeeds[map][DEFAULT_SERVICE_NEED[map]]); 
   
   const isService = mapType === 'service';
@@ -57,8 +58,8 @@ function CDDWrapper({ baseURL }) {
 
   const tempIndicators = indicators ? [ ...indicators ] : [];
   const currIndicator = tempIndicators.filter(byMapType[mapType].filter).map(byMapType[mapType].map);
-
   const currHeatpumpData = heatpumpData.map(mapHeatpumpData);
+  
   const controls = [
 		{ 
 			type: 'buttonGroup',
@@ -129,10 +130,9 @@ function CDDWrapper({ baseURL }) {
   let legends = [
     {
       type: 'continuous',
-      header: 'legend',
+      header: mapType === 'service' ? (map === 'cooling' ? ['CDD18 (°C days)'] : map === 'heating' ? ['HDD18 (°C days)'] : ['Average yearly T (°C)']) : ['CO2 savings - Heat pumps VS gas (%)', '2'],
       subInHeader: false,
-      unitTop: mapType === 'service' ? (map === 'cooling' ? 'CDD18' : map === 'heating' ? 'HDD18' : 'Average yearly T (°C)') : 'Index',
-      labels: mapType === 'service' ? legend[mapType][map].minmax : legend.heatpump.minmax,
+      labels: mapType === 'service' ? legend[mapType][map].minmax : [-100,0,100],
       colors: mapType === 'service' ? legend[mapType][map].color : legend.heatpump.color,
       round: false
     }
@@ -196,8 +196,8 @@ function CDDWrapper({ baseURL }) {
   function mapHeatpumpData(d) {
     let result = { ISO: d.Code };
     year === 2019 
-      ? result.value = d[2019]
-      : result.value = d[`${year}-${scenario}`]
+      ? result.value = Number(d[2019]) * -1
+      : result.value = Number(d[`${year}-${scenario}`]) * -1
     return result
   }
 
@@ -207,6 +207,7 @@ function CDDWrapper({ baseURL }) {
       click: _ => setOpenModal(!openModal),
     }
   ];
+  let barTitle = 'Share of population (%)';
 
   return (
     <MapContainer selector='CDD' loaded={currIndicator}>
@@ -222,16 +223,16 @@ function CDDWrapper({ baseURL }) {
         click={e => setCountry(e)}
       />
       <ControlWrapper dark bg>
-        <ControlContainer position='topLeft' style={{'width': '320px'}}> 
+        <ControlContainer position='topLeft' style={{'width': '330px'}}> 
           {controls.map((control, idx) => 
             <Control key={idx} {...control} /> )}
           {regionDropdown.map((drop, idx) => 
             <Control key={idx} {...drop} /> )}
           {isService 
-            ? <Bars dark data={currIndicator}/>
+            ? <><Bars title={barTitle} data={currIndicator}/></>
             : (!country 
-              ? <div><p> Select a territory by clicking on the map </p></div>
-              : <Bars dark label={currIndicator[0] && currIndicator[0].title} data={currIndicator} titleSize={{"fontSize": "1.25rem"}} />)}
+              ? <><p>Select a territory to see CO<sub>2</sub> savings by switching from gas to heat pumps</p></>
+              : <><Bars dark title={barTitle} label={currIndicator[0] && currIndicator[0].title} data={currIndicator} titleSize={{"fontSize": "1.25rem"}} /></>)}
           {popup.map((item, idx) => 
             <Popup key={idx} {...item} />
           )}
@@ -253,90 +254,119 @@ export default CDDWrapper;
 const Popup = ({ click }) => <Icon fill button type='help' dark='float' styles={classes.Help} click={click} title="Glossary of map terms"/>
 
 const Content = ({ table }) => {
+  let nav = [
+    "Glossary",
+    "Heating needs",
+    "Cooling needs",
+    "Heating and cooling needs",
+    "Heat pumps emissions"
+  ];
+
+  const [selectedNav, setSelectedNav] = useState('Glossary');
+  const ref = React.createRef();
+  const ref1 = React.createRef();
+  const ref2 = React.createRef();
+  const ref3 = React.createRef();
+  const ref4 = React.createRef();
+
+  const scrollSmoothHandler = e => {
+    let refs = [ref, ref1, ref2, ref3, ref4];
+    for (let r in refs) {
+      if (refs[r].current.id === e) {
+        refs[r].current.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    setSelectedNav(e)
+  };
   
   return (
-    <div>
-      <div className={classes.ContentSection}>
-        <h3>Need for heating</h3>
-        <div className={classes.Content}>
-          <p><b>HDD:</b> Heating Degree Days </p>
-          <p><b>SDS:</b> Sustainable Development Scenario </p>
-          <p><b>STEPS:</b> Stated Policies Scenario </p>
-          <br/>
-          <p>Heating Degree Days (HDD) shown in this map are calculated using daily average temperatures, base temperature 18°C (HDD18).</p>
-          <br/>
-          <p>
-            Historical <b>temperature</b> values derived from ERA5 hourly data on single levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). (Accessed on 09/11/2020), 10.24381/cds.adbb2d47. More details and data on historical variables can be found in the IEA Weather for energy tracker.
-            Future temperature values are derived from NCAR GIS Program. 2012. Climate Change Scenarios, version 2.0. Community Climate System Model, June 2004 version 3.0. http://www.cesm.ucar.edu/models/ccsm3.0/ was used to derive data products. For this analysis, outcomes from RCPs 2.6 and 4.5 have been associated to the SDS and STEPS scenario respectively.
-          </p>
-          <br/>
-          <p>
-            <b>Population</b> data are derived from Jones, B., O’Neill, B.C., 2016. Spatially explicit global population scenarios consistent with the Shared Socioeconomic Pathways. Environmental Research Letters 11, 84003. DOI:10.1088/1748-9326/11/8/084003.
-            Gao, J., 2017. Downscaling Global Spatial Population Projections from 1/8-degree to 1-km Grid Cells. NCAR Technical Note NCAR/TN-537+STR, DOI: 10.5065/D60Z721H.
-          </p>
+    <div className={classes.PopupWrapper}>
+      <div className={classes.PopupNavWrapper}>
+        <div className={classes.PopupNav}>
+            <ul>
+              {
+                nav.map(d =>
+                  <li key={d} onClick={_ => scrollSmoothHandler(d)} className={selectedNav === d ? classes.selected : ''} >{d}</li> )
+              }
+            </ul>
         </div>
-        <Table title='Service needs' body={table.heating.service} head={['Type', 'Description']} />
-        <Table title='Indicators' body={table.heating.indicators} head={['Type', 'Description']} />
       </div>
       <div className={classes.ContentSection}>
-        <h3>Need for cooling</h3>
         <div className={classes.Content}>
-          <p><b>CDD:</b> Heating Degree Days </p>
-          <p><b>SDS:</b> Sustainable Development Scenario </p>
-          <p><b>STEPS:</b> Stated Policies Scenario </p>
-          <br/>
-          <p><b>Cooling Degree Days (CDD)</b> shown in this map are calculated using daily average temperatures, base temperature 18°C (CDD18). CDD used to evaluate cooling needs are calculated using daily average temperatures, base temperature 10°C (CDD10).</p>
-          <br/>
-          <p>
-            Historical <b>temperature</b> values derived from ERA5 hourly data on single levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). (Accessed on 09/11/2020), 10.24381/cds.adbb2d47. More details and data on historical variables can be found in the IEA Weather for energy tracker.
-            Future temperature values are derived from NCAR GIS Program. 2012. Climate Change Scenarios, version 2.0. Community Climate System Model, June 2004 version 3.0. http://www.cesm.ucar.edu/models/ccsm3.0/ was used to derive data products. For this analysis, outcomes from RCPs 2.6 and 4.5 have been associated to the SDS and STEPS scenario respectively.
-          </p>
-          <br/>
-          <p>
-            <b>Population data</b> are derived from Jones, B., O’Neill, B.C., 2016. Spatially explicit global population scenarios consistent with the Shared Socioeconomic Pathways. Environmental Research Letters 11, 84003. DOI:10.1088/1748-9326/11/8/084003. Gao, J., 2017. Downscaling Global Spatial Population Projections from 1/8-degree to 1-km Grid Cells. NCAR Technical Note NCAR/TN-537+STR, DOI: 10.5065/D60Z721H.
-          </p>
-        </div>
-        <Table title='Service needs' body={table.cooling.service} head={['Type', 'Description']} />
-        <Table title='Indicators' body={table.cooling.indicators} head={['Type', 'Description']} />
-      </div>
-      <div className={classes.ContentSection}>
-        <h3>Need for heating and cooling</h3>
-        <div className={classes.Content}>
-          <p><b>SDS:</b> Sustainable Development Scenario </p>
-          <p><b>STEPS:</b> Stated Policies Scenario </p>
-          <br/>
-          <p>
-            Historical <b>average yearly temperature values</b> derived from ERA5 hourly data on single levels from 1979 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). (Accessed on 09/11/2020), 10.24381/cds.adbb2d47. More details and data on historical variables can be found in the IEA Weather for energy tracker. Future temperature values are derived from NCAR GIS Program. 2012. Climate Change Scenarios, version 2.0. Community Climate System Model, June 2004 version 3.0. http://www.cesm.ucar.edu/models/ccsm3.0/ was used to derive data products. For this analysis, outcomes from RCPs 2.6 and 4.5 have been associated to the SDS and STEPS scenario respectively.
-          </p>
-          <br/>
-          <p>
-            <b>Population data</b> are derived from Jones, B., O’Neill, B.C., 2016. Spatially explicit global population scenarios consistent with the Shared Socioeconomic Pathways. Environmental Research Letters 11, 84003. DOI:10.1088/1748-9326/11/8/084003.
-            Gao, J., 2017. Downscaling Global Spatial Population Projections from 1/8-degree to 1-km Grid Cells. NCAR Technical Note NCAR/TN-537+STR, DOI: 10.5065/D60Z721H. 
-          </p>
-        </div>
-        <Table title='Indicators' body={table.both.indicators} head={['Type', 'Description']} />
-      </div>
-      <div className={classes.ContentSection}>
-        <h3>Heat pumps emissions reduction potential</h3>
-        <div className={classes.Content}>
-          <p><b>SDS:</b> Sustainable Development Scenario </p>
-          <p><b>STEPS:</b> Stated Policies Scenario </p>
-          <br/>
-          <p>
-            The heat pump emissions index assesses the emissions reduction potential from switching from a condensing gas boiler (the lowest carbon-intensive fossil-fuel based heating option) to a market median air-source heat pump for space heating. The carbon footprint of heating equipment is averaged across the entire duration of their projected operations, and in particular accounts for changes in the carbon intensity of electricity in each scenario, in the case of heat pumps. For the assessment average annual emissions of heat pumps purchased in 2019, calculations are based on the electricity mix of the Stated Policies Scenario.
-          </p>
-          <br/>
-          <p>
-            If the index is positive, running a heat pump is typically less carbon-intensive than running a condensing gas boiler (e.g. 30% lower if the index is equal to 30%, and up to 100%, in which case heat pumps are zero-carbon, i.e. operating in an area where the electricity is entirely decarbonized). If the index is negative, running a heat pump is typically more carbon-intensive than running a condensing gas boiler. If the index is equal to 0, there is no emissions reduction potential since the carbon footprint of market median heat pump operations is equal to one of a condensing gas boiler. 
-          </p>
+          <h3 id={nav[0]} ref={ref}>Information</h3>
+          <div className={classes.ContentInfo}>
+            <p>
+              <b>Heating and cooling needs</b>
+              <br/>
+              These maps are showing indicators related to local heating and cooling needs, including both the share of population with heating and cooling needs as well as the intensity of those needs, depending on temperature and humidity levels. Such indicators can be used to assess the relevance of low-carbon heating and cooling solutions at the local level, especially for heat pumps or district energy. 
+              <br/>
+              The maps can be visualized for 2019, 2040 and 2070, for the Sustainable Development Scenario and the Stated Policies Scenario, at both the global and aggregated regional level. 
+            </p>
+            <br/>
+            <p>
+              <b>CO<sub>2</sub> savings from heat pumps</b>
+              <br/>
+              This map is showing indicators related to potential for reducing carbon emissions from switching from a condensing gas boiler (the lowest carbon-intensive fossil-fuel heating option) to a market median air-source heat pump for space heating.
+              <br/>
+              The maps can be visualized for 2019, 2040 and 2070, for the Sustainable Development Scenario and the Stated Policies Scenario, at the country level. 
+            </p>
+
+          </div>
+          <h3 id={nav[0]} ref={ref}>Glossary</h3>
+          <div className={classes.ContentInfo}>
+            <p><b>HDD:</b> Heating Degree Days </p>
+            <p><b>CDD:</b> Cooling degree days </p>
+            <p><b>SDS:</b> Sustainable Development Scenario </p>
+            <p><b>STEPS:</b> Stated Policies Scenario </p>
+            <br/>
+            <p>
+              The <b>historical variables</b> used in this map can be explored and downloaded from the <a href='https://www.iea.org/articles/weather-for-energy-tracker'><b>Weather for energy tracker</b></a>.
+              <br/> <br/>
+              <b>Future temperature</b> values are derived from NCAR GIS Program. 2012. Climate Change Scenarios, version 2.0. Community Climate System Model, June 2004 version 3.0. http://www.cesm.ucar.edu/models/ccsm3.0/ was used to derive data products. For this analysis, outcomes from RCPs 2.6 and 4.5 (anomalies, multi-year mean of monthly data of future climate simulations) have been associated to the SDS and STEPS scenario respectively.
+            </p>
+            <br/>
+            <p>
+              <b>Population</b> projections data are derived from Jones, B., O’Neill, B.C., 2016. Spatially explicit global population scenarios consistent with the Shared Socioeconomic Pathways. Environmental Research Letters 11, 84003. DOI:10.1088/1748-9326/11/8/084003. Gao, J., 2017. Downscaling Global Spatial Population Projections from 1/8-degree to 1-km Grid Cells. NCAR Technical Note NCAR/TN-537+STR, DOI: 10.5065/D60Z721H.
+            </p>
+            <br/>
+            <p>
+              Sustainable Development Scenario: This is the scenario which lies at the heart of Energy Technology Perspective 2020 and World Energy Outlook 2020. It describes the broad evolution of the energy sector that would be required to reach the United Nations Sustainable Development Goals (SDGs) most closely related to energy. It is consistent with reaching global net-zero CO<sub>2</sub> emissions from the energy sector in 2070s and it is designed to assess what is needed to meet these SDS goals, including the Paris Agreement, in a realistic and cost-effective way.
+            </p><br/>
+            <p>
+              Stated Policies Scenario: This scenario serves as a benchmark for the projections of the Sustainable Development Scenario. It assesses the evolution of the global energy system on the assumption that government policies and commitments that have already been adopted or announced with respect to energy and the environment are implemented, including commitments made in the nationally determined contributions under the Paris Agreement.
+            </p><br/>
+            <p><b>Heating Degree Days</b>(HDD) <br/>Shown in this map are calculated using daily average temperatures, base temperature 18°C, HDD (18°C).<br/></p><br/>
+            <p><b>Cooling Degree Days</b> (CDD) <br/>Shown in this map are calculated using daily average temperatures, base temperature 18°C, CDD (18°C).<br/></p><br/>
+            <p>CDD used to evaluate cooling needs are calculated using daily average temperatures, base temperature 10°C, CDD (10°C).</p><br/>
+            <p><b>Heating and cooling needs</b><br/>The indicators related to heating and cooling needs derive from variables displayed on a grid map at the  resolution 0.25 degree by latitude and longitude. The thresholds values used to define the indicators are described below.<br/></p><br/>
+            
+          </div>
+          <h3 id={nav[1]} ref={ref1}>Heating needs</h3>
+          <Table title='Service needs' body={table.heating.service} head={['Type', 'Description']} />
+          <Table title='Indicators' header={true} body={table.heating.indicators} head={['Type', 'Description']} />
+          <h3 id={nav[2]} ref={ref2}>Cooling needs</h3>
+          <Table title='Service needs' body={table.cooling.service} head={['Type', 'Description']} />
+          <Table title='Indicators' header={true} body={table.cooling.indicators} head={['Type', 'Description']} />
+          <h3 id={nav[3]} ref={ref3}>Heating and cooling needs</h3>
+          <Table title='Indicators' body={table.both.indicators} head={['Type', 'Description']} />
+          <h3 id={nav[4]} ref={ref4}>CO<sub>2</sub> savings from heat pumps</h3>
+          <div className={classes.ContentInfo}>
+            <p>
+            The heat pump emissions indicator assesses the emissions reduction potential from switching from a condensing gas boiler (the lowest carbon-intensive fossil-fuel heating option) to a market median air-source heat pump for space heating. The carbon footprint of heating equipment is averaged across the entire duration of their projected operations, and in particular accounts for changes in the carbon intensity of electricity in each scenario, in the case of heat pumps. For the assessment of average annual emissions of heat pumps purchased in 2019, calculations are based on the electricity mix of the Stated Policies Scenario.
+            </p>
+            <br/>
+            <p>
+            If the indicator is negative, running a heat pump is typically less carbon-intensive than running a condensing gas boiler (e.g. 30% lower if the indicator is equal to -30%). -100% means that heat pumps are zero-carbon, i.e. operating in an area where the electricity is entirely decarbonized. If the indicator is positive, running a heat pump is typically more carbon-intensive than running a condensing gas boiler. If the index is equal to 0, there is no emissions reduction from switching to heat pumps since the carbon footprint of a market median heat pump is equal to one of a condensing gas boiler.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   )
 }
-const Table = ({ title, body, head }) => (
+const Table = ({ title, header, body, head }) => (
 	<div className={classes.Table}>
-		<h5>{title}</h5>
+		{header && <h5>{title}</h5>}
 		<div className={classes.TableHeader}>
 			<table>
 				<thead>

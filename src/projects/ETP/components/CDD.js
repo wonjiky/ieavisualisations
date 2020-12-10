@@ -14,7 +14,7 @@ function CDD({
 	currOverlay,
   click,
 }) {
-
+	
   const config = {
     map: 'oecd',
 		centroids: true,
@@ -43,13 +43,14 @@ function CDD({
 		}
 
 		// Remove all centroids for disputed regions
+		let isVisible = mapData.map(d => d.ISO);
 		for (let layer in layers) {
 			map.setFilter(layers[layer], [ "all", 
 				["match", ["get", "ISO3"], disputedRegionsISO, false, true],
+				["match", ["get", "ISO3"], isVisible, true, false],
 				["match", ["id"], disputedRegionsID, false,true]
 			])
     }
-    
     
     for (let i in ETP_LAYERS) {
       let tempSources = ETP_LAYERS[i].layers;
@@ -76,18 +77,18 @@ function CDD({
 	
 	const addMainLayer = React.useCallback(e => {
 		if (!map || mapType !== 'service') return;
-			map
-				.addSource(`grid-tiles`, {
-					'type': 'image',
-					'url': `${currMain}.png`,
-					'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]	
-				})
-				.addLayer({
-					'id': `grid-layer`,
-					'type': 'raster',
-					'source': `grid-tiles`,
-					'paint':{'raster-fade-duration': 0},
-				}, 'shapes-layer')
+		map
+			.addSource(`grid-tiles`, {
+				'type': 'image',
+				'url': `${currMain}.png`,
+				'coordinates': [ [-180,85], [180, 85.06], [180, -85], [-180, -85.06] ]	
+			})
+			.addLayer({
+				'id': `grid-layer`,
+				'type': 'raster',
+				'source': `grid-tiles`,
+				'paint':{'raster-fade-duration': 0},
+			}, 'shapes-layer')
 		return () => {
 				map
 					.removeLayer(`grid-layer`)
@@ -145,9 +146,9 @@ function CDD({
 
   useEffect (() => {
     if (!map || mapType === 'service') return;
-
-    let mapColors = colorsByVariables(mapData, minMax, colors);
-
+		
+		let mapColors = colorsByVariables(mapData, minMax, colors);
+		
 		map
 			.setPaintProperty( "shapes-layer", "fill-color", [
 				'interpolate', ['exponential', 0.5], ['zoom'],

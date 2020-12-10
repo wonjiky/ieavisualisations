@@ -1,164 +1,164 @@
 ﻿variable,region,scenario,year,value
-Needing cooling (all),Asia Pacific,0,2019,98
-Needing cooling (all),Central & South America,0,2019,94
-Needing cooling (all),North America,0,2019,94
-Needing cooling (all),Eurasia,0,2019,57
-Needing cooling (all),Europe,0,2019,83
-Needing cooling (all),Middle East,0,2019,99
-Needing cooling (all),Africa,0,2019,100
-Needing cooling (all),World,0,2019,95
-Needing cooling (all),Asia Pacific,SDS,2040,98
-Needing cooling (all),Central & South America,SDS,2040,95
-Needing cooling (all),North America,SDS,2040,94
-Needing cooling (all),Eurasia,SDS,2040,66
-Needing cooling (all),Europe,SDS,2040,85
-Needing cooling (all),Middle East,SDS,2040,99
-Needing cooling (all),Africa,SDS,2040,100
-Needing cooling (all),World,SDS,2040,96
-Needing cooling (all),Asia Pacific,SDS,2070,98
-Needing cooling (all),Central & South America,SDS,2070,95
-Needing cooling (all),North America,SDS,2070,94
-Needing cooling (all),Eurasia,SDS,2070,67
-Needing cooling (all),Europe,SDS,2070,84
-Needing cooling (all),Middle East,SDS,2070,99
-Needing cooling (all),Africa,SDS,2070,100
-Needing cooling (all),World,SDS,2070,96
-Needing cooling (all),Asia Pacific,STEPS,2040,98
-Needing cooling (all),Central & South America,STEPS,2040,95
-Needing cooling (all),North America,STEPS,2040,95
-Needing cooling (all),Eurasia,STEPS,2040,71
-Needing cooling (all),Europe,STEPS,2040,87
-Needing cooling (all),Middle East,STEPS,2040,99
-Needing cooling (all),Africa,STEPS,2040,100
-Needing cooling (all),World,STEPS,2040,96
-Needing cooling (all),Asia Pacific,STEPS,2070,98
-Needing cooling (all),Central & South America,STEPS,2070,96
-Needing cooling (all),North America,STEPS,2070,96
-Needing cooling (all),Eurasia,STEPS,2070,81
-Needing cooling (all),Europe,STEPS,2070,88
-Needing cooling (all),Middle East,STEPS,2070,99
-Needing cooling (all),Africa,STEPS,2070,100
-Needing cooling (all),World,STEPS,2070,97
-Needing cooling (hot climates),Asia Pacific,0,2019,55
-Needing cooling (hot climates),Central & South America,0,2019,44
-Needing cooling (hot climates),North America,0,2019,9
-Needing cooling (hot climates),Eurasia,0,2019,0
-Needing cooling (hot climates),Europe,0,2019,0
-Needing cooling (hot climates),Middle East,0,2019,42
-Needing cooling (hot climates),Africa,0,2019,55
-Needing cooling (hot climates),World,0,2019,44
-Needing cooling (hot climates),Asia Pacific,SDS,2040,59
-Needing cooling (hot climates),Central & South America,SDS,2040,43
-Needing cooling (hot climates),North America,SDS,2040,9
-Needing cooling (hot climates),Eurasia,SDS,2040,0
-Needing cooling (hot climates),Europe,SDS,2040,0
-Needing cooling (hot climates),Middle East,SDS,2040,46
-Needing cooling (hot climates),Africa,SDS,2040,58
-Needing cooling (hot climates),World,SDS,2040,48
-Needing cooling (hot climates),Asia Pacific,SDS,2070,64
-Needing cooling (hot climates),Central & South America,SDS,2070,43
-Needing cooling (hot climates),North America,SDS,2070,8
-Needing cooling (hot climates),Eurasia,SDS,2070,0
-Needing cooling (hot climates),Europe,SDS,2070,0
-Needing cooling (hot climates),Middle East,SDS,2070,49
-Needing cooling (hot climates),Africa,SDS,2070,60
-Needing cooling (hot climates),World,SDS,2070,51
-Needing cooling (hot climates),Asia Pacific,STEPS,2040,60
-Needing cooling (hot climates),Central & South America,STEPS,2040,45
-Needing cooling (hot climates),North America,STEPS,2040,9
-Needing cooling (hot climates),Eurasia,STEPS,2040,0
-Needing cooling (hot climates),Europe,STEPS,2040,0
-Needing cooling (hot climates),Middle East,STEPS,2040,47
-Needing cooling (hot climates),Africa,STEPS,2040,59
-Needing cooling (hot climates),World,STEPS,2040,49
-Needing cooling (hot climates),Asia Pacific,STEPS,2070,67
-Needing cooling (hot climates),Central & South America,STEPS,2070,49
-Needing cooling (hot climates),North America,STEPS,2070,10
-Needing cooling (hot climates),Eurasia,STEPS,2070,0
-Needing cooling (hot climates),Europe,STEPS,2070,0
-Needing cooling (hot climates),Middle East,STEPS,2070,52
-Needing cooling (hot climates),Africa,STEPS,2070,65
-Needing cooling (hot climates),World,STEPS,2070,54
-Needing cooling and dehumidification (all year),Asia Pacific,0,2019,43
-Needing cooling and dehumidification (all year),Central & South America,0,2019,32
-Needing cooling and dehumidification (all year),North America,0,2019,6
-Needing cooling and dehumidification (all year),Eurasia,0,2019,0
-Needing cooling and dehumidification (all year),Europe,0,2019,0
-Needing cooling and dehumidification (all year),Middle East,0,2019,10
-Needing cooling and dehumidification (all year),Africa,0,2019,32
-Needing cooling and dehumidification (all year),World,0,2019,32
-Needing cooling and dehumidification (all year),Asia Pacific,SDS,2040,49
-Needing cooling and dehumidification (all year),Central & South America,SDS,2040,31
-Needing cooling and dehumidification (all year),North America,SDS,2040,5
-Needing cooling and dehumidification (all year),Eurasia,SDS,2040,0
-Needing cooling and dehumidification (all year),Europe,SDS,2040,0
-Needing cooling and dehumidification (all year),Middle East,SDS,2040,9
-Needing cooling and dehumidification (all year),Africa,SDS,2040,34
-Needing cooling and dehumidification (all year),World,SDS,2040,35
-Needing cooling and dehumidification (all year),Asia Pacific,SDS,2070,55
-Needing cooling and dehumidification (all year),Central & South America,SDS,2070,30
-Needing cooling and dehumidification (all year),North America,SDS,2070,5
-Needing cooling and dehumidification (all year),Eurasia,SDS,2070,0
-Needing cooling and dehumidification (all year),Europe,SDS,2070,0
-Needing cooling and dehumidification (all year),Middle East,SDS,2070,10
-Needing cooling and dehumidification (all year),Africa,SDS,2070,36
-Needing cooling and dehumidification (all year),World,SDS,2070,38
-Needing cooling and dehumidification (all year),Asia Pacific,STEPS,2040,52
-Needing cooling and dehumidification (all year),Central & South America,STEPS,2040,32
-Needing cooling and dehumidification (all year),North America,STEPS,2040,6
-Needing cooling and dehumidification (all year),Eurasia,STEPS,2040,0
-Needing cooling and dehumidification (all year),Europe,STEPS,2040,0
-Needing cooling and dehumidification (all year),Middle East,STEPS,2040,9
-Needing cooling and dehumidification (all year),Africa,STEPS,2040,36
-Needing cooling and dehumidification (all year),World,STEPS,2040,37
-Needing cooling and dehumidification (all year),Asia Pacific,STEPS,2070,60
-Needing cooling and dehumidification (all year),Central & South America,STEPS,2070,37
-Needing cooling and dehumidification (all year),North America,STEPS,2070,7
-Needing cooling and dehumidification (all year),Eurasia,STEPS,2070,0
-Needing cooling and dehumidification (all year),Europe,STEPS,2070,0
-Needing cooling and dehumidification (all year),Middle East,STEPS,2070,11
-Needing cooling and dehumidification (all year),Africa,STEPS,2070,39
-Needing cooling and dehumidification (all year),World,STEPS,2070,42
-Needing cooling (all year),Asia Pacific,0,2019,44
-Needing cooling (all year),Central & South America,0,2019,32
-Needing cooling (all year),North America,0,2019,6
-Needing cooling (all year),Eurasia,0,2019,0
-Needing cooling (all year),Europe,0,2019,0
-Needing cooling (all year),Middle East,0,2019,37
-Needing cooling (all year),Africa,0,2019,46
-Needing cooling (all year),World,0,2019,35
-Needing cooling (all year),Asia Pacific,SDS,2040,49
-Needing cooling (all year),Central & South America,SDS,2040,31
-Needing cooling (all year),North America,SDS,2040,5
-Needing cooling (all year),Eurasia,SDS,2040,0
-Needing cooling (all year),Europe,SDS,2040,0
-Needing cooling (all year),Middle East,SDS,2040,41
-Needing cooling (all year),Africa,SDS,2040,49
-Needing cooling (all year),World,SDS,2040,39
-Needing cooling (all year),Asia Pacific,SDS,2070,56
-Needing cooling (all year),Central & South America,SDS,2070,30
-Needing cooling (all year),North America,SDS,2070,5
-Needing cooling (all year),Eurasia,SDS,2070,0
-Needing cooling (all year),Europe,SDS,2070,0
-Needing cooling (all year),Middle East,SDS,2070,43
-Needing cooling (all year),Africa,SDS,2070,52
-Needing cooling (all year),World,SDS,2070,44
-Needing cooling (all year),Asia Pacific,STEPS,2040,53
-Needing cooling (all year),Central & South America,STEPS,2040,32
-Needing cooling (all year),North America,STEPS,2040,6
-Needing cooling (all year),Eurasia,STEPS,2040,0
-Needing cooling (all year),Europe,STEPS,2040,0
-Needing cooling (all year),Middle East,STEPS,2040,42
-Needing cooling (all year),Africa,STEPS,2040,50
-Needing cooling (all year),World,STEPS,2040,42
-Needing cooling (all year),Asia Pacific,STEPS,2070,61
-Needing cooling (all year),Central & South America,STEPS,2070,37
-Needing cooling (all year),North America,STEPS,2070,7
-Needing cooling (all year),Eurasia,STEPS,2070,0
-Needing cooling (all year),Europe,STEPS,2070,0
-Needing cooling (all year),Middle East,STEPS,2070,46
-Needing cooling (all year),Africa,STEPS,2070,56
-Needing cooling (all year),World,STEPS,2070,48
+Needing cooling,Asia Pacific,0,2019,98
+Needing cooling,Central & South America,0,2019,94
+Needing cooling,North America,0,2019,94
+Needing cooling,Eurasia,0,2019,57
+Needing cooling,Europe,0,2019,83
+Needing cooling,Middle East,0,2019,99
+Needing cooling,Africa,0,2019,100
+Needing cooling,World,0,2019,95
+Needing cooling,Asia Pacific,SDS,2040,98
+Needing cooling,Central & South America,SDS,2040,95
+Needing cooling,North America,SDS,2040,94
+Needing cooling,Eurasia,SDS,2040,66
+Needing cooling,Europe,SDS,2040,85
+Needing cooling,Middle East,SDS,2040,99
+Needing cooling,Africa,SDS,2040,100
+Needing cooling,World,SDS,2040,96
+Needing cooling,Asia Pacific,SDS,2070,98
+Needing cooling,Central & South America,SDS,2070,95
+Needing cooling,North America,SDS,2070,94
+Needing cooling,Eurasia,SDS,2070,67
+Needing cooling,Europe,SDS,2070,84
+Needing cooling,Middle East,SDS,2070,99
+Needing cooling,Africa,SDS,2070,100
+Needing cooling,World,SDS,2070,96
+Needing cooling,Asia Pacific,STEPS,2040,98
+Needing cooling,Central & South America,STEPS,2040,95
+Needing cooling,North America,STEPS,2040,95
+Needing cooling,Eurasia,STEPS,2040,71
+Needing cooling,Europe,STEPS,2040,87
+Needing cooling,Middle East,STEPS,2040,99
+Needing cooling,Africa,STEPS,2040,100
+Needing cooling,World,STEPS,2040,96
+Needing cooling,Asia Pacific,STEPS,2070,98
+Needing cooling,Central & South America,STEPS,2070,96
+Needing cooling,North America,STEPS,2070,96
+Needing cooling,Eurasia,STEPS,2070,81
+Needing cooling,Europe,STEPS,2070,88
+Needing cooling,Middle East,STEPS,2070,99
+Needing cooling,Africa,STEPS,2070,100
+Needing cooling,World,STEPS,2070,97
+Living in very hot climates,Asia Pacific,0,2019,55
+Living in very hot climates,Central & South America,0,2019,44
+Living in very hot climates,North America,0,2019,9
+Living in very hot climates,Eurasia,0,2019,0
+Living in very hot climates,Europe,0,2019,0
+Living in very hot climates,Middle East,0,2019,42
+Living in very hot climates,Africa,0,2019,55
+Living in very hot climates,World,0,2019,44
+Living in very hot climates,Asia Pacific,SDS,2040,59
+Living in very hot climates,Central & South America,SDS,2040,43
+Living in very hot climates,North America,SDS,2040,9
+Living in very hot climates,Eurasia,SDS,2040,0
+Living in very hot climates,Europe,SDS,2040,0
+Living in very hot climates,Middle East,SDS,2040,46
+Living in very hot climates,Africa,SDS,2040,58
+Living in very hot climates,World,SDS,2040,48
+Living in very hot climates,Asia Pacific,SDS,2070,64
+Living in very hot climates,Central & South America,SDS,2070,43
+Living in very hot climates,North America,SDS,2070,8
+Living in very hot climates,Eurasia,SDS,2070,0
+Living in very hot climates,Europe,SDS,2070,0
+Living in very hot climates,Middle East,SDS,2070,49
+Living in very hot climates,Africa,SDS,2070,60
+Living in very hot climates,World,SDS,2070,51
+Living in very hot climates,Asia Pacific,STEPS,2040,60
+Living in very hot climates,Central & South America,STEPS,2040,45
+Living in very hot climates,North America,STEPS,2040,9
+Living in very hot climates,Eurasia,STEPS,2040,0
+Living in very hot climates,Europe,STEPS,2040,0
+Living in very hot climates,Middle East,STEPS,2040,47
+Living in very hot climates,Africa,STEPS,2040,59
+Living in very hot climates,World,STEPS,2040,49
+Living in very hot climates,Asia Pacific,STEPS,2070,67
+Living in very hot climates,Central & South America,STEPS,2070,49
+Living in very hot climates,North America,STEPS,2070,10
+Living in very hot climates,Eurasia,STEPS,2070,0
+Living in very hot climates,Europe,STEPS,2070,0
+Living in very hot climates,Middle East,STEPS,2070,52
+Living in very hot climates,Africa,STEPS,2070,65
+Living in very hot climates,World,STEPS,2070,54
+Needing cooling and dehumidification all days of the year,Asia Pacific,0,2019,43
+Needing cooling and dehumidification all days of the year,Central & South America,0,2019,32
+Needing cooling and dehumidification all days of the year,North America,0,2019,6
+Needing cooling and dehumidification all days of the year,Eurasia,0,2019,0
+Needing cooling and dehumidification all days of the year,Europe,0,2019,0
+Needing cooling and dehumidification all days of the year,Middle East,0,2019,10
+Needing cooling and dehumidification all days of the year,Africa,0,2019,32
+Needing cooling and dehumidification all days of the year,World,0,2019,32
+Needing cooling and dehumidification all days of the year,Asia Pacific,SDS,2040,49
+Needing cooling and dehumidification all days of the year,Central & South America,SDS,2040,31
+Needing cooling and dehumidification all days of the year,North America,SDS,2040,5
+Needing cooling and dehumidification all days of the year,Eurasia,SDS,2040,0
+Needing cooling and dehumidification all days of the year,Europe,SDS,2040,0
+Needing cooling and dehumidification all days of the year,Middle East,SDS,2040,9
+Needing cooling and dehumidification all days of the year,Africa,SDS,2040,34
+Needing cooling and dehumidification all days of the year,World,SDS,2040,35
+Needing cooling and dehumidification all days of the year,Asia Pacific,SDS,2070,55
+Needing cooling and dehumidification all days of the year,Central & South America,SDS,2070,30
+Needing cooling and dehumidification all days of the year,North America,SDS,2070,5
+Needing cooling and dehumidification all days of the year,Eurasia,SDS,2070,0
+Needing cooling and dehumidification all days of the year,Europe,SDS,2070,0
+Needing cooling and dehumidification all days of the year,Middle East,SDS,2070,10
+Needing cooling and dehumidification all days of the year,Africa,SDS,2070,36
+Needing cooling and dehumidification all days of the year,World,SDS,2070,38
+Needing cooling and dehumidification all days of the year,Asia Pacific,STEPS,2040,52
+Needing cooling and dehumidification all days of the year,Central & South America,STEPS,2040,32
+Needing cooling and dehumidification all days of the year,North America,STEPS,2040,6
+Needing cooling and dehumidification all days of the year,Eurasia,STEPS,2040,0
+Needing cooling and dehumidification all days of the year,Europe,STEPS,2040,0
+Needing cooling and dehumidification all days of the year,Middle East,STEPS,2040,9
+Needing cooling and dehumidification all days of the year,Africa,STEPS,2040,36
+Needing cooling and dehumidification all days of the year,World,STEPS,2040,37
+Needing cooling and dehumidification all days of the year,Asia Pacific,STEPS,2070,60
+Needing cooling and dehumidification all days of the year,Central & South America,STEPS,2070,37
+Needing cooling and dehumidification all days of the year,North America,STEPS,2070,7
+Needing cooling and dehumidification all days of the year,Eurasia,STEPS,2070,0
+Needing cooling and dehumidification all days of the year,Europe,STEPS,2070,0
+Needing cooling and dehumidification all days of the year,Middle East,STEPS,2070,11
+Needing cooling and dehumidification all days of the year,Africa,STEPS,2070,39
+Needing cooling and dehumidification all days of the year,World,STEPS,2070,42
+Needing cooling all days of the year,Asia Pacific,0,2019,44
+Needing cooling all days of the year,Central & South America,0,2019,32
+Needing cooling all days of the year,North America,0,2019,6
+Needing cooling all days of the year,Eurasia,0,2019,0
+Needing cooling all days of the year,Europe,0,2019,0
+Needing cooling all days of the year,Middle East,0,2019,37
+Needing cooling all days of the year,Africa,0,2019,46
+Needing cooling all days of the year,World,0,2019,35
+Needing cooling all days of the year,Asia Pacific,SDS,2040,49
+Needing cooling all days of the year,Central & South America,SDS,2040,31
+Needing cooling all days of the year,North America,SDS,2040,5
+Needing cooling all days of the year,Eurasia,SDS,2040,0
+Needing cooling all days of the year,Europe,SDS,2040,0
+Needing cooling all days of the year,Middle East,SDS,2040,41
+Needing cooling all days of the year,Africa,SDS,2040,49
+Needing cooling all days of the year,World,SDS,2040,39
+Needing cooling all days of the year,Asia Pacific,SDS,2070,56
+Needing cooling all days of the year,Central & South America,SDS,2070,30
+Needing cooling all days of the year,North America,SDS,2070,5
+Needing cooling all days of the year,Eurasia,SDS,2070,0
+Needing cooling all days of the year,Europe,SDS,2070,0
+Needing cooling all days of the year,Middle East,SDS,2070,43
+Needing cooling all days of the year,Africa,SDS,2070,52
+Needing cooling all days of the year,World,SDS,2070,44
+Needing cooling all days of the year,Asia Pacific,STEPS,2040,53
+Needing cooling all days of the year,Central & South America,STEPS,2040,32
+Needing cooling all days of the year,North America,STEPS,2040,6
+Needing cooling all days of the year,Eurasia,STEPS,2040,0
+Needing cooling all days of the year,Europe,STEPS,2040,0
+Needing cooling all days of the year,Middle East,STEPS,2040,42
+Needing cooling all days of the year,Africa,STEPS,2040,50
+Needing cooling all days of the year,World,STEPS,2040,42
+Needing cooling all days of the year,Asia Pacific,STEPS,2070,61
+Needing cooling all days of the year,Central & South America,STEPS,2070,37
+Needing cooling all days of the year,North America,STEPS,2070,7
+Needing cooling all days of the year,Eurasia,STEPS,2070,0
+Needing cooling all days of the year,Europe,STEPS,2070,0
+Needing cooling all days of the year,Middle East,STEPS,2070,46
+Needing cooling all days of the year,Africa,STEPS,2070,56
+Needing cooling all days of the year,World,STEPS,2070,48
 Living in high cooling density areas,Asia Pacific,0,2019,19
 Living in high cooling density areas,Central & South America,0,2019,30
 Living in high cooling density areas,North America,0,2019,11
