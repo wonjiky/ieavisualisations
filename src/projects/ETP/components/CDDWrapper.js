@@ -3,7 +3,7 @@ import axios from 'axios'
 import Papa from 'papaparse'
 import CDD from './CDD'
 import variables from './assets/variables.json'
-import { legend, heatpumpDataMap, serviceDataMap, getCountryNameByISO, findSubpowerFromText } from './assets/util'
+import { legend, heatpumpDataMap, serviceDataMap, getCountryNameByISO } from './assets/util'
 import { MapContainer } from '../../../components/container'
 import { Bars } from '../../../components/bars'
 import { Icon } from '../../../components/icons'
@@ -24,7 +24,7 @@ function CDDWrapper({ baseURL }) {
   const [scenario, setScenario] = useState(scenarios.steps);
   const [region, setRegion] = useState('World'); 
   const [map, setMap] = useState(Object.keys(maps)[0]);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   
 
   const DEFAULT_SERVICE_NEED = { "cooling": 0, "heating": 0, "both": 1 };
