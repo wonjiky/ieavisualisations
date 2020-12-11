@@ -26,7 +26,7 @@ export default props => {
 
     case 'description':
       return <Description {...props} />
-        
+      
     default:
       return null;
   }

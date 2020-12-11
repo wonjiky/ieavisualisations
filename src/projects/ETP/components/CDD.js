@@ -228,7 +228,8 @@ function CDD({
 		for (let i in noPopup) if (selected === noPopup[i]) return;
 
 		map.getCanvas().style.cursor = 'pointer';
-		popUp.addClassName('weather');
+		popUp
+			.addClassName('weather');
 		popUp
 			.setLngLat(mousePos)
 			.setHTML(value)
