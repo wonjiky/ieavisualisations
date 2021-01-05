@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useMap } from '../../../components/customHooks'
 
 const Map = ({ data, project, click }) => {
-
   const config = { 
 		map: 'custom',
     style: "mapbox://styles/iea/ck9mv6pv834351ipiu0p02w80",

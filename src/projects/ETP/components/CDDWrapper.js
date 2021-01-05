@@ -210,7 +210,7 @@ function CDDWrapper({ baseURL }) {
   let barTitle = 'Share of population (%)';
 
   return (
-    <MapContainer selector='CDD' loaded={currIndicator}>
+    <MapContainer selector='CDD' loaded={currIndicator} fluid={true}>
       <CDD
         years={year}
         mapType={mapType}

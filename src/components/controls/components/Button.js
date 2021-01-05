@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from './css/Button.module.css'
-import global from './css/Global.module.css'
 
 export default props => {
 
@@ -12,10 +11,10 @@ export default props => {
 		: type === 'button' && flow === 'column'
 		? [classes.CheckToggleOptions, classes.column].join(' ') 
 		: [classes.CheckToggleOptions, classes.row].join(' ');
-	
+
 	return (
 		<div className={classes.Toggle}>
-			{label ?? <label className={global.ToggleLabel}> {label} </label>}
+			{label ?? <label className={classes.ToggleLabel}> {label} </label>}
 			<div className={optionStyle}> 
 				{type === 'buttonGroup'
 					? options.map((option, idx) => <Button key={`${type}-${idx}`} {...props} option={option} disabled={props.disabled} />)

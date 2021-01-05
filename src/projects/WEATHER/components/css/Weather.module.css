@@ -142,6 +142,7 @@ th {
     transition: 0.3s;
 }
 
+.LegendWrapper,
 .LegendWrapper > div {
     background: transparent !important;
     box-shadow: none;

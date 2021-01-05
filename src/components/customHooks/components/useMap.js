@@ -123,7 +123,7 @@ export default config => {
 	function fetchCustomMap() {
 		const map = new mapboxgl.Map({...mapConfig, container: mapContainerRef.current});
 		map.on("load", () => {
-      setPopUp(popUp);
+      setPopUp(tooltip);
       setMap(map);
       map.addControl(new mapboxgl.NavigationControl());
     });

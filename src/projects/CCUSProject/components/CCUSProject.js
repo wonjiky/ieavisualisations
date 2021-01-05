@@ -31,9 +31,9 @@ const CCUSProject = () => {
     {
       type: 'description',
       options: [
-        "EOR = enhanced oil recovery;",
-        "Mtpa = mega tonnes per annum;",
-        "Large-scale is defined as involving the capture of at least 0.8 Mt/year of CO2 for a coal-based power plant and 0.4 Mt/year for other emissions-intensive industrial facilities (including natural gas-based power generation)."
+        "EOR = enhanced oil recovery.",
+        "Mtpa = mega tonnes per annum.",
+        "Dedicated storage refers to sites with the sole purpose of CO2 storage, and not associated with enhanced oil recovery."
       ],
       theme: 'light'
     }
@@ -42,7 +42,7 @@ const CCUSProject = () => {
   const legends = [
     {
       type: 'category',
-      header: ['Sector type'],
+      header: ['Sector'],
       labels: ['Industry/Fuel transformation', 'Power'],
       colors: ['#3e7ad3', '#00ada1'],
       selected: ['Industry/Fuel transformation', 'Power'],
@@ -52,7 +52,6 @@ const CCUSProject = () => {
   ]
 
   
-  
   return (
     <MapContainer selector='CCUSProjects' loaded={data}>
       <Map 
@@ -61,18 +60,21 @@ const CCUSProject = () => {
         click={e => setProject(e.features[0].properties)} 
       />      
       <ControlWrapper bg={true}>
-        <ControlContainer position='bottomLeft'>
+        <ControlContainer position='bottomRight'>
           {legends.map((legend, idx) => 
             <Legends key={idx} {...legend} />)}
         </ControlContainer>
-        <ControlContainer position='topLeft' style={{'width': '320px'}}>
-          <ProjectInfo 
-            project={project}
-          /> 
-          {controls.map((d, idx) => 
-            <Control key={idx} {...d} />)}
-        </ControlContainer>
-        
+        {
+
+          Object.keys(project).length === 0 
+          ? <></>
+          : <ControlContainer position='topLeft' style={{'width': '320px', 'maxHeight': '740px'}}>
+              <ProjectInfo project={project} /> 
+              {controls.map((d, idx) => 
+                <Control key={idx} {...d} />)}
+            </ControlContainer>
+            
+        }
       </ControlWrapper>
     </MapContainer>
   )
@@ -88,11 +90,27 @@ const ProjectInfo = ({ project }) => {
         ? <div className={classes.NotSelected}>Select a project by clicking on the map</div>
         : <div className={classes.ProjectContent}>
           <h5 style={{'color': project.sectorType === 'Power' ? '#00ada1' : '#3e7ad3'}}> {project.facility} </h5>
-          <span>Country</span><br/>
-          <p> {project.country} </p>
-          <span>Operation date</span><br/>
-          <p> {project.operationDate} </p>
           <p className={classes.ProjectDescription}> {project.description} </p>
+          <span>Country</span><br/>
+          <p className={classes.ProjectDescription}> {project.country} </p>
+          <span>Operation date</span><br/>
+          <p className={classes.ProjectDescription}> {project.operationDate} </p>
+          <span>Retrofit or new</span><br/>
+          <p className={classes.ProjectDescription}> {project.status} </p>
+          <span>Capture rate (Mtpa)</span><br/>
+          <p className={classes.ProjectDescription}> {project.captureRate} </p>
+          <span>Sector</span><br/>
+          <p className={classes.ProjectDescription}> {project.sector} </p>
+          <span>Feedstock</span><br/>
+          <p className={classes.ProjectDescription}> {project.feedstock} </p>
+          <span>Primary storage type</span><br/>
+          <p className={classes.ProjectDescription}> {project.storageType} </p>
+          <span>Storage location</span><br/>
+          <p className={classes.ProjectDescription}> {project.location} </p>
+          <span>Transport length (km)</span><br/>
+          <p className={classes.ProjectDescription}> {project.length} </p>
+          <span>Transportation type</span><br/>
+          <p className={classes.ProjectDescription}> {project.transportType} </p>
         </div>
       }
     </div>

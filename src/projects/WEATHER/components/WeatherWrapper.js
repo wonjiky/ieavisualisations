@@ -310,10 +310,19 @@ export default function() {
 		? [classes.LegendWrapper, classes.Bottom].join(' ') 
 		: classes.LegendWrapper;
 		
-	const disclaimer = 'This map is without prejudice to the status of or sovereignty over any territory, to the delimitation of international frontiers and boundaries and to the name of any territory, city or area.';
+	const disclaimer = {
+		title: 'Weather for energy tracker',
+		text: 'This map is without prejudice to the status of or sovereignty over any territory, to the delimitation of international frontiers and boundaries and to the name of any territory, city or area.'
+	};
 
 	return (
-		<MapContainer selector={'Weather_Map'} loaded={data.data} disclaimer={disclaimer} type='weather'>
+		<MapContainer 
+			fluid={true}
+			selector={'Weather_Map'} 
+			loaded={data.data} 
+			theme='dark'
+			// disclaimer={disclaimer} 
+		>
 			<Weather 
 				data={data.data} 
 				territoryMinMax={data.minMax}
@@ -331,14 +340,10 @@ export default function() {
 				}}
 			/>
 			<ControlWrapper 
-			 	bg
-				dark={true} 
 				help={true}
 				helpClick={_ => setOpenInfo(!openInfo)}	
 				helpTitle="Glossary of map terms"
-				download={true}
-				downloadLink={download}
-				downloadLabel={downloadButtonLabel}
+				download={{ link: download, label: downloadButtonLabel}}
 			>
 				<ControlContainer position='bottomRight' customClass={legendCustomStyle}>
           {legends.map((legend, idx) => 

@@ -1,10 +1,8 @@
 import React from 'react'
 import Highcharts from 'highcharts/highmaps'
 import HighchartsReact from 'highcharts-react-official'
-import HC_more from 'highcharts/highcharts-more'
 
-window.Highcharts = Highcharts; //this line did the magic
-HC_more(Highcharts);
+window.Highcharts = Highcharts;
 export default ({ data, maxValue }) => {
   return (
     <div>
@@ -16,6 +14,7 @@ export default ({ data, maxValue }) => {
 }
 
 const LineChart = ({ series, maxValue }) => {
+
   const containerProps = {
     style: {
       width: '97%',

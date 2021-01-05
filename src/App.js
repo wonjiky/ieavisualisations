@@ -3,7 +3,7 @@ import { Weather } from './projects/WEATHER';
 import { GTF_Flow, GTF_Vector } from './projects/GTF';
 import { Electricity } from './projects/Electricity';
 import { CCUS } from './projects/CCUS';
-// import { Test } from './projects/Test';
+import { Test } from './projects/Test';
 import { CCUSProject } from './projects/CCUSProject';
 import { CDDMap, ETPBubbleChart } from './projects/ETP';
 import { Auth } from './components/fakeAuth';
@@ -32,7 +32,7 @@ function App() {
 		{ id: 7, item: 'ETP2020 - Ownership bubble chart', url: '/ETP2020-ownership', component: ETPBubbleChart, exact: true, pw: password[3], title: 'ETP2020 - Ownership bubble chart' },
 		{ id: 8, item: 'COVID impact on electricity', url: '/electricity-project', component: Electricity, exact: true, pw: password[3], title: 'Electricity-project' },
 		{ id: 9, item: 'CCUS projects', url: '/ccus-projects', component: CCUSProject, exact: true, pw: password[3], title: 'CCUS projects' },
-		// { id: 9, item: 'Test', url: '/test', component: Test, exact: true, pw: password[3], title: 'test' },
+		{ id: 9, item: 'Test', url: '/test', component: Test, exact: true, pw: password[3], title: 'test' },
 	];
 
 	let baseURL = process.env.REACT_APP_DEV;
@@ -63,7 +63,7 @@ function App() {
 					/>
 			))}
 			</Switch>
-			</Router>
+		</Router>
 	)
 }
 

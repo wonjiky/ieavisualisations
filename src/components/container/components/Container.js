@@ -2,27 +2,24 @@ import React from 'react'
 import { Icon } from '../../icons'
 import { Loader } from '../../loader'
 import { Disclaimer } from '../../disclaimer'
+import { ThemeProvider } from '../../../context'
 import classes from './css/Contaner.module.css'
 
-export default ({ selector, children, loaded, type, disclaimer}) => (
-  !loaded 
-  ? <Loader /> 
-  : <div className='container' id={selector}>
-      {type === 'weather' ? <Disclaimer disclaimer={disclaimer} /> : null}
-      <div className={classes.ExpandContainer}>
-        <div className={classes.Expand}>
-          <Icon 
-            type='expand' 
-            button={true} 
-            click={ e => toggleFullScreen(selector)}
-            stroke={'rgba(60,60,60)'} 
-            strokeWidth="1"
-          />
-        </div>
+function FullScreenIcon(selector) {
+  return (
+    <div className={classes.ExpandContainer}>
+      <div className={classes.Expand}>
+        <Icon 
+          type='expand' 
+          button={true} 
+          click={ _ => toggleFullScreen(selector)}
+          stroke={'rgba(60,60,60)'} 
+          strokeWidth="1"
+        />
       </div>
-      {children}
     </div>
-)
+  );
+};
 
 function toggleFullScreen(selector) {
   let elem = document.getElementById(selector);
@@ -34,4 +31,24 @@ function toggleFullScreen(selector) {
   } else {
     document.exitFullscreen();
   }
-}
+};
+
+export default ({ 
+  disclaimer,
+  selector, 
+  children, 
+  loaded, 
+  fluid,
+  theme,
+}) => (
+  !loaded 
+  ? <Loader /> 
+  : <ThemeProvider theme={theme}>
+      <div className={fluid ? 'container-fluid' : 'container'} id={selector}>
+        {disclaimer ? <Disclaimer disclaimer={disclaimer} /> : null}
+        <FullScreenIcon selector />
+        {children}
+      </div>
+    </ThemeProvider>  
+    
+);

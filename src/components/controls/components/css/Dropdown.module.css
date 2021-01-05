@@ -1,24 +1,71 @@
-.Dropdown {
+.DropdownWrapper {
+  position: relative;
   padding: 9px 18px;
 }
 
-.Dropdown > button {
+.DropdownWrapper > button {
   width: 100%;
+  padding: 4px 20px 0 0;
+  font-size: 1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: none;
+  text-align:left;
 }
 
-.Dropdown button > span {
+.DropdownWrapper button > span {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.Dropdown:hover .Icon > div {
+.DropdownWrapper:not(:first-child) {
+  margin-left: -1px;
+}
+
+.DropdownWrapper > button:before {
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  transition: border .2s linear;
+  border: 1px solid #e6e6e6;
+  content: "";
+}
+
+.DropdownWrapper > button:hover:before {
+  z-index:1;
+  border-color:#949494;
+}
+
+.DropdownWrapper.dark > button:before {
+  border-color: #949494;
+}
+
+.DropdownWrapper.dark > button:hover:before {
+  border-color: #fff; 
+}
+
+.DropdownLabel {
+  display: flex;
+  line-height: 1.25rem;
+  font-size: .8rem;
+}
+
+.DropdownWrapper:hover .Icon.dark > div {
   background: #ebebeb1d;
   transition: background .2s linear;
 }
 
-.Dropdown .Icon > div{
+.DropdownWrapper:hover .Icon > div {
+  background: #f3f3f3;
+}
+
+.DropdownWrapper .Icon > div {
   box-shadow: none !important;
   height: 100%;
   width: 100%;
@@ -62,15 +109,11 @@
   justify-content: center;
   top: 50%;
   right: 8px;
-  transition: background .2s linear;
+  transition: all .2s linear;
 }
 
 .Icon > svg {
   width: 80%;
-}
-
-.dark {
-  fill: #fff;
 }
 
 .DropdownOptions ul {
@@ -82,12 +125,12 @@
 
 .DropdownOptions ul li {
   width: 100%;
-  color: #000;
   font-weight: normal;
   font-size: .8rem;
+  color: #000;
   background: transparent;
-  padding: 0;
   text-align: left;
+  padding: 0;
 }
 
 .OptionItem {

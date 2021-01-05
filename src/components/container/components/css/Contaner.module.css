@@ -18,6 +18,7 @@
   width: 29px;
   background-color: #fff;
   transition: none;
+  box-shadow: none;
 }
 
 .Expand:hover button {

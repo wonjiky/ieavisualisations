@@ -1,62 +1,77 @@
 import React from 'react'
-import classes from './css/Dropdown.module.css'
 import { Icon } from '../../icons'
-import global from './css/Global.module.css'
+import { useTheme } from '../../../context'
+import classes from './css/Dropdown.module.css'
 
-export default ({ 
-  label, 
-  options, 
-  click, 
-  selected, 
-  bottom, 
-  group,
-  active, 
-  open, 
-  dark 
-}) => {
+export default ({ label, options, click, selected, bottom, group, active, open }) => {
   
-  
-  let dropdownStyle = active.open && active.target === label 
+  const { theme, style } = useTheme();
+
+  const optionStyle = active.open && active.target === label 
     ? [classes.DropdownOptions, classes.active].join(' ') 
     : classes.DropdownOptions;
 
-  let wrapperStyle = dark 
-    ? [global.ControlContainer, classes.Dropdown, global.dark].join(' ') 
-    : [global.ControlContainer, classes.Dropdown].join(' ');
+  const dropdownStyle = theme === 'dark' 
+    ? [classes.DropdownWrapper, classes.dark].join(' ')
+    : classes.DropdownWrapper;
 
-  const groupedList = options.reduce((r, a) => {
-    r[a.group] = [...r[a.group] || [], a];
-    return r;
+  const iconStyle = theme === 'dark'
+     ? [classes.Icon, classes.dark].join(' ')
+     : classes.Icon
+
+  const groupedList = options.reduce((acc, curr) => {
+    acc[curr.group] = [...acc[curr.group] || [], curr];
+    return acc;
   }, {});
-  
+
+  const buttonMeta = {
+    iconStyle,
+    theme: theme,
+    style: style,
+    selected: selected,
+    open: open,
+    label:label
+  };
+
+  const optionsMeta = {
+    bottom: bottom,
+    options: options,
+    group: group,
+    click: click,
+    optionStyle,
+    groupedList,
+  };
+
   return(
-    <div className={wrapperStyle}>
-      <label className={global.ControlLabel}>
-        {label}
-      </label>
-      <button value={label} onClick={e => open(e)}>
-        <span>{selected}</span>
-        <div className={dark 
-          ? [classes.Icon, classes.dark].join(' ') 
-          : classes.Icon}>
-            <Icon type='downArrow' dark={dark ? true : false} />
-        </div>
-      </button>     
-      <div id='dropdown' style={bottom ? {top: 'unset', bottom: '0px'} : null} className={dropdownStyle}>
-        <div>
-          <ul>
-            {
-              group 
-                ? Object.entries(groupedList).map((option,idx) => 
-                  <Group key={`group-${idx}`} option={option[1]} group={group} click={click}/>)
-                : <Single option={options} group={group} click={click} />
-            }
-          </ul>
-        </div>
-      </div>
+    <div className={dropdownStyle}>
+      <label className={classes.DropdownLabel}> {label} </label>
+      <Button { ...buttonMeta }/>
+      <Options {...optionsMeta} />
     </div>
   )
 };
+
+const Button = ({ label, open, style, theme, selected, iconStyle }) => (
+  <button value={label} onClick={e => open(e)}>
+    <span style={{ color: style.color }}>{selected}</span>
+    <div className={iconStyle}>
+      <Icon type='downArrow' dark={theme === 'dark' ? true : false} />
+    </div>
+  </button>     
+)
+
+const Options = ({ bottom, optionStyle, options, groupedList, group, click }) => (
+  <div id='dropdown' style={bottom ? {top: 'unset', bottom: '0px'} : null} className={optionStyle}>
+    <div>
+      <ul>
+        {group 
+          ? Object.entries(groupedList).map((option,idx) => 
+              <Group key={`group-${idx}`} option={option[1]} group={group} click={click}/>)
+          : <Single option={options} group={group} click={click} />}
+      </ul>
+    </div>
+  </div>
+)
 
 const Group = ({ option, click, group }) => (
   <li> 

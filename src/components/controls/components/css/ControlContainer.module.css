@@ -1,137 +1,71 @@
+.ControlWrapper {
+  display: flex;
+  flex-flow: column;
+  z-index: 2;
+  box-sizing: border-box;
+  background: transparent;
+  box-shadow: none;
+}
+
 .ControlContainer {
-  transition: transform .2s linear;
+  padding: 14px 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
 }
 
-.Wrapper {
-  display: none;
+.ControlContainer > div:not(:last-child) {
+  margin-bottom: 14px;
 }
 
-.ToggleWrapper {
-  display: none;
+.bottomLeft,
+.bottomRight,
+.topLeft,
+.topRight {
+  position: absolute;
+}
+
+.topLeft { 
+  top:0;
+  left: 0;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.bottomLeft { 
+  bottom:0;
+  left: 0;
+  margin-bottom: 40px;
+  margin-left: 20px;
+}
+
+.topRight { 
+  top:0;
+  right: 0;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.bottomRight { 
+  bottom:0;
+  right: 0;
+  margin-bottom: 40px;
+  margin-right: 20px;
 }
 
 @media screen and (max-width: 729px) {
+	.ControlWrapper {
+    position: relative;
+    background: transparent !important;
+    box-shadow: none;
+    margin: auto;
+    padding: unset !important;
+    width: unset !important;
+    bottom: unset !important;
+    top: unset !important;
+    left: unset !important;
+    right: unset !important;
+  }
 
   .ControlContainer {
-    position: fixed;
-    width: inherit;
-    height: 400px;
-    z-index: 10;
-    box-sizing: border-box;
-    transform: translate3d(0, 0, 0);
-    box-shadow: 0 0 10px rgba(0,0,0,.2);
-    background: #fff;
-    /* background: linear-gradient(0deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.8) 75%,  rgba(255,255,255,1) 85%, rgba(255,255,255,0.9) 100%); */
+    box-shadow: none !important;
   }
-
-  .Wrapper {
-    border-bottom: 1px solid #000;
-    display: block;
-  }
-
-  .ToggleWrapper {
-    display: block;
-    position: absolute;
-    top: -55px;
-  }
-
-  .ToggleContainer {
-    display: flex;
-    justify-content: center;
-    width: 100vw;
-  }
-  
-  .BodyWrapper {
-    height: 100%;
-    padding: 25px 0;
-    box-sizing: border-box;
-    overflow-y: scroll;
-  }
-
-  .ControlContainerBody {
-    width: calc(65vw + 50px);
-    margin: auto;
-    box-sizing: border-box;
-  }
-
-  .open {
-    transform: translate3d(0,-100%,0);
-    transition: transform .2s linear;
-  }
-
-  .ControlContainer.dark > .Wrapper {
-    border-bottom: 1px solid #fff !important;
-  }
-
-  .dark {
-    color: #fff !important;
-    background: rgba(37,37,37,0.97);
-  }
-}
-
-.ButtonWrapper {
-  position: absolute;
-  margin-left: 20px;
-  display: flex;
-  top: 410px;
-}
-
-.Help,
-.Download {
-  /* width: 36px;
-  height: 36px; */
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.Help > svg,
-.Download > svg {
-  height: 100%;
-  margin-top: 0;
-}
-
-.DownloadContainer {
-  display: flex;
-  position: relative;
-}
-
-.DownloadButton {
-  margin-right: 10px;
-}
-
-.DownloadButton:hover + .DownloadWrapper{
-  visibility: visible;
-  opacity: 1;
-  transition: 0.3s;
-}
-
-.DownloadWrapper {
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  width: 220px;
-  margin-left: -130px;
-  visibility: hidden;
-  opacity: 0;
-  padding: 8px 20px;
-  text-align: center;
-  background: #fff;
-  transition: 0.3s;
-}
-
-.DownloadWrapper:after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -10px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #fff transparent transparent transparent;
-}
-
-.DownloadWrapper {
-  text-decoration: none;
-  font-size: .8rem;
-  color: #000;
 }

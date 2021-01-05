@@ -1,16 +1,15 @@
 import React from 'react'
 import classes from './css/Input.module.css'
 
-export default props => {
-  const { 
-    options,
+export default ({
+  options,
     type,
     selected,
     name,
     change,
-    disabled,
-  } = props;
-  
+    disabled
+}) => {
+
   return (
     <div className={classes.InputWrapper}>
       {options.map((d, idx) =>

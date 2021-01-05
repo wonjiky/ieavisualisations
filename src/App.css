@@ -32,26 +32,21 @@ canvas:focus{
 }
 
 .container {
-	/* margin: 0 auto;
+	margin: 0 auto;
 	position: relative;
 	margin-top: 50px;
-	height: 800px;
-	width: 1384px; */
+	height: 50vh;
+	min-height: 800px;
+}
+
+.container-fluid {
 	width: 100vw !important;
 	height: 100vh !important;
 }
 
-.containerTest {
-	margin: 0 auto;
-	position: relative;
-	margin-top: 50px;
-	height: 800px;
-	width: 1384px;
-}
-
 @media screen and (min-width: 1480px) {
 	.container,
-	.containerTest {
+	.container-fluid {
 		width: 1384px;
 		padding-right: 0;
 		padding-left: 0;
@@ -62,28 +57,28 @@ canvas:focus{
 
 @media screen and (max-width: 1479px) and (min-width: 1280px) {
 	.container,
-	.containerTest {
+	.container-fluid {
 		width: calc(100vw - 96px);
 	}
 }
 
 @media screen and (max-width: 1279px) and (min-width: 960px) {
 	.container,
-	.containerTest {
+	.container-fluid {
 		width: calc(100vw - 96px);
 	}
 }
 
 @media screen and (max-width: 959px) and (min-width: 730px) {
 	.container,
-	.containerTest {
+	.container-fluid {
 		width: calc(100vw - 80px);
 	}
 }
 
 @media screen and (max-width: 729px) {
 	.container,
-	.containerTest {
+	.container-fluid {
 		width: calc(100vw - 48px);
 	}
 }

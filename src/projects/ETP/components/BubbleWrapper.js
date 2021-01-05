@@ -5,6 +5,8 @@ import NB from './assets/NB.json'
 import NBHH from './assets/Nbperhh.json'
 import CDD from './assets/CDD.json'
 import COUNTRIES from './assets/countries.json'
+
+
 import { Control } from '../../../components/controls'
 import classes from './css/Bubble.module.css'
 
@@ -12,7 +14,6 @@ import classes from './css/Bubble.module.css'
 const BubbleWrapper = () => {
 
   const [year, setYear] = useState(1990);
-
   let colors = ["#04188e", "#546072", "#9ca159", "#e4bd35", "#d17f2e", "#b93326"];
   let range = [0, 500, 1000, 1500, 2000, 2500];
   let MAX_YEAR = 2070, MIN_YEAR = 1990;
@@ -49,23 +50,6 @@ const BubbleWrapper = () => {
     getColor(tempData[i])    
   }
 
-  function getValue(data) {
-    let result = [];
-    let tempData = [...data];
-    for (let i in tempData) result.push(data[i][yearIndex])
-    return result;
-  }
-
-  function mergeData(acc, curr, idx) {
-    acc.push({
-      x: getValue(xPos)[idx],
-      y: getValue(yPos)[idx],
-      z: getValue(radius)[idx],
-      color: getValue(color)[idx],
-      country: curr
-    })
-    return acc;
-  }
 
   function getColor(value) {
     for (let idx in range) {
@@ -86,7 +70,27 @@ const BubbleWrapper = () => {
       }
     }
   }
+
+  function getValue(data) {
+    let result = [];
+    let tempData = [...data];
+    for (let i in tempData) result.push(data[i][yearIndex])
+    return result;
+  }
+
   
+  function mergeData(acc, curr, idx) {
+    acc.push({
+      x: getValue(xPos)[idx],
+      y: getValue(yPos)[idx],
+      z: getValue(radius)[idx],
+      color: getValue(color)[idx],
+      country: curr
+    })
+    return acc;
+  }
+  
+
   function filterData(d) {
     let hasRadius = d.z !== 0;
     let isNotNull = d.x !== null && d.y !== null && d.z !== null && d.color !== null;
@@ -94,11 +98,11 @@ const BubbleWrapper = () => {
   }
 
   return (
-    <div className='containerTest'>
-      <Bubble data={data} maxValue={maxValue} />
+    <div className='container'>
       <div className={classes.Slider}>
         {slider.map((control, idx) => <Control key={idx} {...control} /> )}
       </div>
+      <Bubble data={data} maxValue={maxValue} />
     </div>
   )
 }

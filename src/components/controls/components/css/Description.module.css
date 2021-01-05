@@ -1,19 +1,5 @@
-.Introduction > p {
+.Description > p {
   font-size: .7rem;
   margin-top: 10px;
   line-height: .9rem;
-}
-
-.dark::before {
-  display: block;
-  content: '';
-  background: #fff;
-  height: 1px;
-}
-
-.Introduction::before {
-  display: block;
-  content: '';
-  background: #000;
-  height: 1px;
 }

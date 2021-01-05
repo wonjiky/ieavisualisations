@@ -1,3 +1,9 @@
 .Slider {
   margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.Slider > div {
+  width: 50%;
 }

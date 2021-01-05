@@ -205,7 +205,7 @@ export default ({ baseURL, match }) => {
   }
 
   return (
-    <MapContainer selector={match.path.substring(1)} loaded={data}>
+    <MapContainer selector={match.path.substring(1)} loaded={data} fluid={true}>
       <CCUSContainer
         data={data}
         toggle={legendToggle}
