@@ -4,11 +4,12 @@ import classes from './css/ControlContainer.module.css'
 
 export default ({ children, position, style, customClass }) => {
 
-  const themes = useTheme();
-  
+  const theme = useTheme();
+  const wrapperStyle = [classes.ControlWrapper, classes[position], customClass].join(' ');
+
   return (
-    <div className={[classes.ControlWrapper, classes[position], customClass].join(' ')} style={{ ...themes.style,  ...style}}>
-      <div className={classes.ControlContainer}>
+    <div className={wrapperStyle} style={{ color: theme.style.color,  ...style}}>
+      <div className={classes.ControlContainer} style={{background: theme.style.background}}>
         {React.Children.map(children, child =>
           child && child.props.type !== 'popup' &&  React.cloneElement(child))}
       </div>

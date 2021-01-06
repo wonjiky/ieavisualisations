@@ -10,7 +10,6 @@ export default props => {
       return <Dropdown {...props} />
 
     case 'button':
-    case 'buttonGroup':
       return <Button {...props} />;
 
     case 'checkbox':

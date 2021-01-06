@@ -109,6 +109,7 @@
   opacity: 0;
   padding: 8px 20px;
   text-align: center;
+  color: #000;
   background: #fff;
   transition: 0.3s;
 }

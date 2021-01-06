@@ -28,27 +28,17 @@ function toggleFullScreen(selector) {
       .catch(err => {
         console.log(err)
       });
-  } else {
-    document.exitFullscreen();
-  }
+  } else document.exitFullscreen();
 };
 
-export default ({ 
-  disclaimer,
-  selector, 
-  children, 
-  loaded, 
-  fluid,
-  theme,
-}) => (
+export default ({ disclaimer, selector, children, loaded, fluid, theme }) => (
   !loaded 
-  ? <Loader /> 
-  : <ThemeProvider theme={theme}>
-      <div className={fluid ? 'container-fluid' : 'container'} id={selector}>
-        {disclaimer ? <Disclaimer disclaimer={disclaimer} /> : null}
-        <FullScreenIcon selector />
-        {children}
-      </div>
-    </ThemeProvider>  
-    
+    ? <Loader /> 
+    : <ThemeProvider theme={theme}>
+        <div className={fluid ? 'container-fluid' : 'container'} id={selector}>
+          {disclaimer ? <Disclaimer disclaimer={disclaimer} /> : null}
+          <FullScreenIcon selector />
+          {children}
+        </div>
+      </ThemeProvider>  
 );

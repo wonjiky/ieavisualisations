@@ -52,5 +52,5 @@
 
 .Float:hover{
   transition: background .19s linear;
-  background: #002999;
+  background: rgb(39, 96, 255);
 }

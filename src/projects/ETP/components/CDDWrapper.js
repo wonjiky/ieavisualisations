@@ -62,26 +62,23 @@ function CDDWrapper({ baseURL }) {
   
   const controls = [
 		{ 
-			type: 'buttonGroup',
+			type: 'button',
       options: Object.keys(mapTypes).map(item => ({ label: mapTypes[item], value: item })),
       selected: mapType,
-      dark: true,
       flow: 'row',
       click: e => setMapType(e.value),
     },
     {
-      type: 'buttonGroup',
+      type: 'button',
       options: years,
       selected: year,
-      dark: true,
       flow: 'row',
 			click: value => setYear(value)
     },
     {
-      type: 'buttonGroup',
+      type: 'button',
       options: Object.values(scenarios),
       selected: scenario,
-      dark: true,
       flow: 'row',
       click: value => setScenario(value),
     },
@@ -114,7 +111,6 @@ function CDDWrapper({ baseURL }) {
     {
       type: isService && 'dropdown',
       label: 'Regions',
-      dark: true,
       options: regions,
       top: true,
       click: value => setRegion(value),
@@ -201,16 +197,19 @@ function CDDWrapper({ baseURL }) {
     return result
   }
 
-  const popup = [
-    {
-      type: 'popup',
-      click: _ => setOpenModal(!openModal),
-    }
-  ];
+  const popup = [{
+    type: 'popup',
+    click: _ => setOpenModal(!openModal),
+  }];
   let barTitle = 'Share of population (%)';
 
   return (
-    <MapContainer selector='CDD' loaded={currIndicator} fluid={true}>
+    <MapContainer 
+      selector='CDD' 
+      loaded={currIndicator} 
+      fluid={true}
+      theme='dark'
+    >
       <CDD
         years={year}
         mapType={mapType}
@@ -222,8 +221,14 @@ function CDDWrapper({ baseURL }) {
         mapData={currHeatpumpData}
         click={e => setCountry(e)}
       />
-      <ControlWrapper dark bg>
-        <ControlContainer position='topLeft' style={{'width': '330px'}}> 
+      <ControlWrapper
+        help={{ visible: true, click: _ => setOpenModal(!openModal), title: "Glossary of map terms" }}
+      >
+        <ControlContainer position='bottomRight' customClass={classes.Legend}>
+          {legends.map((legend, idx) => 
+            <Legends key={idx} {...legend} />)}
+        </ControlContainer>
+        <ControlContainer position='topLeft' customClass={classes.customControlStyle}> 
           {controls.map((control, idx) => 
             <Control key={idx} {...control} /> )}
           {regionDropdown.map((drop, idx) => 
@@ -232,17 +237,12 @@ function CDDWrapper({ baseURL }) {
             ? <><Bars title={barTitle} data={currIndicator}/></>
             : (!country 
               ? <><p>Select a territory to see CO<sub>2</sub> savings by switching from gas to heat pumps</p></>
-              : <><Bars dark title={barTitle} label={currIndicator[0] && currIndicator[0].title} data={currIndicator} titleSize={{"fontSize": "1.25rem"}} /></>)}
+              : <><Bars title={barTitle} label={currIndicator[0] && currIndicator[0].title} data={currIndicator} titleSize={{"fontSize": "1.25rem"}} /></>)}
           {popup.map((item, idx) => 
-            <Popup key={idx} {...item} />
-          )}
-        </ControlContainer>
-        <ControlContainer position='bottomRight' customClass={classes.Legend}>
-          {legends.map((legend, idx) => 
-            <Legends key={idx} {...legend} />)}
+            <Popup key={idx} {...item} /> )}
         </ControlContainer>
       </ControlWrapper>
-      <Modal styles='full' open={openModal} click={_ =>  setOpenModal(!openModal)}>
+      <Modal size='full' open={openModal} click={_ => setOpenModal(!openModal)}>
         <Content table={table} />
 			</Modal>
     </MapContainer>
@@ -251,7 +251,7 @@ function CDDWrapper({ baseURL }) {
 
 export default CDDWrapper;
 
-const Popup = ({ click }) => <Icon fill button type='help' dark='float' styles={classes.Help} click={click} title="Glossary of map terms"/>
+const Popup = ({ click }) => <Icon fill button type='help' float={true} styles={classes.Help} click={click} title="Glossary of map terms"/>
 
 const Content = ({ table }) => {
   let nav = [

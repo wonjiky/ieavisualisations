@@ -192,7 +192,7 @@ export default function() {
 	const controls = {
 		topleft: [
 			{ 
-				type: 'buttonGroup',
+				type: 'button',
 				options: ['Territory','Grid'],
 				selected: uppercase(mapType),
 				flow: 'row',
@@ -252,7 +252,7 @@ export default function() {
 					: { ...gridTime, year: Number(e.target.value) }))
 			},
 			{ 
-				type: 'buttonGroup',
+				type: 'button',
 				options: mapType === 'territory' ? ['Year', 'Month', 'Day'] : ['Year', 'Month'],
 				selected: uppercase(viewInterval),
 				flow: 'row',
@@ -321,7 +321,7 @@ export default function() {
 			selector={'Weather_Map'} 
 			loaded={data.data} 
 			theme='dark'
-			// disclaimer={disclaimer} 
+			disclaimer={disclaimer} 
 		>
 			<Weather 
 				data={data.data} 
@@ -340,9 +340,7 @@ export default function() {
 				}}
 			/>
 			<ControlWrapper 
-				help={true}
-				helpClick={_ => setOpenInfo(!openInfo)}	
-				helpTitle="Glossary of map terms"
+				help={{ visible: true, click: _ => setOpenInfo(!openInfo), title: "Glossary of map terms" }}
 				download={{ link: download, label: downloadButtonLabel}}
 			>
 				<ControlContainer position='bottomRight' customClass={legendCustomStyle}>
@@ -358,18 +356,18 @@ export default function() {
 				</ControlContainer>
 			</ControlWrapper>
 			<div className={classes.ButtonWrapper} style={{"top": "412px", "zIndex": "2"}}>
-				<Icon fill button type='help' dark='float' styles={classes.Help} click={_ => setOpenInfo(!openInfo)} title="Glossary of map terms"/>
+				<Icon fill button type='help' float={true} styles={classes.Help} click={_ => setOpenInfo(!openInfo)} title="Glossary of map terms"/>
 				{mapType === 'territory' && 
 					<div className={classes.DownloadContainer}>
 						<a href={download} className={classes.DownloadButton}>
-							<Icon strokeWidth={1} stroke type='download' viewBox='-13 -11 50 50' dark='float' styles={classes.Download} />
+							<Icon strokeWidth={1} stroke type='download' viewBox='-13 -11 50 50' float={true} styles={classes.Download} />
 						</a>
 						<div className={classes.DownloadWrapper}>
 							{downloadButtonLabel}
 						</div>
 					</div>}
 			</div>
-			<Modal styles='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)}>
+			<Modal size='full' open={openInfo} click={_ =>  setOpenInfo(!openInfo)}>
 				<Table title='Value types' body={variables.valueTypes} head={['Type', 'Description']} />
 				<Table title='Variables' body={variables.table} head={['Name', 'Description', 'Aggregation in territories', 'Unit']} />
 			</Modal>

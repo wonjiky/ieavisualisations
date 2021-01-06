@@ -3,11 +3,19 @@ import React, { useContext, createContext } from 'react'
 const themes = {
   dark: {
     theme: 'dark',
-    style :{
+    style: {
       background: 'rgba(43, 43, 43, .95)',
       color: '#fff',
-      borderColor: '#fff'
+      borderColor: '#fff',
     },
+    bar: {
+      borderColor: '#fff',
+      background: '#fff',
+    },
+    icon: {
+      float: '#fff',
+      color: '#fff'
+    }
   },
   light: {
     theme: 'light',
@@ -15,6 +23,14 @@ const themes = {
       background: '#fff',
       color: '#000',
       borderColor: '#000'
+    },
+    bar: {
+      borderColor: '#949494',
+      background: '#949494',
+    },
+    icon: {
+      float: '#fff',
+      color: '#000'
     }
   }
 }

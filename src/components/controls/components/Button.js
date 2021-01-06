@@ -1,56 +1,63 @@
 import React from 'react';
+import { useTheme } from '../../../context'
 import classes from './css/Button.module.css'
 
-export default props => {
+export default ({ 
+	options, 
+	label, 
+	flow, 
+	selected, 
+	click, 
+	disabled 
+}) => {
 
-	const { type, options, label, flow } = props;
-	let optionStyle = type === 'buttonGroup' && flow === 'row' 
-		? [classes.RadioToggleOptions, classes.row].join(' ')
-		: type === 'buttonGroup' && flow === 'column'
-		? [classes.RadioToggleOptions, classes.column].join(' ') 
-		: type === 'button' && flow === 'column'
-		? [classes.CheckToggleOptions, classes.column].join(' ') 
-		: [classes.CheckToggleOptions, classes.row].join(' ');
+	const ButtonStyle = flow === 'row' 
+		? [classes.Buttons, classes.row].join(' ')
+		: [classes.Buttons, classes.column].join(' ');
 
 	return (
-		<div className={classes.Toggle}>
-			{label ?? <label className={classes.ToggleLabel}> {label} </label>}
-			<div className={optionStyle}> 
-				{type === 'buttonGroup'
-					? options.map((option, idx) => <Button key={`${type}-${idx}`} {...props} option={option} disabled={props.disabled} />)
-					: options.map((option, idx) => <Button key={`Toggle-${idx}`} {...props} {...option} disabled={props.disabled} />)}
+		<div className={classes.ButtonWrapper}>
+			{label ?? <label className={classes.ButtonLabel}> {label} </label>}
+			<div className={ButtonStyle}> 
+				{options.map((option, idx) => 
+					<Button 
+						key={`${option}-${idx}`} 
+						option={option} 
+						selected={selected}
+						click={click}
+						disabled={disabled} 
+					/>)}
 			</div>
 		</div>
 	)
 }
 
-const Button = props => {
-
-	const {option, dark, type, selected, click, disabled } = props;
+const Button = ({ option, selected, click, disabled }) => {
 	
-	let selectedType = type === 'buttonGroup' ? selected === (option.value || option) : selected;
-	let isDisable = disabled && disabled.filter(d => d === option)[0];
-	let disable = isDisable === (option.value || option) ? true : false;
+	const { theme } = useTheme();
+	const isDark = theme === 'dark';
+	const labels = option.label || option, values = option.value || option;
+	const selectedOption = selected === values;
+	const hasDisabled = disabled && disabled.filter(d => d === values)[0];
+	const isDisabled = hasDisabled === values ? true : false;
 
-
-	let optionStyle = selectedType && dark
+	const optionStyle = selectedOption && isDark
 		? [classes.active, classes.dark].join(' ') 
-		: selectedType && !dark ? classes.active
-		: !selectedType && dark ? classes.dark
-		: classes.ToggleOption;
+		: selectedOption && !isDark 
+		? classes.active
+		: !selectedOption && isDark 
+		? classes.dark
+		: null;
 
-	let buttonStyle = !disable 
-		? optionStyle 
-		: [optionStyle, classes.disabled].join(' ');
-	let label = option.label || option;
-	let finalLabel = findSubpowerFromText(String(label), 'CO2', '2');
+	const buttonStyle = !isDisabled 
+		? optionStyle : [optionStyle, classes.disabled].join(' ');
+	const label = findSubpowerFromText(String(labels), 'CO2', '2');
 	return (
-		<button onClick={ _=> click(option)} disabled={disable} className={buttonStyle} > 
-			{finalLabel}
+		<button className={buttonStyle} onClick={ _ => click(option)} disabled={isDisabled}> 
+			{label}
 		</button>
-	)
+	);
 }
-
 
 const findSubpowerFromText = (text, key, sub) => {
 	if(text === undefined) return text;

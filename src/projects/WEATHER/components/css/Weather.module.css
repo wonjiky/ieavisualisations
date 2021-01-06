@@ -142,7 +142,6 @@ th {
     transition: 0.3s;
 }
 
-.LegendWrapper,
 .LegendWrapper > div {
     background: transparent !important;
     box-shadow: none;
@@ -161,9 +160,12 @@ th {
 
 .LogoCustomStyle {
     margin-right: 50px !important;
-    background: transparent !important;
-    box-shadow: none;
     padding: 0;
+}
+
+.LogoCustomStyle > div { 
+    box-shadow: none;
+    background: transparent !important;
 }
 
 @media screen and (max-width: 729px) {

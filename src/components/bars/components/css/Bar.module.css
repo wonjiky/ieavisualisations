@@ -6,7 +6,6 @@
 .BarLabel {
   display: flex;
   justify-content: space-between;
-  color: #6f6f6f;
 }
 
 .BarLabel > p {
@@ -18,23 +17,11 @@
   margin-top: 3px;
   width: inherit;
   position: relative;  
-  border: 1px solid #e6e6e6;
+  border: 1px solid;
 }
 
 .Bar_Percentage {
   position: absolute;
-  background: #adadad;
   height:100%;
 }
 
-.BarLabel.dark {
-  color: white;
-}
-
-.Bar_Wrapper.dark {
-  border: 1px solid #fff;
-}
-
-.Bar_Percentage.dark {
-  background: #fff !important;
-}

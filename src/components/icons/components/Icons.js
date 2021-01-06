@@ -1,9 +1,10 @@
 import React from 'react'
+import { useTheme } from '../../../context'
 import classes from './css/Icons.module.css'
 
 export default ({ 
   click, 
-  dark, 
+  float, 
   type, 
   button, 
   viewBox,
@@ -13,7 +14,9 @@ export default ({
   title,
 }) => {
 
-  let styleType = {
+  const { theme, icon } = useTheme();
+  const isDark = theme === 'dark';
+  const styleOptions = {
     dark: {
       button: [classes.Button, classes.dark, styles].join(' '),
       icon: [classes.Icon, classes.dark, styles].join(' '),
@@ -28,23 +31,24 @@ export default ({
     }
   };
 
-  const icon = iconTypes[type];
-  const style = dark === true 
-    ? styleType.dark 
-    : dark === 'float'
-    ? styleType.float
-    : styleType.light;
+  const iconType = iconTypes[type];
+  const wrapperStyle = float 
+    ? styleOptions.float
+    : (isDark ? styleOptions.dark : styleOptions.light);
+  
+  const pathFill = float ? icon.float : icon.color;
+  const pathStroke = type === 'expand' ? stroke : (stroke ? pathFill : '');
 
   return (
-    <Wrapper button={button} click={click} style={style}>
-      <svg viewBox={viewBox || icon.viewBox}>
-        <title>{title ? title : icon.title}</title>
-        {icon.path.map((path, idx) => 
+    <Wrapper button={button} click={click} style={wrapperStyle}>
+      <svg viewBox={viewBox || iconType.viewBox}>
+        <title>{title ? title : iconType.title}</title>
+        {iconType.path.map((path, idx) => 
           <path 
             key={idx} 
             strokeWidth={strokeWidth || ''}
-            stroke={stroke ? (dark ? '#fff' : '#000') : ''} 
-            fill={dark ? '#fff' : '#000'} 
+            stroke={pathStroke} 
+            fill={pathFill} 
             d={path}
           />
         )}

@@ -1,34 +1,17 @@
-.Toggle {
+.ButtonWrapper {
   width: 100%;
 }
 
-.CheckToggleOptions,
-.RadioToggleOptions {
+.Buttons {
   display: flex;
   position: relative;
 }
 
-.CheckToggleOptions.column > button {
-  margin-bottom: 7px;
-}
-
-.CheckToggleOptions.column > button:last-child {
-  margin-bottom: 0px;
-}
-
-.CheckToggleOptions.row > button {
-  margin-right: 7px;
-}
-
-.CheckToggleOptions.row > button:last-child {
-  margin-right: 0px;
-}
-
-.row > .ToggleOption:not(:first-child) {
+.row > .ButtonOption:not(:first-child) {
   margin-left: -1px;
 }
 
-.column > .ToggleOption:not(:first-child) {
+.column > .ButtonOption:not(:first-child) {
   margin-top: -1px;
 }
 
@@ -40,8 +23,7 @@
   flex-flow: column;
 }
 
-.CheckToggleOptions > button,
-.RadioToggleOptions > button {
+.Buttons > button {
   flex: 1;
   box-sizing: border-box;
   cursor: pointer;
@@ -49,12 +31,11 @@
   margin: 0;
   font-size: 0.9rem;
   color: rgba(0,0,0,0.6);
-  /* background: rgba(255,255,255,0.7); */
   background: #e6e6e6;
   transition: color .2s linear;
 }
 
-button:hover {
+.Buttons > button:hover {
   color: #000;
   transition: color .2s linear;
 }
@@ -70,8 +51,8 @@ button:hover {
 }
 
 .active {
-  color: #000;
-  background:#949494;
+  color: #000 !important;
+  background:#949494 !important;
 }
 
 .active.dark {
@@ -80,10 +61,10 @@ button:hover {
 }
 
 .disabled {
-  color: rgba(0,0,0,0.2);
-  cursor: default;
+  color: rgba(0,0,0,0.2) !important;
+  cursor: default !important;
 }
 
 .disabled:hover {
-  color: rgba(0,0,0,0.2);
+  color: rgba(0,0,0,0.2) !important;
 }
