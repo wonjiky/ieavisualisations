@@ -164,17 +164,15 @@ function CDDWrapper({ baseURL }) {
       })
   },[baseURL, map, mapType])
 
-
-  useEffect(() => { 
-    axios
-      .get(`${baseURL}etp/CDD/Heat pump index map.csv`)
-      .then(response => {
-        const tempData = Papa.parse(response.data, { header: true }).data;
-        const filteredData = tempData.filter(d => getCountryNameByISO(d.Code))
-        setHeatpumpData(filteredData)
-      })
-  },[])
-
+  function fetchHeatpumpData() {
+    axios.get(`${baseURL}etp/CDD/Heat pump index map.csv`).then((response) => {
+      const tempData = Papa.parse(response.data, { header: true }).data;
+      const filteredData = tempData.filter((d) => getCountryNameByISO(d.Code));
+      setHeatpumpData(filteredData);
+    });
+  }
+  
+  useEffect(fetchHeatpumpData, [baseURL]);
 
   function serviceDataFilter(d) {
     let is2019 =  d.region === region && d.scenario === '0';

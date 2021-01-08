@@ -1,12 +1,44 @@
-.NotSelected {
-  font-weight: bold;
-  font-size: 1.5rem;
-  /* color: #04f; */
+@keyframes fadein{
+    0% { opacity:0; }
+    66% { opacity:0; }
+    100% { opacity:1; }
+}
+
+@-webkit-keyframes fadein{
+    0% { opacity:0; }
+    66% { opacity:0; }
+    100% { opacity:1; }
 }
 
 .ProjectInfoWrapper {
-  height: 580px;
+  height: 100%;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #fff;
+  min-width: 0px;
+  width: 0%;
+  box-shadow: 5px 0 10px -4px rgba(0,0,0,.2);
   overflow-y: scroll;
+  transition: all 0.3s;
+}
+
+.open {
+  min-width: 320px;
+  width: 25%;
+  transition: all 0.25s;
+}
+
+.ProjectContent {
+  padding: 12px 16px;
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+.visible {
+  opacity: 1;
+  transition: opacity .19s linear .3s; 
 }
 
 .ProjectContent > h5 {
@@ -27,6 +59,24 @@
 .ProjectDescription {
   font-size: 1rem !important;
 }
+
+.Description {
+  border-top: 1px solid black;
+  font-size: 0.8rem;
+  padding: 12px 0;
+}
+
+.CloseButton {
+  display: flex;
+  width: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  justify-content: flex-end;
+}
+.CloseButton > button {
+  box-shadow: none;
+}
+
 
 @media screen and (max-width: 729px) {
   .ProjectInfoWrapper {

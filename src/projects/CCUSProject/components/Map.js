@@ -11,10 +11,13 @@ const Map = ({ data, project, click }) => {
   }
 
   const { map, mapContainerRef, popUp } = useMap(config);
+  useEffect(() => {
+    const hasProject = Object.keys(project).length > 0;
+    if (hasProject || !map) return;
+    map.flyTo({ center: [0, 30], zoom: 1.3 });
+  }, [map, project])
 
   useEffect(setDefaultMap, [map])
-
-
   useEffect (() => {
     let hasProject = Object.keys(project).length > 0;
     const normalize = (val, max, min)  =>  (val - min) / (max - min);
@@ -141,7 +144,7 @@ const Map = ({ data, project, click }) => {
     let selected = e.features[0].properties;
     click(e)
     map.flyTo({
-      center: [selected.lon, selected.lat],
+      center: [selected.lon - .6, selected.lat],
       zoom: 8
     })
   }

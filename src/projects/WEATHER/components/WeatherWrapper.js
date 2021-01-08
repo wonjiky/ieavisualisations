@@ -320,7 +320,7 @@ export default function() {
 			fluid={true}
 			selector={'Weather_Map'} 
 			loaded={data.data} 
-			theme='dark'
+			theme='light'
 			disclaimer={disclaimer} 
 		>
 			<Weather 
