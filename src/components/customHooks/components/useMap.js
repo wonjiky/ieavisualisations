@@ -15,7 +15,7 @@ export default (config) => {
       ? fetchOecdMap
       : config.map === "custom"
       ? fetchCustomMap
-      : fetchMapboxMap;
+      : createDefaultMap;
 
   const tooltip = new mapboxgl.Popup({
     closeButton: false,
@@ -87,7 +87,7 @@ export default (config) => {
     });
   }
 
-  function fetchMapboxMap() {
+  function createDefaultMap() {
     const map = new mapboxgl.Map({
       ...mapConfig,
       container: mapContainerRef.current,
@@ -105,8 +105,8 @@ export default (config) => {
           url: source.url,
         });
       }
-			
-			for (let i in mapBox.layers) {
+
+      for (let i in mapBox.layers) {
         let { paint } = config;
         let layer = mapBox.layers[i];
         let solid = layer.id === "solid";
@@ -117,8 +117,8 @@ export default (config) => {
               "line-color": solid ? paint.lineColor : paint.dottedLineColor,
             }
           : { "line-width": 1, "line-color": solid ? "black" : "white" };
-				
-				map.addLayer({
+
+        map.addLayer({
           id: `dotted-${i}`,
           source: layer.source,
           "source-layer": layer.sourceLayer,
@@ -130,8 +130,7 @@ export default (config) => {
           filter: layer.filter,
           layout: layer.layout,
         });
-			}
-			
+      }
       // addCentroids(map);
     });
   }

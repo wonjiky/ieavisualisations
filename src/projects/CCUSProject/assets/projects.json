@@ -147,7 +147,7 @@
     "length": "374.0",
     "location": "Onshore",
     "storageType": "EOR",
-    "description": "The Lost Cabin facility has temporarily suspended operations due to a fire at the gas processing facility in late 2018; it is expeted to resume in late 2020. \nThe Lost Cabin gas processing facility (Wyoming, US) has captured CO2 at the rate of 0.9 Mtpa since 2013. The captured CO2 is compressed and transported via the 374 km Denbury pipeline to Denbury's Bell Creek oil field in South East Montana where it is injected at a depth of 4.5 km for EOR.",
+    "description": "The Lost Cabin gas processing facility (Wyoming, US) has captured CO2 at the rate of 0.9 Mtpa since 2013. The captured CO2 is compressed and transported via the 374 km Denbury pipeline to Denbury's Bell Creek oil field in South East Montana where it is injected at a depth of 4.5 km for EOR. The Lost Cabin facility has temporarily suspended operations due to a fire at the gas processing facility.",
     "lat": 43.2794,
     "lon": -107.604
   },
@@ -299,7 +299,7 @@
     "length": "132.0",
     "location": "Onshore",
     "storageType": "EOR",
-    "description": "Petra Nova coal-fired power generation plant in the United States, has temporarily suspended CO2 capture operations in response to low oil prices.\nThe Petra Nova CCS project (Texas, US) is the world's largest post-combustion CO2 capture system from a coal-fired power plant currently in operation. The 240 MW Unit 8 of the W. A. Parish power plant near Houston, Texas, has been retrofitted with a 1.4 Mtpa post-combustion CO2 capture facility.  Captured CO2 to be transported by pipeline 130 km to West Ranch Oilfield, Jackson County, for EOR",
+    "description": "The Petra Nova CCS project (Texas, US) is the world's largest post-combustion CO2 capture system from a coal-fired power plant currently in operation. The 240 MW Unit 8 of the W. A. Parish power plant near Houston, Texas, has been retrofitted with a 1.4 Mtpa post-combustion CO2 capture facility.  Captured CO2 to be transported by pipeline 130 km to West Ranch Oilfield, Jackson County, for EOR. Petra Nova coal-fired power generation plant in the United States, has temporarily suspended CO2 capture operations in response to low oil prices.",
     "lat": 29.4777,
     "lon": -95.635
   },

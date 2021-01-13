@@ -10,10 +10,18 @@ const Disclaimer = ({ disclaimer }) => {
   let content = (
     <div className={style}>
       <div className={c.DisclaimerContent}>
-        {title && <h4> {title} </h4>}
-        {text && <p> {text} </p>}
+        {title ? <h4> {title} </h4> : ''}
+        {text ? (
+          <p> {text} </p>
+        ) : (
+          <p>
+            This map is without prejudice to the status of or sovereignty over
+            any territory, to the delimitation of international frontiers and
+            boundaries and to the name of any territory, city or area.
+          </p>
+        )}
         <button onClick={() => setClick(!click)}>
-          {button ? button : 'I understand'}
+          {button ? button : "I understand"}
         </button>
       </div>
     </div>

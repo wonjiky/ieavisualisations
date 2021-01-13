@@ -3,17 +3,17 @@ import { Icon } from '../../icons'
 import { Loader } from '../../loader'
 import { Disclaimer } from '../../disclaimer'
 import { ThemeProvider } from '../../../context'
-import classes from './css/Contaner.module.css'
+import classes from "./css/Container.module.css";
 
-function FullScreenIcon(selector) {
+function FullScreenIcon({ id }) {
   return (
     <div className={classes.ExpandContainer}>
       <div className={classes.Expand}>
-        <Icon 
-          type='expand' 
-          button={true} 
-          click={ _ => toggleFullScreen(selector)}
-          stroke={'rgba(60,60,60)'} 
+        <Icon
+          type="expand"
+          button={true}
+          click={(_) => toggleFullScreen(id)}
+          stroke={"rgba(60,60,60)"}
           strokeWidth="1"
         />
       </div>
@@ -21,8 +21,8 @@ function FullScreenIcon(selector) {
   );
 };
 
-function toggleFullScreen(selector) {
-  let elem = document.getElementById(selector);
+function toggleFullScreen(id) {
+  let elem = document.getElementById(id);
   if (!document.fullscreenElement) {
     elem.requestFullscreen()
       .catch(err => {
@@ -37,7 +37,7 @@ export default ({ disclaimer, selector, children, loaded, fluid, theme }) => (
     : <ThemeProvider theme={theme}>
         <div className={fluid ? 'container-fluid' : 'container'} id={selector}>
           {disclaimer ? <Disclaimer disclaimer={disclaimer} /> : null}
-          <FullScreenIcon selector />
+          <FullScreenIcon id={selector} />
           {children}
         </div>
       </ThemeProvider>  

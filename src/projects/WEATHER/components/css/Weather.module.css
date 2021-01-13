@@ -163,11 +163,6 @@ th {
     padding: 0;
 }
 
-.LogoCustomStyle > div { 
-    box-shadow: none;
-    background: transparent !important;
-}
-
 @media screen and (max-width: 729px) {
 	.ButtonWrapper {
 		display: none;

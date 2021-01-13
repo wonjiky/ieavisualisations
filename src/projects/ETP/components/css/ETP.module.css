@@ -1,16 +1,3 @@
-.Legend > div {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.customControlStyle {
-  width: 330px;
-}
-
-.customControlStyle > div {
-  background: rgba(43, 43, 43, .95);
-}
-
 .Help {
   width: 36px;
   height: 36px;
