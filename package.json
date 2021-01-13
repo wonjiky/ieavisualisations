@@ -52,6 +52,6 @@
     ]
   },
   "devDependencies": {
-    "@iea/react-components": "^1.1.6"
+    "@iea/react-components": "^1.2.12"
   }
 }

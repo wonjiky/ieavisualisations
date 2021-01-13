@@ -1,15 +1,19 @@
 import React from "react";
-import { useTheme } from "../../../context";
+import { useTheme } from "@iea/react-components";
 import classes from "./css/ControlContainer.module.css";
 
 export default ({ children, position, style, customClass, transparent }) => {
   const theme = useTheme();
-  const wrapperStyle = [classes.ControlWrapper, classes[position], customClass].join(" ");
+  const wrapperStyle = [
+    classes.ControlWrapper,
+    classes[position],
+    customClass,
+  ].join(" ");
   const containerStyle = {
     background: transparent ? "transparent" : theme.style.background,
     boxShadow: transparent && "none",
   };
-  
+
   return (
     <div
       className={wrapperStyle}
@@ -19,13 +23,17 @@ export default ({ children, position, style, customClass, transparent }) => {
         {React.Children.map(
           children,
           (child) =>
-            child && child.props.type !== "popup" && React.cloneElement(child)
+            child &&
+            child.props.type !== "floatingButtons" &&
+            React.cloneElement(child)
         )}
       </div>
       {React.Children.map(
         children,
         (child) =>
-          child && child.props.type === "popup" && React.cloneElement(child)
+          child &&
+          child.props.type === "floatingButtons" &&
+          React.cloneElement(child)
       )}
     </div>
   );

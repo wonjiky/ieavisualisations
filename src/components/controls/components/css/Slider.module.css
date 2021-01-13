@@ -1,38 +1,3 @@
-.Slider {
-    position: relative;
-    width: 400px;
-    padding: 12px 20px;
-    margin-left: -1px;
-}
-
-.Slider:before {
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    transition: border .2s linear;
-    border: 1px solid #e6e6e6;
-    content: "";
-}
-
-.SliderLabel {
-    display: flex;
-    justify-content: space-between;
-}
-
-.SliderLabel > span {
-    font-weight: bold;
-}
-
-.RailStyle {
-    position: absolute;
-    width: 100%;
-    height: 8px;
-    background: #bababa;
-}
-
 .SliderContainer {  
     display: flex;
     flex-flow: column;
@@ -50,14 +15,7 @@
     height: 8px;
     border-radius: 8px;
     width: 100%;
-    background: #d3d3d3;
+    background: #e6e6e6;
     outline: none;
 }
 
-.SliderContainer input[type=range]::-webkit-slider-thumb {
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    color:rgba(27,27,27,0.8);
-    cursor: pointer;
-}

@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { MapContainer } from "../../../components/container";
 import {
-  ControlContainer,
+  MapContainer,
   ControlWrapper,
-  Control,
-} from "../../../components/controls";
-import { Modal } from "../../../components/modal";
-import { Legends } from "../../../components/legends";
-import { Icon } from "../../../components/icons";
-import CountryInfo from "./CountryInfo";
+  ControlContainer,
+  Legend,
+  Icon,
+  Modal,
+  Controls,
+} from "@iea/react-components";
 import {
   getCountryNameByISO,
   isAnomaly,
@@ -21,15 +20,14 @@ import {
   getGridMinMax,
 } from "./util";
 import axios from "axios";
+import CountryInfo from "./CountryInfo";
 import variables from "../assets/variables.json";
 import gridMinMaxRange from "../assets/gridminmax.json";
 import Logos from "./Logos";
 import Weather from "./Weather";
-
 import classes from "./css/Weather.module.css";
 
 export default function () {
-  // Grid level image time range
   let minYear = 2000,
     maxYear = 2020;
   let months = 12,
@@ -485,6 +483,16 @@ export default function () {
       ? [classes.LegendWrapper, classes.Bottom].join(" ")
       : classes.LegendWrapper;
 
+  const popUps = [
+    {
+      type: "floatingButtons",
+      click: () => setOpenInfo(!openInfo),
+      mapType: mapType,
+      download: download,
+      downloadButtonLabel: downloadButtonLabel,
+    },
+  ];
+
   const disclaimer = { title: "Weather for energy tracker" };
 
   return (
@@ -519,53 +527,31 @@ export default function () {
         }}
         download={{ link: download, label: downloadButtonLabel }}
       >
-        <ControlContainer position="bottomRight" transparent>
+        <ControlContainer
+          transparent
+          position="bottomRight"
+          customClass={legendCustomStyle}
+        >
           {legends.map((legend, idx) => (
-            <Legends key={idx} {...legend} />
+            <Legend key={idx} {...legend} />
           ))}
         </ControlContainer>
         <ControlContainer position="topLeft" style={{ width: "280px" }}>
           {controls.topleft.map((control, idx) => (
-            <Control key={idx} {...control} />
+            <Controls key={idx} {...control} />
+          ))}
+          {popUps.map((popup, idx) => (
+            <Popup key={idx} {...popup} />
           ))}
         </ControlContainer>
         <ControlContainer
-          position="topRight"
           transparent
+          position="topRight"
           customClass={classes.LogoCustomStyle}
         >
           <Logos />
         </ControlContainer>
       </ControlWrapper>
-      <div
-        className={classes.ButtonWrapper}
-        style={{ top: "412px", zIndex: "2" }}
-      >
-        <Icon
-          fill
-          button
-          type="help"
-          float={true}
-          styles={classes.Help}
-          click={(_) => setOpenInfo(!openInfo)}
-          title="Glossary of map terms"
-        />
-        {mapType === "territory" && (
-          <div className={classes.DownloadContainer}>
-            <a href={download} className={classes.DownloadButton}>
-              <Icon
-                strokeWidth={1}
-                stroke
-                type="download"
-                viewBox="-13 -11 50 50"
-                float={true}
-                styles={classes.Download}
-              />
-            </a>
-            <div className={classes.DownloadWrapper}>{downloadButtonLabel}</div>
-          </div>
-        )}
-      </div>
       <Modal size="full" open={openInfo} click={(_) => setOpenInfo(!openInfo)}>
         <Table
           title="Value types"
@@ -598,6 +584,37 @@ export default function () {
     </MapContainer>
   );
 }
+
+const Popup = ({ click, download, downloadButtonLabel, mapType }) => {
+  return (
+    <div className={classes.ButtonWrapper}>
+      <Icon
+        fill
+        button
+        type="help"
+        float={true}
+        styles={classes.Help}
+        click={click}
+        title="Glossary of map terms"
+      />
+      {mapType === "territory" && (
+        <div className={classes.DownloadContainer}>
+          <a href={download} className={classes.DownloadButton}>
+            <Icon
+              strokeWidth={1}
+              stroke
+              type="download"
+              viewBox="-13 -11 50 50"
+              float={true}
+              styles={classes.Download}
+            />
+          </a>
+          <div className={classes.DownloadWrapper}>{downloadButtonLabel}</div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Table = ({ title, body, head }) => (
   <div className={classes.Table}>

@@ -1,10 +1,16 @@
 import React from "react";
 import axios from "axios";
 import Papa from "papaparse";
+// import { MapContainer } from "../../../components/container";
+// import { ControlWrapper, ControlContainer } from "../../../components/controls";
+// import { Legends } from "../../../components/legends";
 import CCUSContainer from "./CCUSContainer";
-import { MapContainer } from "../../../components/container";
-import { ControlWrapper, ControlContainer } from "../../../components/controls";
-import { Legends } from "../../../components/legends";
+import {
+  MapContainer,
+  ControlWrapper,
+  ControlContainer,
+  Legend,
+} from '@iea/react-components'
 import classes from "./css/Index.module.css";
 
 export default ({ baseURL, match }) => {
@@ -257,7 +263,12 @@ export default ({ baseURL, match }) => {
   }
 
   return (
-    <MapContainer selector={match.path.substring(1)} loaded={data} fluid={true} theme="light">
+    <MapContainer
+      selector={match.path.substring(1)}
+      loaded={data}
+      fluid={true}
+      theme="light"
+    >
       <CCUSContainer
         data={data}
         toggle={legendToggle}
@@ -266,7 +277,7 @@ export default ({ baseURL, match }) => {
       <ControlWrapper bg={true}>
         <ControlContainer position="bottomLeft">
           {legends.map((legend, idx) => (
-            <Legends key={idx} {...legend} />
+            <Legend key={idx} {...legend} />
           ))}
           <div className={classes.Introduction}>
             <p>

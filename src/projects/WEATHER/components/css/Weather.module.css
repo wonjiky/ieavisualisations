@@ -1,183 +1,185 @@
 .ButtonWrapper {
-    position: absolute;
-    margin-left: 20px;
-    display: flex;
+  display: flex;
+  margin-top: 10px;
 }
 
 .Help,
 .Download {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .Help > svg,
 .Download > svg {
-    height: 100%;
-    margin-top: 0;
+  height: 100%;
+  margin-top: 0;
 }
 
 .DownloadContainer {
-    display: flex;
-    position: relative;
+  display: flex;
+  position: relative;
 }
 
 .DownloadButton {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-.DownloadButton:hover + .DownloadWrapper{
-    visibility: visible;
-    opacity: 1;
-    transition: 0.3s;
+.DownloadButton:hover + .DownloadWrapper {
+  visibility: visible;
+  opacity: 1;
+  transition: 0.3s;
 }
 
 .DownloadWrapper {
-    display: flex;
-    visibility: hidden;
-    opacity: 0;
-    padding: 0 20px;
-    align-items: center;
-    background: #fff;
-    transition: 0.3s;
+  display: flex;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  padding: 5px 20px;
+  align-items: center;
+  background: #fff;
+  transition: 0.3s;
 }
 
 .DownloadWrapper:before {
-    content:'';
-    display:block;
-    width:0;
-    height:0;
-    position:absolute;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent; 
-    border-right: 7px solid #fff;
-    left: 39px;
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 7px solid #fff;
+  left: 39px;
 }
 
 .DownloadWrapper {
-    text-decoration: none;
-    font-size: .8rem;
-    color: #000;
+  text-decoration: none;
+  font-size: 0.8rem;
+  color: #000;
 }
 
 table {
-    border-collapse: collapse;
-    width: 100%;
-    padding: 10px;
+  border-collapse: collapse;
+  width: 100%;
+  padding: 10px;
 }
 
-td, th {
-    height: 2rem;
-    text-align: left;
-    padding: 12px 7px;
+td,
+th {
+  height: 2rem;
+  text-align: left;
+  padding: 12px 7px;
 }
 
 td {
-    border-bottom: .5px solid #ccc;
-    line-height: 1.6rem;
+  border-bottom: 0.5px solid #ccc;
+  line-height: 1.6rem;
 }
 
 td:last-child {
-    font-size: .8rem;
-    text-align: right;
+  font-size: 0.8rem;
+  text-align: right;
 }
 
 th:last-child {
-    text-align: right;
+  text-align: right;
 }
 
 th {
-    font-size: 1rem;
-    border-bottom: 4px solid #ccc;
+  font-size: 1rem;
+  border-bottom: 4px solid #ccc;
 }
 
 .Table h5,
 .ModalText h5 {
-    margin: 0 0 25px;
-    font-size: 2rem;
-    color: #E6E6E6;
+  margin: 0 0 25px;
+  font-size: 2rem;
+  color: #e6e6e6;
 }
 
 .Table,
 .ModalText {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .Table h6,
 .ModalText h6 {
-    font-size: 1.25rem;
-    margin: 0 0 10px;
+  font-size: 1.25rem;
+  margin: 0 0 10px;
 }
 
-.TableWrapper{
-    padding: 0 20px;
+.TableWrapper {
+  padding: 0 20px;
 }
 
 .CustomTable td:first-child {
-    width: 15%;
+  width: 15%;
 }
 
 .CustomTable td:last-child {
-    text-align: left;
-    font-size: 1rem;
+  text-align: left;
+  font-size: 1rem;
 }
 
 .CustomTable th:last-child {
-    text-align: left;
+  text-align: left;
 }
 
 .ModalTextContent p {
-    width: 40%;
+  width: 40%;
 }
 
-.ModalTextContent{
-    margin-bottom: 20px;
-    line-height: 1.25rem;
-    padding: 0 20px;
+.ModalTextContent {
+  margin-bottom: 20px;
+  line-height: 1.25rem;
+  padding: 0 20px;
 }
 
-.LegendWrapper { 
-    bottom: 100px;
-    transition: 0.3s;
-}
-
-.LegendWrapper > div {
-    background: transparent !important;
-    box-shadow: none;
+.LegendWrapper {
+  bottom: 100px;
+  transition: 0.3s;
 }
 
 .GridView {
-    transform: translateY(100px);
-    transition: 0.3s;
-    color: #000 !important;
+  transform: translateY(100px);
+  transition: 0.3s;
+  color: #000 !important;
 }
 
 .Bottom {
-    transform: translateY(100px);
-    transition: 0.3s;
+  transform: translateY(100px);
+  transition: 0.3s;
 }
 
 .LogoCustomStyle {
-    margin-right: 50px !important;
-    padding: 0;
+  margin-right: 50px !important;
+  padding: 0;
 }
 
 @media screen and (max-width: 729px) {
-	.ButtonWrapper {
-		display: none;
-    }
-    
-    .GridView {
-        transform: translateY(0);
-        transition: 0.3s;
-    }
+  .ButtonWrapper {
+    display: none;
+  }
 
-    .GridView {
-        color: #fff !important;
-    }
+  .LogoCustomStyle {
+    display: flex;
+    align-items: center;
+    margin-right: 0px !important;
+  }
 
-    .Bottom {
-        transform: translateY(0);
-    }
+  .GridView {
+    transform: translateY(0);
+    transition: 0.3s;
+  }
+
+  .GridView {
+    color: #fff !important;
+  }
+
+  .Bottom {
+    transform: translateY(0);
+  }
 }

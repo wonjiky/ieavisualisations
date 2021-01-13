@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { ControlWrapper, ControlContainer } from "../../../components/controls";
-import { MapContainer } from "../../../components/container";
-import { Icon } from "../../../components/icons";
-import { Legends } from "../../../components/legends";
 import PROJECTS from "../assets/projects.json";
 import Map from "./Map";
+import {
+  MapContainer,
+  ControlWrapper,
+  ControlContainer,
+  Legend,
+  Icon,
+} from "@iea/react-components";
 import classes from "./css/CCUSProjects.module.css";
 
 const CCUSProject = () => {
@@ -47,7 +50,7 @@ const CCUSProject = () => {
       <ControlWrapper bg={true}>
         <ControlContainer position="bottomRight">
           {legends.map((legend, idx) => (
-            <Legends key={idx} {...legend} />
+            <Legend key={idx} {...legend} />
           ))}
         </ControlContainer>
         <ProjectInformation

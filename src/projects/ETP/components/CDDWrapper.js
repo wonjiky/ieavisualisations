@@ -3,22 +3,24 @@ import axios from "axios";
 import Papa from "papaparse";
 import CDD from "./CDD";
 import variables from "./assets/variables.json";
+import { Bars } from "../../../components/bars";
+import {
+  MapContainer,
+  ControlWrapper,
+  ControlContainer,
+  Icon,
+  Modal,
+  Legend,
+  Controls,
+} from "@iea/react-components";
+
 import {
   legend,
   heatpumpDataMap,
   serviceDataMap,
   getCountryNameByISO,
 } from "./assets/util";
-import { MapContainer } from "../../../components/container";
-import { Bars } from "../../../components/bars";
-import { Icon } from "../../../components/icons";
-import { Legends } from "../../../components/legends";
-import { Modal } from "../../../components/modal";
-import {
-  ControlWrapper,
-  Control,
-  ControlContainer,
-} from "../../../components/controls";
+
 import classes from "./css/ETP.module.css";
 
 function CDDWrapper({ baseURL }) {
@@ -237,14 +239,13 @@ function CDDWrapper({ baseURL }) {
       : (result.value = Number(d[`${year}-${scenario}`]) * -1);
     return result;
   }
-
+  const barTitle = "Share of population (%)";
   const popup = [
     {
-      type: "popup",
+      type: "floatingButtons",
       click: (_) => setOpenModal(!openModal),
     },
   ];
-  let barTitle = "Share of population (%)";
 
   return (
     <MapContainer
@@ -274,15 +275,15 @@ function CDDWrapper({ baseURL }) {
       >
         <ControlContainer position="bottomRight" transparent>
           {legends.map((legend, idx) => (
-            <Legends key={idx} {...legend} />
+            <Legend key={idx} {...legend} />
           ))}
         </ControlContainer>
         <ControlContainer position="topLeft">
           {controls.map((control, idx) => (
-            <Control key={idx} {...control} />
+            <Controls key={idx} {...control} />
           ))}
           {regionDropdown.map((drop, idx) => (
-            <Control key={idx} {...drop} />
+            <Controls key={idx} {...drop} />
           ))}
           {isService ? (
             <>

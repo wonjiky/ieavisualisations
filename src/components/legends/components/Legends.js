@@ -1,5 +1,4 @@
 import React from "react";
-import { useTheme } from "@iea/react-components";
 import classes from "./css/Legends.module.css";
 
 export default ({

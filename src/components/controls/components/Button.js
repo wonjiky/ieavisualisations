@@ -1,5 +1,6 @@
 import React from 'react';
-import { useTheme } from '../../../context'
+// import { useTheme } from '../../../context'
+import { useTheme } from '@iea/react-components'
 import classes from './css/Button.module.css'
 
 export default ({ 
