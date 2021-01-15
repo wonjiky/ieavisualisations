@@ -1,0 +1,37 @@
+.Bar {
+  margin-bottom: 10px;
+}
+
+.Bar:last-child {
+  margin-bottom: 0px;
+}
+
+.BarLabel{
+  display: flex;
+  position: relative;
+  font-size: .8rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 4px;
+}
+
+.BarLabel > p {
+  max-width: 85%;
+}
+
+.BarLabel > span {
+  max-width: 15%;
+}
+
+.Bar_Wrapper {
+  height: 12px;
+  position: relative;  
+  width: inherit;
+  border: 1px solid;
+}
+
+.Bar_Percentage {
+  position: absolute;
+  height:100%;
+}
+
