@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
-const CURRENT_PROJECT = "etpCoolingHeating";
+const CURRENT_PROJECT = "weatherForEnergy";
 const BUILD_TARGETS = [
   {
     project: "componentTest",

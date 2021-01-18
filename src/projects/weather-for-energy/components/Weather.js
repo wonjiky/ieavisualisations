@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { colorsByVariables, getPopupInfo, getCentroidLabelByISO } from "./util";
 import { disputedRegions } from "../../../global";
-import { Map } from "@iea/react-components";
-import { useMap } from "../../../component-test/components/customHooks";
+import { Map, useMap } from "@iea/react-components";
 
 export default function Weather({
   data,
@@ -224,5 +223,6 @@ export default function Weather({
     popUp.remove();
   }
 
-  return <Map mapRef={mapContainerRef} />;
+  // return <Map mapRef={mapContainerRef} />;
+  return <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />;
 }
