@@ -223,6 +223,5 @@ export default function Weather({
     popUp.remove();
   }
 
-  // return <Map mapRef={mapContainerRef} />;
-  return <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />;
+  return <Map mapRef={mapContainerRef} />;
 }

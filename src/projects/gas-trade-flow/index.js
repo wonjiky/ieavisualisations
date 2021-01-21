@@ -1,2 +1,2 @@
-export { default as GTF_Vector } from './components/GtfVectorContainer';
-export { default as GTF_Flow } from './components/GtfFlowContainer';
+export { default as GtfVector } from './components/GtfVector';
+export { default as GtfAnimatedFlow } from './components/GtfAnimatedFlow';

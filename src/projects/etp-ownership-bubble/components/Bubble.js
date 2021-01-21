@@ -3,11 +3,13 @@ import Highcharts from "highcharts/highmaps";
 import HighchartsReact from "highcharts-react-official";
 
 window.Highcharts = Highcharts;
+
 const BubbleChart = ({ data, maxValue }) => {
+  
   return (
     <div>
       <div>
-        <LineChart series={data} maxValue={maxValue} />
+        <LineChart series={data} />
       </div>
     </div>
   );
@@ -15,7 +17,7 @@ const BubbleChart = ({ data, maxValue }) => {
 
 export default BubbleChart;
 
-const LineChart = ({ series, maxValue }) => {
+const LineChart = ({ series }) => {
   const containerProps = {
     style: {
       width: "97%",

@@ -1,70 +1,118 @@
-// import React from 'react';
-// import { Weather } from './projects/WEATHER';
-// import { GTF_Flow, GTF_Vector } from './projects/GTF';
-// import { Electricity } from './projects/Electricity';
-// import { CCUS } from './projects/CCUS';
-// import { Test } from './projects/Test';
-// import { CCUSProject } from './projects/CCUSProject';
-// import { CDDMap, ETPBubbleChart } from './projects/ETP';
-// import { Auth } from './compo/fakeAuth';
-// import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-// import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+// import ComboMap from "./projects/ccus-combo-map";
+// import WeatherForEnergy from "./projects/weather-for-energy";
+// import HeatingCoolingDemands from './projects/heating-cooling-demands'
+import { GtfVector, GtfAnimatedFlow } from "./projects/gas-trade-flow";
+// import RegionsMap from './projects/ccus-region-maps'
+// import Test from './component-test'
+import classes from "./App.module.css";
 
+export default function App() {
 
-// function App() {
+  const test = [{ id: "test", url: "/test", component: GtfAnimatedFlow }];
+  const projecturl = "https://ieademoviz.azurewebsites.net/projects/";
+  const prod = process.env.NODE_ENV === "production";
+  const baseurl = prod ? process.env.REACT_APP_PROD : process.env.REACT_APP_DEV;
 
-// 	let password = [' ', ' ', ' ', ' '];
-// 	if (process.env.NODE_ENV === 'production') password = [
-// 		process.env.REACT_APP_GTF_PW, 
-// 		process.env.REACT_APP_GTF2_PW, 
-// 		process.env.REACT_APP_WEATHER_PW,
-// 		process.env.REACT_APP_ETP2020_PW,
-// 	];
-	
-// 	let projects = [
-// 		{ id: 1, item: 'GTF', url: '/gtf-vector', component: GTF_Vector, exact: true, pw: password[0], title: 'GTF: Vector' },
-// 		{ id: 2, item: 'GTF-FLOW', url: '/gtf-flow', component: GTF_Flow, exact: true, pw: password[1], title: 'GTF: Flow' },
-// 		{ id: 3, item: 'WEATHER', url: '/weather-country', component: Weather, exact: true, pw: password[2], title: 'WEATHER' },
-// 		{ id: 4, item: 'ETP CCUS - US', url: '/etp-ccus-us', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
-// 		{ id: 5, item: 'ETP CCUS - Europe', url: '/etp-ccus-europe', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
-// 		{ id: 6, item: 'ETP CCUS - China', url: '/etp-ccus-china', component: CCUS, exact: true, pw: password[3], title: 'ETP2020 - CO2 Map' },
-// 		{ id: 7, item: 'ETP2020 - CDD', url: '/ETP2020-cdd', component: CDDMap, exact: true, pw: password[3], title: 'ETP2020 - CDD Map' },
-// 		{ id: 7, item: 'ETP2020 - Ownership bubble chart', url: '/ETP2020-ownership', component: ETPBubbleChart, exact: true, pw: password[3], title: 'ETP2020 - Ownership bubble chart' },
-// 		{ id: 8, item: 'COVID impact on electricity', url: '/electricity-project', component: Electricity, exact: true, pw: password[3], title: 'Electricity-project' },
-// 		{ id: 9, item: 'CCUS projects', url: '/ccus-projects', component: CCUSProject, exact: true, pw: password[3], title: 'CCUS projects' },
-// 		{ id: 9, item: 'Test', url: '/test', component: Test, exact: true, pw: password[3], title: 'test' },
-// 	];
+  return (
+    <Router>
+      <Switch>
+        <Route
+          path="/"
+          exact
+          render={(_) => (
+            <div className={classes.Wrapper}>
+              <div>
+                <header>IEA Demo Visualisations</header>
+                <div>
+                  <ul>
+                    {!prod &&
+                      test.map((project) => (
+                        <li key={project.id}>
+                          <Link to={project.url} style={{ color: "#04f" }}>
+                            {project.id}
+                          </Link>
+                        </li>
+                      ))}
+                    {PROJECTS.map((project, idx) => (
+                      <Item key={idx} {...project} baseurl={projecturl} />
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+        />
+        {test.map(({ id, url, component: C }) => (
+          <Route
+            exact
+            key={id}
+            path={url}
+            render={(props) => <C {...props} baseURL={baseurl} />}
+          />
+        ))}
+      </Switch>
+    </Router>
+  );
+}
 
-// 	let baseURL = process.env.REACT_APP_DEV;
-// 	if (process.env.NODE_ENV === 'production') baseURL = process.env.REACT_APP_PROD;	
+function Item({ project, status, url, baseurl }) {
+  let styledClass =
+    status === "pending"
+      ? classes.pending
+      : "done"
+      ? classes.done
+      : classes.progress;
 
-// 	return (
-// 		<Router basename={process.env.PUBLIC_URL}>
-// 			<Switch>
-// 				<Route path='/' exact render={ _ => (
-// 					<div className='Intro'>
-// 						<h1>IEA map demo</h1>
-// 						{projects.map((project, idx) => (
-// 							<Link key={`${project.item}-${idx}`} to={project.url}>{project.item}</Link>
-// 						))}
-// 					</div>
-// 				)} />
-// 				{projects.map(({ id, item, url, pw, title, component: C, exact }) => (
-// 					<Route
-// 						key={`${item}-${id}`}
-// 						path={`${url}`}
-// 						url={url}
-// 						exact={exact}
-// 						render={ props => 
-// 							<Auth pw={pw} title={title}>	
-// 								<C {...props} baseURL={baseURL} /> 
-// 							</Auth>
-// 						}
-// 					/>
-// 			))}
-// 			</Switch>
-// 		</Router>
-// 	)
-// }
+  return (
+    <li>
+      <a className={styledClass} href={`${baseurl}${url}`}>
+        {project}
+      </a>
+    </li>
+  );
+}
 
-// export default App;
+const PROJECTS = [
+  {
+    status: "done",
+    project: "CCUS Combo Map",
+    url: "ccus-combo-map",
+  },
+  {
+    status: "done",
+    project: "ETP Heating and Cooling Demands",
+    url: "heating-cooling-demands",
+  },
+  {
+    status: "done",
+    project: "Weather for energy tracker",
+    url: "weather-for-energy",
+  },
+  {
+    status: "done",
+    project: "CCUS Region Map - US",
+    url: "ccus-regions-maps/us",
+  },
+  {
+    status: "done",
+    project: "CCUS Region Map - Europe",
+    url: "ccus-regions-maps/europe",
+  },
+  {
+    status: "done",
+    project: "CCUS Region Map - China",
+    url: "ccus-regions-maps/china",
+  },
+  {
+    status: "pending",
+    project: "GTF - Flow",
+    url: "gas-trade-flow/animated",
+  },
+  {
+    status: "pending",
+    project: "GTF - Vector",
+    url: "gas-trade-flow/vector",
+  },
+];

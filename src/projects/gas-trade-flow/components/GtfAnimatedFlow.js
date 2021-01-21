@@ -1,5 +1,5 @@
 import React from 'react';
-import Flowmap from './GtfFlowMap';
+import Flowmap from './GtfAnimatedFlowMap';
 import Papa from 'papaparse';
 import axios from 'axios';
 
@@ -17,6 +17,7 @@ export default function GTFContainer(props) {
   });
   
   React.useEffect(() => {
+    console.log(props.baseURL);
     let calls = [
       axios.get(`${props.baseURL}gtf/flow.json`),
       axios.get(`${props.baseURL}gtf/places.csv`),
